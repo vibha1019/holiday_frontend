@@ -1,69 +1,44 @@
-import google.generativeai as genai
-import json
 import os
+import requests
 
-# Use the environment variable "API_KEY" to configure the API key
-genai.configure(api_key=os.environ["API_KEY"])
-
-# Load dataset
-dataset_path = "dataset2.json"
-try:
-    with open(dataset_path, "r") as open_file:
-        dataset = json.load(open_file)["database"]
-except FileNotFoundError:
-    dataset = []
-
-new_user = ""
+# Define API endpoint and headers
+API_URL = "https://generativelanguage.googleapis.com/v1beta2/models/text-bison-001:generateText"
+API_KEY = os.environ.get("API_KEY")  # Ensure API_KEY is set in your environment variables
+headers = {
+    "Content-Type": "application/json",
+    "Authorization": f"Bearer {API_KEY}"
+}
 
 # AI Assistant Instructions
 instructions = """
-You are an application with special expertise in recommending good book suggestions based on the 
-information given in the dataset. Depending on the 3 preferred genres of the person, you are required 
-to provide 5 suggested books, their authors, genres, a short synopsis, and age rating.
+You are an application with special expertise in recommending good book suggestions based on the user's input. 
+Please provide 5 book suggestions along with their authors, genres, short synopsis, and age ratings based on the prompt given.
 """
 
 # Get user input
-prompt = input("Enter a prompt: ")
+prompt = input("Enter a prompt for book recommendations: ")
 
-# Prepare the prompt by combining the dataset and instructions
-context = f"Dataset: {dataset}\n\nInstructions: {instructions}\n\nPrompt: {prompt}"
+# Prepare the context to send
+context = f"Instructions: {instructions}\n\nPrompt: {prompt}"
 
+# Prepare the request body
+request_data = {
+    "prompt": context,
+    "max_output_tokens": 500,  # Limit the response size
+    "temperature": 0.7,  # Control creativity level (higher = more creative)
+}
+
+# Make the POST request to the API
 try:
-    # Generate text using the Gemini API (correct method usage)
-    model = genai.GenerativeModel("gemini-1.5-flash")
-    response = model.generate_content(
-        input_text = context,  # Correct argument for the input content
-        max_output_tokens = 500,  # Optional: Adjust as needed
-        temperature=0.7,  # Optional: Adjust creativity level
-    )
-
-    # Display the AI response
+    response = requests.post(API_URL, json=request_data, headers=headers)
+    response.raise_for_status()  # Raise an error for bad responses (4xx/5xx)
+    
+    # Get the response from the API and print the result
+    response_data = response.json()
     print("\n############################################")
     print("Response: ")
-    print(response.text)  # Should now correctly print the generated text
+    print(response_data.get("result", "No result found"))
     print("############################################\n")
-
-    # Check if the user wants to add new data
-    if "book recommendation" in response.text.lower():
-        print("You are not in our database. Would you like to be added? Type yes/no.")
-        yesNo = input()
-        if yesNo.lower() == "yes":
-            newName = input("Enter your name: ")
-            bookGenre1 = input("Enter your preferred genre 1: ")
-            bookGenre2 = input("Enter your preferred genre 2: ")
-            bookGenre3 = input("Enter your preferred genre 3: ")
-            new_user = {
-                "name": newName,
-                "bookGenre1": bookGenre1,
-                "bookGenre2": bookGenre2,
-                "bookGenre3": bookGenre3
-            }
-
-            dataset.append(new_user)
-            with open(dataset_path, "w") as outfile:
-                json.dump({"database": dataset}, outfile)
-                print("New user information added.")
-                print("Please re-run the program and ask again.")
-
-except Exception as e:
-    print("An error occurred while generating text:", str(e))
+    
+except requests.exceptions.RequestException as e:
+    print(f"An error occurred while sending the request: {e}")
