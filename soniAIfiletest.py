@@ -67,6 +67,3 @@ try:
 
 except Exception as e:
     print("An error occurred while generating text:", str(e))
-git config pull.rebase false  # merge
-hint:   git config pull.rebase true   # rebase
-hint:   git config pull.ff only 
