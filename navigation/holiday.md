@@ -18,7 +18,7 @@ comments: true
     <main class="categories">
         <div class="category-box" id="home-decor">
             <h2>Home Decor</h2>
-            <button onclick="location.href='{{ site.baseurl }}/home-decor.md'">Explore Home Decor</button>
+            <button onclick="location.href=`${site.baseurl}/home-decor.md`">Explore Home Decor</button>
         </div>
         <div class="category-box" id="food">
             <h2>Food</h2>
