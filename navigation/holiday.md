@@ -42,8 +42,6 @@ comments: true
         </div>
     </main>
 </div>
-
-
 <style>
 /* General Page Styles */
 .holiday-page {
