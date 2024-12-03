@@ -6,6 +6,7 @@ author: Soni Dhenuva, Vibha Mandayam, Kushi Gade, Nora Ahadian, Spencer Lyons
 comments: true
 ---
 
+<<<<<<< HEAD
 <script>
   // Toggle visibility of item lists
   function toggleItems(id) {
@@ -302,3 +303,9 @@ body {
     margin-top: 20px;
   }
 </style>
+=======
+<html>
+<button onclick="location.href='{{ site.baseurl }}/holiday/post/'">Add Post</button>
+</html>
+
+>>>>>>> 2458b12 (add post button)
