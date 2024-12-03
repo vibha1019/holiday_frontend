@@ -11,34 +11,34 @@ comments: true
         <h1>✨ Holiday Season Gifts</h1>
     </header>
 
-  <div class="holiday-page">
+<div class="holiday-page">
     <header class="holiday-header">
         <h1>🎁 Happy Holidays Gift List 🎄</h1>
     </header>
     <main class="categories">
         <div class="category-box" id="home-decor">
             <h2>Home Decor</h2>
-            <button onclick="location.href=`${site.baseurl}/home-decor.md`">Explore Home Decor</button>
+            <button onclick="location.href='{{ site.baseurl }}/home-decor.md'">Explore Home Decor</button>
         </div>
         <div class="category-box" id="food">
             <h2>Food</h2>
-            <button onclick="location.href=`${site.baseurl}/food.md`">Explore Food</button>
+            <button onclick="location.href='{{ site.baseurl }}/food.md'">Explore Food</button>
         </div>
         <div class="category-box" id="clothes">
             <h2>Clothes</h2>
-            <button onclick="location.href=`${site.baseurl}/clothes.md`">Explore Clothes</button>
+            <button onclick="location.href='{{ site.baseurl }}/clothes.md'">Explore Clothes</button>
         </div>
         <div class="category-box" id="scented">
             <h2>Scented Gifts</h2>
-            <button onclick="location.href=`${site.baseurl}/scented.md`">Explore Scented Gifts</button>
+            <button onclick="location.href='{{ site.baseurl }}/scented.md'">Explore Scented Gifts</button>
         </div>
         <div class="category-box" id="electronics">
             <h2>Electronics</h2>
-            <button onclick="location.href=`${site.baseurl}/electronics.md`">Explore Electronics</button>
+            <button onclick="location.href='{{ site.baseurl }}/electronics.md'">Explore Electronics</button>
         </div>
         <div class="category-box" id="toys">
             <h2>Toys</h2>
-            <button onclick="location.href=`${site.baseurl}/toys.md`">Explore Toys</button>
+            <button onclick="location.href='{{ site.baseurl }}/toys.md'">Explore Toys</button>
         </div>
     </main>
 </div>
@@ -127,8 +127,4 @@ comments: true
     }
 }
 </style>
-
-<div class="custom-background">
-    <h1>Welcome to the Holiday Gift List 🎁</h1>
-</div>
 
