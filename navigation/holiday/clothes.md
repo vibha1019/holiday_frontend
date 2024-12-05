@@ -6,7 +6,6 @@ author: Soni Dhenuva, Vibha Mandayam, Kushi Gade, Nora Ahadian, Spencer Lyons
 comments: true
 ---
 <html lang="en">
-<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clothes Gifts</title>
@@ -99,8 +98,6 @@ comments: true
             display: grid;
         }
     </style>
-</head>
-<body>
     <header>
         <h1>👗 Explore Clothes Gifts 🎄</h1>
     </header>
@@ -138,7 +135,6 @@ comments: true
             }
         }
     </script>
-</body>
 </html>
 
 

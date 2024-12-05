@@ -6,7 +6,6 @@ author: Soni Dhenuva, Vibha Mandayam, Kushi Gade, Nora Ahadian, Spencer Lyons
 comments: true
 ---
 <html lang="en">
-<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Food Gifts</title>
@@ -99,11 +98,7 @@ comments: true
             display: grid;
         }
     </style>
-</head>
-<body>
-    <header>
         <h1>🎁 Explore Food Gifts 🎄</h1>
-    </header>
     <!-- Food Category -->
     <div class="category-box">
         <h2>Food</h2>
@@ -138,5 +133,4 @@ comments: true
             }
         }
     </script>
-</body>
 </html>
