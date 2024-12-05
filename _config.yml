@@ -18,3 +18,4 @@ plugins:
 header_pages:
   - navigation/ai.md
   - navigation/holiday.md
+  - navigation/search.md
