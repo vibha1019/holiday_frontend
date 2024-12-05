@@ -53,7 +53,7 @@ permalink: /searchbar
             transition: background-color 0.3s;
         }
         .result:hover {
-            background: #dee2e6;
+            background: #0e1e6e;
         }
     </style>
 </head>
