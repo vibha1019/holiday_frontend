@@ -5,6 +5,7 @@ permalink: /holiday/home-decor/
 author: Soni Dhenuva, Vibha Mandayam, Kushi Gade, Nora Ahadian, Spencer Lyons
 comments: true
 ---
+
 <!-- Button to trigger the form display -->
 <button id="showFormButton">Create a Post</button>
 
@@ -67,3 +68,68 @@ comments: true
     }
   });
 </script>
+
+<style>
+  /* General Post Form Styling */
+  .post-form-container {
+    background-color: #13292b;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    color: #ffffff;
+  }
+
+  .post-form-container h2 {
+    font-size: 1.8em;
+    text-align: center;
+    color: #ffd700; /* Gold color */
+  }
+
+  .post-form-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1.1em;
+  }
+
+  .post-form-container input,
+  .post-form-container textarea,
+  .post-form-container select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f4f4f4;
+  }
+
+  .post-form-container button {
+    background-color: #ffd700;
+    color: #13292b;
+    padding: 12px 20px;
+    font-size: 1.2em;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    border: none;
+  }
+
+  .post-form-container button:hover {
+    background-color: #ffcc00;
+  }
+
+  /* Button to trigger the form */
+  #showFormButton {
+    background-color: #008080;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1.1em;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+  }
+
+  #showFormButton:hover {
+    background-color: #006f6f;
+  }
+</style>
