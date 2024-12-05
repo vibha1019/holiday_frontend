@@ -14,9 +14,25 @@ comments: true
     <input type="text" id="title" name="title" required>
     <p></p>
     <label for="comment">Comment:</label>
-    <textarea id="comment" name="comment" required></textarea>
+    <textarea id="comment" name="comment" required>
+Quality:
+Usefulness:
+</textarea>
     <p></p>
-    <!-- Dropdown for Age Range (acting as channel_id) -->
+
+    <!-- Star Rating Section -->
+    <label for="star-rating">Rating:</label>
+    <div id="star-rating" class="star-rating">
+      <span class="star" data-value="1">&#9733;</span>
+      <span class="star" data-value="2">&#9733;</span>
+      <span class="star" data-value="3">&#9733;</span>
+      <span class="star" data-value="4">&#9733;</span>
+      <span class="star" data-value="5">&#9733;</span>
+    </div>
+    <input type="hidden" id="star-rating-value" name="star-rating" value="0" />
+    <p></p>
+
+    <!-- Age Range Dropdown -->
     <label for="channel-select">Age Range:</label>
     <select id="channel-select" name="channel">
       <option value="1">Teenage Girls (11-15)</option>
@@ -24,25 +40,46 @@ comments: true
       <option value="3">Toddlers</option>
       <option value="4">Adults</option>
     </select>
+    <p></p>
+
     <button type="submit">Add Post</button>
   </form>
 </div>
 
 <!-- Embedded JavaScript -->
 <script>
+  // Handle star rating clicks
+  const stars = document.querySelectorAll('.star');
+  const ratingValueInput = document.getElementById('star-rating-value');
+
+  stars.forEach(star => {
+    star.addEventListener('click', function () {
+      const rating = this.getAttribute('data-value');
+      // Set the value in the hidden input field
+      ratingValueInput.value = rating;
+
+      // Update the star colors based on rating
+      stars.forEach(star => {
+        star.style.color = (star.getAttribute('data-value') <= rating) ? 'gold' : 'gray';
+      });
+    });
+  });
+
   // Handle form submission
   document.getElementById('postForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const title = document.getElementById('title').value;
     const comment = document.getElementById('comment').value;
-    const channel_id = document.getElementById('channel-select').value; // Use the selected value as channel_id
+    const channel_id = document.getElementById('channel-select').value; // Get the selected value for age range
+    const starRating = ratingValueInput.value; // Get the star rating value
 
     // Prepare the data to be sent to the backend
     const postData = {
       title: title,
       comment: comment,
-      channel_id: channel_id
+      channel_id: channel_id,
+      star_rating: starRating
     };
 
     try {
@@ -108,5 +145,17 @@ comments: true
 
   .post-form-container button:hover {
     background-color: #ffcc00;
+  }
+
+  /* Styling for star rating */
+  .star-rating {
+    font-size: 2em;
+    cursor: pointer;
+    color: gray; /* Default color */
+  }
+
+  .star {
+    padding: 0 5px;
+    transition: color 0.3s ease;
   }
 </style>
