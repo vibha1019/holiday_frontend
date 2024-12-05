@@ -57,6 +57,8 @@ permalink: /searchbar
             background: #dee2e6;
         }
     </style>
+</head>
+<body>
     <div class="container">
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search for an item..." oninput="searchItems()">
@@ -99,3 +101,5 @@ permalink: /searchbar
             });
         }
     </script>
+</body>
+</html>
