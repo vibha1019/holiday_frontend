@@ -54,7 +54,6 @@ comments: true
     color: #ffffff;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
 }
-
 /* Header Styles */
 .holiday-header h1 {
     font-size: 2.5em;
@@ -64,7 +63,6 @@ comments: true
     padding: 10px 20px;
     border-radius: 10px;
 }
-
 /* Category Grid Styles */
 .categories {
     display: grid;
@@ -73,7 +71,6 @@ comments: true
     width: 100%;
     max-width: 1200px;
 }
-
 /* Category Box Styles */
 .category-box {
     background: rgba(0, 0, 0, 0.6);
@@ -83,12 +80,10 @@ comments: true
     padding: 20px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-
 .category-box h2 {
     margin-bottom: 15px;
     font-size: 1.5em;
 }
-
 .category-box button {
     background: #ffffff;
     color: #008080;
@@ -99,28 +94,23 @@ comments: true
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease;
 }
-
 .category-box button:hover {
     background: #008080;
     color: #ffffff;
 }
-
 /* Hover Effect */
 .category-box:hover {
     transform: translateY(-10px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
 }
-
 /* Responsive Design */
 @media (max-width: 768px) {
     .holiday-header h1 {
         font-size: 2em;
     }
-
     .category-box h2 {
         font-size: 1.2em;
     }
-
     .category-box button {
         font-size: 0.9em;
     }
