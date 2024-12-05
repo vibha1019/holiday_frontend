@@ -3,6 +3,7 @@ layout: post
 title: searchbar
 permalink: /searchbar
 ---
+<body>
 <title>Search Bar with Clickable Links</title>
     <style>
         body {
@@ -19,7 +20,6 @@ permalink: /searchbar
             width: 100%;
             max-width: 600px;
             padding: 20px;
-            background: white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
         }
@@ -48,17 +48,15 @@ permalink: /searchbar
         .result {
             margin: 5px 0;
             padding: 10px 15px;
-            background: #e9ecef;
+            background: #0c7ae8;
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
         }
         .result:hover {
-            background: #dee2e6;
+            background: #1861ab;
         }
     </style>
-</head>
-<body>
     <div class="container">
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search for an item..." oninput="searchItems()">
@@ -102,4 +100,3 @@ permalink: /searchbar
         }
     </script>
 </body>
-</html>
