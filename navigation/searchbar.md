@@ -3,8 +3,8 @@ layout: post
 title: searchbar
 permalink: /searchbar
 ---
-<body>
-<title>Search Bar with Clickable Links</title>
+<head>
+    <title>Search Bar with Clickable Links</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,7 +14,6 @@ permalink: /searchbar
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f8f9fa;
         }
         .container {
             width: 100%;
@@ -39,7 +38,7 @@ permalink: /searchbar
             transition: border-color 0.3s;
         }
         #searchInput:focus {
-            border-color: #007bff;
+            border-color: #000000;
         }
         #results {
             margin-top: 20px;
@@ -48,15 +47,17 @@ permalink: /searchbar
         .result {
             margin: 5px 0;
             padding: 10px 15px;
-            background: #0c7ae8;
+            background: #000000;
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
         }
         .result:hover {
-            background: #1861ab;
+            background: #dee2e6;
         }
     </style>
+</head>
+<body>
     <div class="container">
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search for an item..." oninput="searchItems()">
@@ -65,38 +66,41 @@ permalink: /searchbar
     </div>
     <script>
         const items = [
-            { name: "Teddy Bear", link: "item.link" },
-            { name: "Lego Set", link: "item.link" },
-            { name: "Remote Control Car", link: "item.link" },
-            { name: "Holiday Candles", link: "item.link" },
-            { name: "Festive Wreath", link: "item.link" },
-            { name: "Decorative Ornaments", link: "item.link" },
-            { name: "Wireless Headphones", link: "item.link" },
-            { name: "Smartwatch", link: "item.link" },
-            { name: "Gaming Console", link: "item.link" },
-            { name: "Cozy Holiday Sweater", link: "item.link" },
-            { name: "Woolen Scarf", link: "item.link" },
-            { name: "Winter Gloves", link: "item.link" },
-            { name: "Holiday Cookies", link: "item.link" },
-            { name: "Chocolate Gift Box", link: "item.link" },
-            { name: "Gourmet Cheese Set", link: "item.link" },
-            { name: "Scented Candle", link: "item.link" },
-            { name: "Aromatic Diffuser", link: "item.link" },
-            { name: "Perfume Gift Set", link: "item.link" }
+            { name: "Teddy Bear", link: "holiday/toys" },
+            { name: "Lego Set", link: "holiday/toys" },
+            { name: "Remote Control Car", link: "holiday/toys" },
+            { name: "Holiday Candles", link: "holiday/home-decor" },
+            { name: "Festive Wreath", link: "holiday/home-decor" },
+            { name: "Decorative Ornaments", link: "holiday/home-decor" },
+            { name: "Wireless Headphones", link: "holiday/electronics" },
+            { name: "Smartwatch", link: "holiday/electronics" },
+            { name: "Gaming Console", link: "holiday/electronics" },
+            { name: "Cozy Holiday Sweater", link: "holiday/clothes" },
+            { name: "Woolen Scarf", link: "holiday/clothes" },
+            { name: "Winter Gloves", link: "holiday/clothes" },
+            { name: "Holiday Cookies", link: "holiday/food" },
+            { name: "Chocolate Gift Box", link: "holiday/food" },
+            { name: "Gourmet Cheese Set", link: "holiday/food" },
+            { name: "Scented Candle", link: "holiday/scented" },
+            { name: "Aromatic Diffuser", link: "holiday/scented" },
+            { name: "Perfume Gift Set", link: "holiday/scented" }
         ];
         function searchItems() {
             const input = document.getElementById('searchInput').value.toLowerCase();
             const resultsDiv = document.getElementById('results');
             resultsDiv.innerHTML = ''; // Clear previous results
-            items.forEach(item => {
-                if (item.name.toLowerCase().includes(input)) {
-                    const resultDiv = document.createElement('div');
-                    resultDiv.className = 'result';
-                    resultDiv.textContent = item.name;
-                    resultDiv.onclick = () => window.location.href = item.link;
-                    resultsDiv.appendChild(resultDiv);
-                }
-            });
+            // Only show results if there's input
+            if (input.trim() !== "") {
+                items.forEach(item => {
+                    if (item.name.toLowerCase().includes(input)) {
+                        const resultDiv = document.createElement('div');
+                        resultDiv.className = 'result';
+                        resultDiv.textContent = item.name;
+                        resultDiv.onclick = () => window.location.href = item.link;
+                        resultsDiv.appendChild(resultDiv);
+                    }
+                });
+            }
         }
     </script>
 </body>
