@@ -6,12 +6,9 @@ author: Soni Dhenuva, Vibha Mandayam, Kushi Gade, Nora Ahadian, Spencer Lyons
 comments: true
 ---
 
-<!-- Button to trigger the form display -->
-<button id="showFormButton">Create a Post</button>
-
-<!-- New Post Form (hidden initially) -->
-<div class="post-form-container" id="post-form" style="display: none;">
-  <h2>Create a Post</h2>
+<!-- New Post Form (shown by default) -->
+<div class="post-form-container" id="post-form">
+  <h2>Post Review</h2>
   <form id="postForm">
     <label for="title">Item Name:</label>
     <input type="text" id="title" name="title" required>
@@ -33,11 +30,6 @@ comments: true
 
 <!-- Embedded JavaScript -->
 <script>
-  document.getElementById('showFormButton').addEventListener('click', function () {
-    const formContainer = document.getElementById('post-form');
-    formContainer.style.display = 'block';  // Show the form
-  });
-
   // Handle form submission
   document.getElementById('postForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -116,20 +108,5 @@ comments: true
 
   .post-form-container button:hover {
     background-color: #ffcc00;
-  }
-
-  /* Button to trigger the form */
-  #showFormButton {
-    background-color: #008080;
-    color: white;
-    padding: 10px 20px;
-    font-size: 1.1em;
-    border-radius: 5px;
-    cursor: pointer;
-    border: none;
-  }
-
-  #showFormButton:hover {
-    background-color: #006f6f;
   }
 </style>
