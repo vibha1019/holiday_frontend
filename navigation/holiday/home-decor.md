@@ -31,7 +31,7 @@ Usefulness:
     </div>
     <input type="hidden" id="star-rating-value" name="star-rating" value="0" />
     <p></p>
-
+    
     <!-- Age Range Dropdown -->
     <label for="channel-select">Age Range:</label>
     <select id="channel-select" name="channel">
