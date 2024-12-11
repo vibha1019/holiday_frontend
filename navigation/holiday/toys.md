@@ -129,6 +129,8 @@ comments: true
     </div>
     <!-- JavaScript -->
     <script>
+        talk = require('./talk.js');
+        console.log("Data:" + talk.sendData({balls:2}))
         function toggleToyProducts() {
             const toyProducts = document.getElementById("toy-products");
             if (toyProducts.style.display === "none" || toyProducts.style.display === "") {
