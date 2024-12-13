@@ -15,55 +15,102 @@ comments: true
     <p></p>
     <label for="comment">Comment:</label>
     <textarea id="comment" name="comment" required>
-Quality:
-Usefulness:
-</textarea>
-    <p></p>
-
-    <!-- Star Rating Section -->
-    <label for="star-rating">Rating:</label>
-    <div id="star-rating" class="star-rating">
-      <span class="star" data-value="1">&#9733;</span>
-      <span class="star" data-value="2">&#9733;</span>
-      <span class="star" data-value="3">&#9733;</span>
-      <span class="star" data-value="4">&#9733;</span>
-      <span class="star" data-value="5">&#9733;</span>
-    </div>
-    <input type="hidden" id="star-rating-value" name="star-rating" value="0" />
-    <p></p>
-    
+    Quality:
+    Usefulness:
+    </textarea>
+    <p></p> 
     <!-- Age Range Dropdown -->
     <label for="channel-select">Age Range:</label>
     <select id="channel-select" name="channel">
-      <option value="1">Teenage Girls (11-15)</option>
-      <option value="2">Teenage Boys (11-15)</option>
-      <option value="3">Toddlers</option>
-      <option value="4">Adults</option>
+        <option value="1" data-channel-id="5">Teenage Girls (11-15)</option>
+        <option value="2" data-channel-id="6">Teenage Boys (11-15)</option>
+        <option value="3" data-channel-id="7">Toddlers</option>
+        <option value="4" data-channel-id="8">Adults</option>
     </select>
     <p></p>
-
     <button type="submit">Add Post</button>
   </form>
 </div>
 
-<!-- Embedded JavaScript -->
 <script>
-  // Handle star rating clicks
-  const stars = document.querySelectorAll('.star');
-  const ratingValueInput = document.getElementById('star-rating-value');
+  // Handle item selection
+  function selectItem(button, category) {
+      // Show the post form
+      const formContainer = document.getElementById('post-form');
+      formContainer.style.display = 'block';
 
-  stars.forEach(star => {
-    star.addEventListener('click', function () {
-      const rating = this.getAttribute('data-value');
-      // Set the value in the hidden input field
-      ratingValueInput.value = rating;
+      // Pre-fill form data based on the selected category
+      document.getElementById('title').value = `${category}`;  // Set the item name (category as placeholder)
+      document.getElementById('comment').value = `I selected ${button.innerText} because`;  // Pre-fill the comment
 
-      // Update the star colors based on rating
-      stars.forEach(star => {
-        star.style.color = (star.getAttribute('data-value') <= rating) ? 'gold' : 'gray';
+      // Get the channel ID from the selected category
+      const channelSelect = document.getElementById('channel-select');
+      let selectedChannelId = '';
+
+      // Match category to the corresponding channel ID
+      if (category === 'Teenage Girls') {
+          selectedChannelId = '5';
+      } else if (category === 'Teenage Boys') {
+          selectedChannelId = '6';
+      } else if (category === 'Toddlers') {
+          selectedChannelId = '7';
+      } else if (category === 'Adults') {
+          selectedChannelId = '8';
+      }
+      // Set the correct value in the dropdown and store the channel ID
+      channelSelect.value = selectedChannelId;  // Select the right option in the dropdown
+      document.getElementById('postForm').setAttribute('data-channel-id', selectedChannelId); // Save the channel ID to the form
+  }
+</script>
+
+<script type="module">
+  import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+
+  // Fetch all arguments for a specific channel
+  async function fetchArguments(channelId) {
+    try {
+      const response = await fetch(`${pythonURI}/api/posts/filter`, {
+        ...fetchOptions,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ channel_id: channelId })
       });
-    });
-  });
+
+      if (!response.ok) throw new Error('Failed to fetch arguments: ' + response.statusText);
+
+      const argumentsData = await response.json();
+      argumentContainer.innerHTML = ""; // Clear existing arguments
+
+      argumentsData.forEach(arg => {
+        const card = document.createElement("div");
+        card.classList.add("argument-card");
+
+        const text = document.createElement("p");
+        text.innerHTML = `<strong>${arg.user_name}:</strong> ${arg.comment}`; // Adjusted to match backend response structure
+
+        card.appendChild(text);
+        argumentContainer.appendChild(card);
+      });
+    } catch (error) {
+      console.error('Error fetching arguments:', error);
+    }
+  }
+
+  // Handle item selection
+  function selectItem(button, type, category) {
+    const color = type === 'most' ? 'green' : 'red';
+    button.style.backgroundColor = color;
+    button.style.color = 'white';
+
+    // Create a post when an item is selected
+    if (type === 'most') {
+      document.getElementById('group-select').value = "Dnero Store";
+      document.getElementById('channel-select').value = category;
+
+      const postForm = document.getElementById('post-form');
+      postForm.style.display = "block"; // Display post form
+    }
+  }
 
   // Handle form submission
   document.getElementById('postForm').addEventListener('submit', async (e) => {
@@ -71,19 +118,18 @@ Usefulness:
 
     const title = document.getElementById('title').value;
     const comment = document.getElementById('comment').value;
-    const channel_id = document.getElementById('channel-select').value; // Get the selected value for age range
-    const starRating = ratingValueInput.value; // Get the star rating value
-
-    // Prepare the data to be sent to the backend
+    const group = document.getElementById('group-select').value;
+    const channel = document.getElementById('channel-select').value;
+    const channelID = document.getElementById('postForm').getAttribute('data-channel-id'); // Retrieve the saved channel ID
     const postData = {
       title: title,
       comment: comment,
-      channel_id: channel_id,
-      star_rating: starRating
-    };
+      channel_id: channelID
+    }
 
     try {
       const response = await fetch(`${pythonURI}/api/post`, {
+        ...fetchOptions,
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(postData)
@@ -97,6 +143,7 @@ Usefulness:
     }
   });
 </script>
+
 
 <style>
   /* General Post Form Styling */
@@ -156,180 +203,6 @@ Usefulness:
 
   .star {
     padding: 0 5px;
-    transition: color 0.3s ease;
+    transition: color 0.3s;
   }
-  /* THIS IS NOW AI CHAT BOX CODE, DO NOT MESS IT UP PLS */
 </style>
-
-<html lang="en">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            position: relative;
-            height: 100vh;
-            background-color: #f9f9f9;
-        }
-        #help-button {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 10px 20px;
-            background-color: #5F9EA0 !important; /* Light blue */
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        #help-button:hover {
-            background-color: #63b6e3;
-        }
-        #chat-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 350px;
-            max-height: 500px;
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        #chat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            background-color: #333;
-            color: white;
-            border-bottom: 1px solid #ddd;
-        }
-        #chat-header h4 {
-            margin: 0;
-            font-size: 16px;
-        }
-        #close-chat {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-        }
-        #close-chat:hover {
-            color: #ff6666;
-        }
-        #chat-box {
-            flex-grow: 1;
-            padding: 10px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-        }
-        .message {
-            margin: 10px;
-            padding: 10px;
-            border-radius: 10px;
-            max-width: 75%;
-            word-wrap: break-word;
-            display: inline-block;
-        }
-        .assistant {
-            background-color: #333;
-            color: white;
-            align-self: flex-start;
-            text-align: left;
-        }
-        .user {
-            background-color: #2f4f4f;
-            color: white;
-            align-self: flex-end;
-            text-align: right;
-        }
-        #input-container {
-            display: flex;
-            padding: 10px;
-            border-top: 1px solid #ddd;
-        }
-        input[type="text"] {
-            flex-grow: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-        button {
-            margin-left: 5px;
-            padding: 10px;
-            background-color: #333;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        button:hover {
-            background-color: #555;
-        }
-    </style>
-    <button id="help-button" onclick="toggleChat()">Need Help?</button>
-    <div id="chat-container">
-        <div id="chat-header">
-            <h4>Giftinator 3000</h4>
-            <button id="close-chat" onclick="toggleChat()">×</button>
-        </div>
-        <div id="chat-box"></div>
-        <div id="input-container">
-            <input type="text" id="user-input" placeholder="Type your message..." />
-            <button onclick="sendMessage()">Send</button>
-        </div>
-    </div>
-    <script>
-        const chatBox = document.getElementById('chat-box');
-        const userInput = document.getElementById('user-input');
-        const chatContainer = document.getElementById('chat-container');
-        function toggleChat() {
-            chatContainer.style.display = chatContainer.style.display === 'flex' ? 'none' : 'flex';
-        }
-        async function sendMessage() {
-            const message = userInput.value;
-            if (!message) return;
-            appendMessage('user', message);
-            userInput.value = '';
-            try {
-                const response = await fetch('http://127.0.0.1:8887/chat', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ user_input: message }),
-                });
-                const data = await response.json();
-                if (response.ok) {
-                    appendMessage('assistant', data.response);
-                } else {
-                    appendMessage('assistant', `Error: ${data.error}`);
-                }
-            } catch (error) {
-                appendMessage('assistant', `Error: ${error.message}`);
-            }
-        }
-        function appendMessage(sender, message) {
-            const messageElement = document.createElement('div');
-            messageElement.className = `message ${sender}`;
-            messageElement.innerText = message;
-            chatBox.appendChild(messageElement);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-    </script>
-
-
-
-
