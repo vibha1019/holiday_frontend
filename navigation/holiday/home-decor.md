@@ -23,15 +23,6 @@ comments: true
     </div>
     <input type="hidden" id="star-rating-value" name="star-rating" value="0" />
     <p></p>
-    <!-- Age Range Dropdown -->
-    <label for="channel-select">Age Range:</label>
-    <select id="channel-select" name="channel">
-      <option value="1">Teenage Girls (11-15)</option>
-      <option value="2">Teenage Boys (11-15)</option>
-      <option value="3">Toddlers</option>
-      <option value="4">Adults</option>
-    </select>
-    <p></p>
 
   <!-- New Post Form -->
   <div class="post-form-container" id="post-form" style="display: none;">
