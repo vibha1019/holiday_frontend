@@ -112,6 +112,88 @@ comments: true
   });
 </script>
 
+<script type="module">
+  import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+
+  // Fetch all arguments for a specific channel
+  async function fetchArguments(channelId) {
+    try {
+      const response = await fetch(`${pythonURI}/api/posts/filter`, {
+        ...fetchOptions,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ channel_id: channelId })
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch arguments: ' + response.statusText);
+
+      const argumentsData = await response.json();
+      argumentContainer.innerHTML = ""; // Clear existing arguments
+
+      argumentsData.forEach(arg => {
+        const card = document.createElement("div");
+        card.classList.add("argument-card");
+
+        const text = document.createElement("p");
+        text.innerHTML = `<strong>${arg.user_name}:</strong> ${arg.comment}`; // Adjusted to match backend response structure
+
+        card.appendChild(text);
+        argumentContainer.appendChild(card);
+      });
+    } catch (error) {
+      console.error('Error fetching arguments:', error);
+    }
+  }
+
+  // Handle item selection
+  function selectItem(button, type, category) {
+    const color = type === 'most' ? 'green' : 'red';
+    button.style.backgroundColor = color;
+    button.style.color = 'white';
+
+    // Create a post when an item is selected
+    if (type === 'most') {
+      document.getElementById('group-select').value = "Dnero Store";
+      document.getElementById('channel-select').value = category;
+
+      const postForm = document.getElementById('post-form');
+      postForm.style.display = "block"; // Display post form
+    }
+  }
+
+  // Handle form submission
+  document.getElementById('postForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const title = document.getElementById('title').value;
+    const comment = document.getElementById('comment').value;
+    const group = document.getElementById('group-select').value;
+    const channel = document.getElementById('channel-select').value;
+    const channelID = document.getElementById('postForm').getAttribute('data-channel-id'); // Retrieve the saved channel ID
+    const postData = {
+      title: title,
+      comment: comment,
+      channel_id: channelID
+    }
+
+    try {
+      const response = await fetch(`${pythonURI}/api/post`, {
+        ...fetchOptions,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(postData)
+      });
+
+      if (!response.ok) throw new Error('Failed to add post: ' + response.statusText);
+      alert("Post added successfully!");
+
+    } catch (error) {
+      console.error('Error adding post:', error);
+    }
+  });
+</script>
+
+
 <style>
   .container {
     display: flex;
@@ -156,4 +238,10 @@ comments: true
     margin-top: 20px;
   }
 
+  body {
+    background-image: url("{{ site.baseurl }}/images/dnerostore/bkgd.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
 </style>
