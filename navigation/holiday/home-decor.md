@@ -21,10 +21,8 @@ comments: true
       </div>
       <div id="holiday-posts" class="category-posts"></div>
     </div>
-<<<<<<< HEAD
     <input type="hidden" id="star-rating-value" name="star-rating" value="0" />
     <p></p>
-
     <!-- Age Range Dropdown -->
     <label for="channel-select">Age Range:</label>
     <select id="channel-select" name="channel">
@@ -34,9 +32,6 @@ comments: true
       <option value="4">Adults</option>
     </select>
     <p></p>
-=======
-  </div>
->>>>>>> ef22360b3a48e2535ad0b7e1f4e9f00427c3dc92
 
   <!-- New Post Form -->
   <div class="post-form-container" id="post-form" style="display: none;">
@@ -264,93 +259,164 @@ comments: true
 <script type="module">
     import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
 
-    // URLs to fetch profile links, user data, and commits
-    const postApiUrl = `${pythonURI}/api/posts`;
-
-   // Fetch posts by category
+    // Fetch and display posts
     async function fetchPosts() {
-      try {
-        const response = await fetch(`${pythonURI}/api/posts`);
-        const data = await response.json();
+        try {
+            const response = await fetch(`${pythonURI}/api/posts`);
+            const data = await response.json();
 
-        // Clear existing posts
-        document.getElementById("holiday-posts").innerHTML = "";
+            // Clear existing posts
+            const postContainer = document.getElementById("holiday-posts");
+            postContainer.innerHTML = "";
 
-        // Loop through posts and categorize them
-        data.forEach(post => {
-          const postElement = document.createElement('div');
-          postElement.classList.add('post-item');
-          postElement.innerHTML = `
-            <p><strong>User:</strong> ${post.user_name}</p>
-            <p><strong>Comment:</strong> ${post.comment}</p>
-          `;          
-          document.getElementById("holiday-posts").appendChild(postElement);
-          
-        });
-      } catch (error) {
-        console.error('Error fetching posts:', error);
-      }
+            // Loop through posts and create cards
+            data.forEach(post => {
+                const postCard = document.createElement('div');
+                postCard.classList.add('post-card');
+
+                // Default placeholder for username if not provided
+                const userName = post.user_name || "Anonymous";
+
+                postCard.innerHTML = `
+                    <div class="post-header">
+                        <p><strong>${userName}</strong></p>
+                    </div>
+                    <div class="post-body">
+                        <p><strong>Gift Title:</strong> ${post.title || "No Title"}</p>
+                        <p>${post.comment}</p>
+                    </div>
+                `;
+                postContainer.appendChild(postCard);
+            });
+        } catch (error) {
+            console.error('Error fetching posts:', error);
+        }
     }
 
     fetchPosts();
 </script>
 
 <style>
-  .container {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-  }
+  body {
+  background-image: url("{{ site.baseurl }}/images/dnerostore/bkgd.png");
+  background-color: #1a1a1a; /* Fallback dark background */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #f9f9f9; /* Light text for better contrast */
+}
 
-  .left-side {
-    width: 48%;
-    padding-right: 20px;
-  }
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+  box-sizing: border-box;
+}
 
-  .right-side {
-    width: 56%;
-    padding-left: 10px;
-  }
+.category-box {
+  width: 100%;
+  max-width: 800px;
+  background-color: #3b3b3b; /* Dark grey for contrast */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  margin: 10px 0;
+}
 
-  .category-row {
-    margin-bottom: 20px;
-    border: 1px solid #45abf5;
-    padding: 10px;
-  }
+.category-box h3 {
+  text-align: center;
+  background-color: #d62828; /* Holiday red */
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
+}
 
-  .category-row h3 {
-    background-color: #000;
-    color: white;
-    padding: 10px;
-    text-align: center;
-  }
+.item-list button {
+  margin: 5px;
+  padding: 10px;
+  background-color: #ffcc4d; /* Golden-yellow */
+  border: 1px solid #d62828; /* Holiday red border */
+  color: #1a1a1a; /* Dark text for contrast */
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
 
-  .item-list-container {
-    display: none;
-  }
+.item-list button:hover {
+  background-color: #d62828; /* Highlight with holiday red */
+  color: #ffffff;
+}
 
-  .item-list {
-    display: flex;
-    flex-direction: column;
-  }
+.post-form-container {
+  background-color: #2c2c2c; /* Deep gray for contrast */
+  border: 2px solid #ffcc4d; /* Golden border for festive touch */
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
 
-  .item-list button {
-    margin: 5px;
-    padding: 10px;
-    background-color: #f1f1f1;
-    border: 1px solid #007BFF;
-    cursor: pointer;
-  }
+.post-form-container h2 {
+  color: #ffcc4d; /* Golden-yellow heading */
+  text-align: center;
+}
 
-  .post-form-container {
-    background-color: #020b40;
-    border: 2px solid #007BFF;
-    padding: 20px;
-    border-radius: 8px;
-    margin-top: 20px;
-  }
+input, textarea, select, button {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ffcc4d; /* Golden border */
+  border-radius: 5px;
+  background-color: #f9f9f9; /* Light background */
+  color: #1a1a1a; /* Dark text */
+  font-size: 1em;
+}
 
-  #details {
-    margin-top: 20px;
-  }
+button[type="submit"] {
+  background-color: #d62828; /* Holiday red */
+  color: #ffffff;
+  border: none;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+button[type="submit"]:hover {
+  background-color: #ffcc4d; /* Golden-yellow hover */
+  color: #1a1a1a;
+}
+
+#holiday-posts {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.post-card {
+  background-color: #3b3b3b; /* Dark grey for contrast */
+  border: 1px solid #ffcc4d; /* Golden border */
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.post-header {
+  font-size: 1.2em;
+  color: #ffcc4d; /* Golden-yellow for headers */
+  margin-bottom: 10px;
+}
+
+.post-body {
+  font-size: 1em;
+  line-height: 1.5;
+  color: #f9f9f9; /* Light text */
+}
+
+.post-body p {
+  margin: 5px 0;
+}
+
+
 </style>
