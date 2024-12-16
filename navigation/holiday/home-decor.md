@@ -9,7 +9,7 @@ comments: true
 <div class="container">
   <div class="category-box">
     <div class="category-row" onclick="toggleItems('holiday-items')">
-      <h3>Home Decor</h3>
+      <h3>Review Home Decor Gift Here</h3>
       <div id="holiday-items" class="item-list-container" style="display: none;">
         <p>Please select the category that applies:</p>
         <div class="item-list">
@@ -21,14 +21,13 @@ comments: true
       </div>
       <div id="holiday-posts" class="category-posts"></div>
     </div>
-    <input type="hidden" id="star-rating-value" name="star-rating" value="0" />
     <p></p>
 
   <!-- New Post Form -->
   <div class="post-form-container" id="post-form" style="display: none;">
-    <h2>Create a Post</h2>
+    <h2>Post Review</h2>
     <form id="postForm">
-      <label for="title">Title:</label>
+      <label for="title">Gift Title:</label>
       <input type="text" id="title" name="title" required>
       <p></p>
       <label for="comment">Comment:</label>
