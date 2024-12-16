@@ -6,6 +6,11 @@ if (location.hostname === "localhost") {
 } else {
         pythonURI =  "https://flocker.nighthawkcodingsociety.com";
 }
+
+// Log the value of pythonURI to the console
+console.log('pythonURI:', pythonURI);
+console.log('Script loaded successfully');
+
 export var javaURI;
 if (location.hostname === "localhost") {
         javaURI = "http://localhost:8885";

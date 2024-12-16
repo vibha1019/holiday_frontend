@@ -6,110 +6,80 @@ author: Soni Dhenuva, Vibha Mandayam, Kushi Gade, Nora Ahadian, Spencer Lyons
 comments: true
 ---
 
-<!-- New Post Form (shown by default) -->
-<div class="post-form-container" id="post-form">
-  <h2>Post Review</h2>
-  <form id="postForm">
-    <label for="title">Item Name:</label>
-    <input type="text" id="title" name="title" required>
-    <p></p>
-    <label for="comment">Comment:</label>
-    <textarea id="comment" name="comment" required>
-    Quality:
-    Usefulness:
-    </textarea>
-    <p></p> 
-    <!-- Age Range Dropdown -->
-    <label for="channel-select">Age Range:</label>
-    <select id="channel-select" name="channel">
-        <option value="1" data-channel-id="5">Teenage Girls (11-15)</option>
-        <option value="2" data-channel-id="6">Teenage Boys (11-15)</option>
-        <option value="3" data-channel-id="7">Toddlers</option>
-        <option value="4" data-channel-id="8">Adults</option>
-    </select>
-    <p></p>
-    <button type="submit">Add Post</button>
-  </form>
+<div class="container">
+  <div class="category-box">
+    <div class="category-row" onclick="toggleItems('holiday-items')">
+      <h3>Home Decor</h3>
+      <div id="holiday-items" class="item-list-container" style="display: none;">
+        <p>Please select the category that applies:</p>
+        <div class="item-list">
+          <button onclick="selectItem(this, 'Holiday')" data-channel-id="5">Teenage Girl (11-15)</button>
+          <button onclick="selectItem(this, 'Holiday')" data-channel-id="6">Teenage Boy (11-15)</button>
+          <button onclick="selectItem(this, 'Holiday')" data-channel-id="7">Toddler</button>
+          <button onclick="selectItem(this, 'Holiday')" data-channel-id="8">Adult</button>
+        </div>
+      </div>
+      <div id="holiday-posts" class="category-posts"></div>
+    </div>
+  </div>
+
+  <!-- New Post Form -->
+  <div class="post-form-container" id="post-form" style="display: none;">
+    <h2>Create a Post</h2>
+    <form id="postForm">
+      <label for="title">Title:</label>
+      <input type="text" id="title" name="title" required>
+      <p></p>
+      <label for="comment">Comment:</label>
+      <textarea id="comment" name="comment" required></textarea>
+      <!-- Dropdowns for Group and Channel Selection -->
+      <div class="dropdown-container">
+        <label for="group-select">Group:</label>
+        <select id="group-select" name="group">
+          <option value="Holiday">Holiday</option>
+        </select>
+        <label for="channel-select">Channel:</label>
+        <select id="channel-select" name="channel">
+          <option value="Teenage Girl (11-15)">Teenage Girl (11-15)</option>
+          <option value="Teenage Boy (11-15)">Teenage Boy (11-15)</option>
+          <option value="Toddler">Toddler</option>
+          <option value="Adult">Adult</option>
+        </select>
+      </div>
+      <button type="submit">Add Post</button>
+    </form>
+  </div>
 </div>
 
 <script>
-  // Handle item selection
-  function selectItem(button, category) {
-      // Show the post form
-      const formContainer = document.getElementById('post-form');
-      formContainer.style.display = 'block';
-
-      // Pre-fill form data based on the selected category
-      document.getElementById('title').value = `${category}`;  // Set the item name (category as placeholder)
-      document.getElementById('comment').value = `I selected ${button.innerText} because`;  // Pre-fill the comment
-
-      // Get the channel ID from the selected category
-      const channelSelect = document.getElementById('channel-select');
-      let selectedChannelId = '';
-
-      // Match category to the corresponding channel ID
-      if (category === 'Teenage Girls') {
-          selectedChannelId = '5';
-      } else if (category === 'Teenage Boys') {
-          selectedChannelId = '6';
-      } else if (category === 'Toddlers') {
-          selectedChannelId = '7';
-      } else if (category === 'Adults') {
-          selectedChannelId = '8';
-      }
-      // Set the correct value in the dropdown and store the channel ID
-      channelSelect.value = selectedChannelId;  // Select the right option in the dropdown
-      document.getElementById('postForm').setAttribute('data-channel-id', selectedChannelId); // Save the channel ID to the form
-  }
-</script>
-
-<script type="module">
-  import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
-
-  // Fetch all arguments for a specific channel
-  async function fetchArguments(channelId) {
-    try {
-      const response = await fetch(`${pythonURI}/api/posts/filter`, {
-        ...fetchOptions,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ channel_id: channelId })
-      });
-
-      if (!response.ok) throw new Error('Failed to fetch arguments: ' + response.statusText);
-
-      const argumentsData = await response.json();
-      argumentContainer.innerHTML = ""; // Clear existing arguments
-
-      argumentsData.forEach(arg => {
-        const card = document.createElement("div");
-        card.classList.add("argument-card");
-
-        const text = document.createElement("p");
-        text.innerHTML = `<strong>${arg.user_name}:</strong> ${arg.comment}`; // Adjusted to match backend response structure
-
-        card.appendChild(text);
-        argumentContainer.appendChild(card);
-      });
-    } catch (error) {
-      console.error('Error fetching arguments:', error);
-    }
+  // Toggle visibility of item lists
+  function toggleItems(id) {
+    const selectedItem = document.getElementById(id);
+    const currentState = selectedItem.style.display;
+    selectedItem.style.display = currentState === 'none' ? 'block' : 'none';
   }
 
   // Handle item selection
-  function selectItem(button, type, category) {
-    const color = type === 'most' ? 'green' : 'red';
-    button.style.backgroundColor = color;
+  function selectItem(button, group) {
+    button.style.backgroundColor = 'green';
     button.style.color = 'white';
 
-    // Create a post when an item is selected
-    if (type === 'most') {
-      document.getElementById('group-select').value = "Dnero Store";
-      document.getElementById('channel-select').value = category;
+    // Show the post form
+    const formContainer = document.getElementById('post-form');
+    formContainer.style.display = 'block';
 
-      const postForm = document.getElementById('post-form');
-      postForm.style.display = "block"; // Display post form
-    }
+    // Pre-fill form data based on the selected category
+    document.getElementById('title').value = "";
+    document.getElementById('comment').value = "";
+    document.getElementById('group-select').value = group;
+
+    // Set the category for the dropdown
+    const categoryName = button.textContent;
+    document.getElementById('channel-select').value = categoryName;
+
+    // Save the channel ID to the form
+    const channelID = button.getAttribute('data-channel-id');
+    document.getElementById('postForm').setAttribute('data-channel-id', channelID);
   }
 
   // Handle form submission
@@ -124,85 +94,66 @@ comments: true
     const postData = {
       title: title,
       comment: comment,
-      channel_id: channelID
-    }
+      channel_id: channelID,
+    };
 
     try {
       const response = await fetch(`${pythonURI}/api/post`, {
-        ...fetchOptions,
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(postData)
+        body: JSON.stringify(postData),
       });
 
       if (!response.ok) throw new Error('Failed to add post: ' + response.statusText);
       alert("Post added successfully!");
-
     } catch (error) {
       console.error('Error adding post:', error);
     }
   });
 </script>
 
-
 <style>
-  /* General Post Form Styling */
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .category-box {
+    width: 100%;
+    max-width: 800px;
+    background-color: #000000;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 10px 0;
+  }
+
+  .category-box h3 {
+    text-align: center;
+    background-color: #007BFF;
+    color: white;
+    padding: 10px;
+  }
+
+  .item-list button {
+    margin: 5px;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border: 1px solid #007BFF;
+    cursor: pointer;
+  }
+
   .post-form-container {
-    background-color: #13292b;
-    border: 1px solid #ccc;
+    background-color: #020b40;
+    border: 2px solid #007BFF;
     padding: 20px;
     border-radius: 8px;
     margin-top: 20px;
-    color: #ffffff;
   }
 
-  .post-form-container h2 {
-    font-size: 1.8em;
-    text-align: center;
-    color: #ffd700; /* Gold color */
-  }
-
-  .post-form-container label {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 1.1em;
-  }
-
-  .post-form-container input,
-  .post-form-container textarea,
-  .post-form-container select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    background-color: #f4f4f4;
-  }
-
-  .post-form-container button {
-    background-color: #ffd700;
-    color: #13292b;
-    padding: 12px 20px;
-    font-size: 1.2em;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%;
-    border: none;
-  }
-
-  .post-form-container button:hover {
-    background-color: #ffcc00;
-  }
-
-  /* Styling for star rating */
-  .star-rating {
-    font-size: 2em;
-    cursor: pointer;
-    color: gray; /* Default color */
-  }
-
-  .star {
-    padding: 0 5px;
-    transition: color 0.3s;
-  }
 </style>
