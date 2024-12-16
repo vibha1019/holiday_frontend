@@ -245,3 +245,97 @@ comments: true
     background-repeat: no-repeat;
   }
 </style>
+
+<script type="module">
+    import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+
+    // URLs to fetch profile links, user data, and commits
+    const postApiUrl = `${pythonURI}/api/posts`;
+
+   // Fetch posts by category
+    async function fetchPosts() {
+      try {
+        const response = await fetch(`${pythonURI}/api/posts`);
+        const data = await response.json();
+
+        // Clear existing posts
+        document.getElementById("holiday-posts").innerHTML = "";
+
+        // Loop through posts and categorize them
+        data.forEach(post => {
+          const postElement = document.createElement('div');
+          postElement.classList.add('post-item');
+          postElement.innerHTML = `
+            <p><strong>User:</strong> ${post.user_name}</p>
+            <p><strong>Comment:</strong> ${post.comment}</p>
+          `;          
+          document.getElementById("holiday-posts").appendChild(postElement);
+          
+        });
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    }
+
+    fetchPosts();
+</script>
+
+<style>
+  .container {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+  }
+
+  .left-side {
+    width: 48%;
+    padding-right: 20px;
+  }
+
+  .right-side {
+    width: 56%;
+    padding-left: 10px;
+  }
+
+  .category-row {
+    margin-bottom: 20px;
+    border: 1px solid #45abf5;
+    padding: 10px;
+  }
+
+  .category-row h3 {
+    background-color: #000;
+    color: white;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .item-list-container {
+    display: none;
+  }
+
+  .item-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .item-list button {
+    margin: 5px;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border: 1px solid #007BFF;
+    cursor: pointer;
+  }
+
+  .post-form-container {
+    background-color: #020b40;
+    border: 2px solid #007BFF;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+  }
+
+  #details {
+    margin-top: 20px;
+  }
+</style>
