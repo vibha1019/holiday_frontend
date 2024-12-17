@@ -38,9 +38,6 @@ comments: true
             <h2>Toys</h2>
             <button onclick="location.href='{{ site.baseurl }}/holiday/toys/'">Explore Toys</button>
         </div>
-
-    </main>
-</div>
 <style>
 /* General Page Styles */
 .holiday-page {
