@@ -49,12 +49,12 @@ html, body {
 /* Apply the background image to the container */
 .holiday-page {
     background-image: url('{{ site.baseurl }}/images/greenbackground.png');
-    background-size: 100% auto; /* Ensure the image spans full width */
+    background-size: cover; /* Keeps the image covering the container */
     background-position: center;
     background-attachment: fixed; /* Keeps background fixed on scroll */
     min-height: 100vh;
-    width: 100vw; /* Full viewport width */
-    margin: 0; /* Remove any margins */
+    width: 68vw; /* Reduces the width of the container to 80% of the viewport */
+    margin: 0 auto; /* Centers the container */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -138,4 +138,236 @@ html, body {
         font-size: 1.2em;
     }
 }
+
+/* Snowflake Styling */
+.snowflake {
+    position: absolute;
+    color: white;
+    font-size: 1em;
+    user-select: none;
+    pointer-events: none;
+    z-index: 1;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(100vh);
+    }
+}
+
+/* Animation for snowflakes */
+.snowflake:nth-child(odd) {
+    animation-duration: 10s;
+}
+
+.snowflake:nth-child(even) {
+    animation-duration: 15s;
+}
+
+/* Adjusting the snowflakes' size and timing */
+.snowflake:nth-child(1) {
+    font-size: 1.5em;
+    animation-duration: 10s;
+}
+
+.snowflake:nth-child(2) {
+    font-size: 1.3em;
+    animation-duration: 12s;
+}
+
+.snowflake:nth-child(3) {
+    font-size: 1.7em;
+    animation-duration: 14s;
+}
 </style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Snowflakes creation
+    for (let i = 0; i < 100; i++) {
+        let snowflake = document.createElement("div");
+        snowflake.classList.add("snowflake");
+        snowflake.style.left = `${Math.random() * 100}%`;
+        snowflake.style.animationDuration = `${Math.random() * 10 + 5}s`; // random fall time
+        snowflake.style.animationDelay = `${Math.random() * 5}s`; // random start time
+        snowflake.innerHTML = "❆";
+        document.querySelector(".holiday-page").appendChild(snowflake);
+    }
+});
+</script>
+
+<html lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            height: 100vh;
+            background-color: #f9f9f9;
+        }
+        #help-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #5F9EA0 !important; /* Light blue */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        #help-button:hover {
+            background-color: #63b6e3;
+        }
+        #chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            max-height: 500px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        #chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            border-bottom: 1px solid #ddd;
+        }
+        #chat-header h4 {
+            margin: 0;
+            font-size: 16px;
+        }
+        #close-chat {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        #close-chat:hover {
+            color: #ff6666;
+        }
+        #chat-box {
+            flex-grow: 1;
+            padding: 10px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .message {
+            margin: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 75%;
+            word-wrap: break-word;
+            display: inline-block;
+        }
+        .assistant {
+            background-color: #333;
+            color: white;
+            align-self: flex-start;
+            text-align: left;
+        }
+        .user {
+            background-color: #2f4f4f;
+            color: white;
+            align-self: flex-end;
+            text-align: right;
+        }
+        #input-container {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            margin-left: 5px;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #555;
+        }
+    </style>
+    <button id="help-button" onclick="toggleChat()">Need Help?</button>
+    <div id="chat-container">
+        <div id="chat-header">
+            <h4>Giftinator 3000</h4>
+            <button id="close-chat" onclick="toggleChat()">×</button>
+        </div>
+        <div id="chat-box"></div>
+        <div id="input-container">
+            <input type="text" id="user-input" placeholder="Type your message..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('user-input');
+        const chatContainer = document.getElementById('chat-container');
+        function toggleChat() {
+            chatContainer.style.display = chatContainer.style.display === 'flex' ? 'none' : 'flex';
+        }
+        async function sendMessage() {
+            const message = userInput.value;
+            if (!message) return;
+            appendMessage('user', message);
+            userInput.value = '';
+            try {
+                const response = await fetch('http://127.0.0.1:8887/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ user_input: message }),
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    appendMessage('assistant', data.response);
+                } else {
+                    appendMessage('assistant', `Error: ${data.error}`);
+                }
+            } catch (error) {
+                appendMessage('assistant', `Error: ${error.message}`);
+            }
+        }
+        function appendMessage(sender, message) {
+            const messageElement = document.createElement('div');
+            messageElement.className = `message ${sender}`;
+            messageElement.innerText = message;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+
+
+
