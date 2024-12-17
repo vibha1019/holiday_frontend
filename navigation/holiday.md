@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", function() {
             bottom: 20px;
             right: 20px;
             padding: 10px 20px;
-            background-color: #5F9EA0 !important; /* Light blue */
+            background-color: #B22222 !important; /* Light blue */
             color: white;
             border: none;
             border-radius: 5px;
