@@ -195,25 +195,42 @@ comments: true
 
 
 <style>
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    max-width: 1200px;
-    padding: 20px;
-    box-sizing: border-box;
-  }
+  body {
+  background-image: url("{{ site.baseurl }}/images/dnerostore/bkgd.png");
+  background-color: #a8e6a3; /* Light green background */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #1a1a1a; /* Dark text for contrast */
+}
 
-  .category-box {
-    width: 100%;
-    max-width: 800px;
-    background-color: #000000;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin: 10px 0;
-  }
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.category-box {
+  width: 100%;
+  max-width: 800px;
+  background-color: #c8e6c9; /* Light green for the category box */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 10px 0;
+}
+
+.post-form-container {
+  background-color: #b2dfdb; /* Light teal for the post form container */
+  border: 2px solid #80cbc4; /* Complementary teal border */
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
 
   .category-box h3 {
     text-align: center;
@@ -238,12 +255,7 @@ comments: true
     margin-top: 20px;
   }
 
-  body {
-    background-image: url("{{ site.baseurl }}/images/dnerostore/bkgd.png");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
+  
 </style>
 
 <script type="module">
