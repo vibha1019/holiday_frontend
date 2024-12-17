@@ -4,7 +4,6 @@ title: searchbar
 permalink: /searchbar
 ---
 <div style="font-family: Arial, sans-serif; margin: 0; padding: 0;">
-    <!-- Search Section -->
     <div class="content">
         <div class="container">
             <h1 class="title" style="color: darkred;">Find Your Holiday Gifts 🎁</h1>
