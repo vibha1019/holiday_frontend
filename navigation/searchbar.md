@@ -3,17 +3,20 @@ layout: post
 title: searchbar
 permalink: /searchbar
 ---
-<div style="font-family: Arial, sans-serif; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh;">
-    <div class="container">
-        <div class="search-bar">
-            <input 
-                type="text" 
-                id="searchInput" 
-                placeholder="Search for an item..." 
-                oninput="searchItems()"
-            >
+<div style="font-family: Arial, sans-serif; margin: 0; padding: 0;">
+    <div class="content">
+        <div class="container">
+            <h1 class="title" style="color: darkred;">Find Your Holiday Gifts 🎁</h1>
+            <div class="search-bar">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Search for an item..." 
+                    oninput="searchItems()"
+                >
+            </div>
+            <div id="results"></div>
         </div>
-        <div id="results"></div>
     </div>
 </div>
 
@@ -22,17 +25,29 @@ permalink: /searchbar
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
+        background-color: white;
+    }
+    
+    /* Content Section */
+    .content {
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        height: 90vh;
     }
     .container {
         width: 100%;
         max-width: 600px;
-        padding: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        border-radius: 12px;
+        background-color: white;
+        text-align: center;
+    }
+    .title {
+        font-size: 28px;
+        color: darkred;
+        margin-bottom: 20px;
     }
     .search-bar {
         display: flex;
@@ -41,32 +56,36 @@ permalink: /searchbar
     }
     #searchInput {
         width: 100%;
-        padding: 15px;
-        border: 2px solid #ccc;
+        padding: 12px;
+        border: 2px solid #ddd;
         border-radius: 25px;
-        font-size: 18px;
+        font-size: 16px;
         box-sizing: border-box;
         outline: none;
-        transition: border-color 0.3s;
+        transition: border-color 0.3s, box-shadow 0.3s;
     }
     #searchInput:focus {
-        border-color: #000000;
+        border-color: green;
+        box-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
     }
     #results {
         margin-top: 20px;
-        width: 100%;
+        text-align: left;
+        max-height: 300px;
+        overflow-y: auto;
     }
     .result {
         margin: 5px 0;
         padding: 10px 15px;
-        background: #000000;
+        background: green;
         color: white;
         border-radius: 5px;
         cursor: pointer;
-        transition: background-color 0.3s;
+        transition: background-color 0.3s, transform 0.2s;
     }
     .result:hover {
-        background: #0e1e6e;
+        background: darkred;
+        transform: translateY(-2px);
     }
 </style>
 
