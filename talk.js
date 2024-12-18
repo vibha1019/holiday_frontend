@@ -23,4 +23,4 @@ const sendDataToBackend = async (data) => {
 export const sendData = (data) => sendDataToBackend(data);
 export const empty = (a,b) => a+b;
 
-module.export = { senData, empty };
+module.export = { sendData, empty };
