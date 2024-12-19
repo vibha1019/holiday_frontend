@@ -215,7 +215,7 @@ document.addEventListener("DOMContentLoaded", function() {
         #help-button {
             position: fixed;
             bottom: 20px;
-            right: 20px;
+            left: 20px; /* Move the button to the left */
             padding: 10px 20px;
             background-color: #B22222 !important; /* Light blue */
             color: white;
@@ -231,7 +231,7 @@ document.addEventListener("DOMContentLoaded", function() {
         #chat-container {
             position: fixed;
             bottom: 20px;
-            right: 20px;
+            left: 20px; /* Align chat box with the button */
             width: 350px;
             max-height: 500px;
             background-color: white;
