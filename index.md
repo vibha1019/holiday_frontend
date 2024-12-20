@@ -1,73 +1,117 @@
 ---
 layout: post
-title: Holiday Giftinator
+title: Snake Game
 search_exclude: true
-description: Login and explore our social media hub for everything DNHS 
+description: Login and explore our social media hub for everything DNHS
 hide: true
 menu: nav/home.html
 ---
 
 <style>
-
-    body{
+    /* Prevent scrolling on the body */
+    html, body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
     }
-    .wrap{
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #121212;
+        color: #ffffff;
+    }
+
+    .wrap {
         margin-left: auto;
         margin-right: auto;
     }
 
-    canvas{
-        display: none;
+    canvas {
+        display: block; /* Ensures canvas takes up full space without overflow */
+        margin: 0;
+        padding: 0;
         border-style: solid;
         border-width: 10px;
-        border-color: #FFFFFF;
+        border-color: #ffffff;
     }
-    canvas:focus{
+
+    canvas:focus {
         outline: none;
     }
 
-    /* All screens style */
-    #gameover p, #setting p, #menu p{
-        font-size: 20px;
+    /* Neon glow and modal styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        padding-top: 60px;
+        text-align: center;
     }
 
-    #gameover a, #setting a, #menu a{
-        font-size: 30px;
-        display: block;
+    .modal-content {
+        background-color: #121212;
+        color: #fff;
+        border: 3px solid #fff;
+        width: 40%;
+        margin: auto;
+        padding: 30px;
+        font-size: 24px;
+        box-shadow: 0 0 20px lime;
+        border-radius: 10px;
     }
 
-    #gameover a:hover, #setting a:hover, #menu a:hover{
+    .modal-content .score {
+        font-size: 36px;
+        font-weight: bold;
+        color: lime;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #fff;
+        text-decoration: none;
         cursor: pointer;
     }
 
-    #gameover a:hover::before, #setting a:hover::before, #menu a:hover::before{
-        content: ">";
-        margin-right: 10px;
-    }
-
-    #menu{
+    #menu {
         display: block;
     }
 
-    #gameover{
+    #gameover {
         display: none;
     }
 
-    #setting{
+    #setting {
         display: none;
     }
 
-    #setting input{
-        display:none;
+    #setting input {
+        display: none;
     }
 
-    #setting label{
+    #setting label {
         cursor: pointer;
     }
 
-    #setting input:checked + label{
-        background-color: #FFF;
+    #setting input:checked + label {
+        background-color: #fff;
         color: #000;
+    }
+
+    .link-alert:hover {
+        cursor: pointer;
     }
 </style>
 
@@ -114,8 +158,16 @@ menu: nav/home.html
     </div>
 </div>
 
+<!-- Modal for score display -->
+<div id="scoreModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Your final score:</p>
+        <p class="score" id="finalScore"></p>
+    </div>
+</div>
+
 <script>
-    
     (function(){
         /* Attributes of Game */
         /////////////////////////////////////////////////////////////
@@ -129,7 +181,7 @@ menu: nav/home.html
         const speed_setting = document.getElementsByName("speed");
         const wall_setting = document.getElementsByName("wall");
         // HTML Screen IDs (div)
-        const SCREEN_MENU = -1, SCREEN_GAME_OVER=1, SCREEN_SETTING=2;
+        const SCREEN_MENU = -1, SCREEN_GAME_OVER = 1, SCREEN_SETTING = 2;
         const screen_menu = document.getElementById("menu");
         const screen_game_over = document.getElementById("gameover");
         const screen_setting = document.getElementById("setting");
@@ -165,10 +217,11 @@ menu: nav/home.html
                     screen_game_over.style.display = "none";
                     break;
                 case SCREEN_GAME_OVER:
-                    screen_snake.style.display = "block";
+                    screen_snake.style.display = "none";
                     screen_menu.style.display = "none";
                     screen_setting.style.display = "none";
                     screen_game_over.style.display = "block";
+                    displayModal();
                     break;
                 case SCREEN_SETTING:
                     screen_snake.style.display = "none";
@@ -178,6 +231,27 @@ menu: nav/home.html
                     break;
             }
         }
+
+        const modal = document.getElementById("scoreModal");
+        const closeModal = document.getElementsByClassName("close")[0];
+
+        function displayModal() {
+            document.getElementById("finalScore").textContent = score;
+            modal.style.display = "block";
+        }
+
+        closeModal.onclick = function() {
+            modal.style.display = "none";
+            newGame();
+        }
+
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+                newGame();
+            }
+        }
+
         /* Actions and Events  */
         /////////////////////////////////////////////////////////////
         window.onload = function(){
@@ -187,214 +261,81 @@ menu: nav/home.html
             button_new_game2.onclick = function(){newGame();};
             button_setting_menu.onclick = function(){showScreen(SCREEN_SETTING);};
             button_setting_menu1.onclick = function(){showScreen(SCREEN_SETTING);};
-            // speed
-            setSnakeSpeed(150);
-            for(let i = 0; i < speed_setting.length; i++){
-                speed_setting[i].addEventListener("click", function(){
-                    for(let i = 0; i < speed_setting.length; i++){
-                        if(speed_setting[i].checked){
-                            setSnakeSpeed(speed_setting[i].value);
-                        }
-                    }
-                });
+            // Keyboard Control
+            document.onkeydown = function(event){
+                let dir_key = event.keyCode || event.which;
+                if(dir_key == 37 && snake_dir != "RIGHT"){snake_next_dir = "LEFT";}
+                else if(dir_key == 38 && snake_dir != "DOWN"){snake_next_dir = "UP";}
+                else if(dir_key == 39 && snake_dir != "LEFT"){snake_next_dir = "RIGHT";}
+                else if(dir_key == 40 && snake_dir != "UP"){snake_next_dir = "DOWN";}
             }
-            // wall setting
-            setWall(1);
-            for(let i = 0; i < wall_setting.length; i++){
-                wall_setting[i].addEventListener("click", function(){
-                    for(let i = 0; i < wall_setting.length; i++){
-                        if(wall_setting[i].checked){
-                            setWall(wall_setting[i].value);
-                        }
-                    }
-                });
-            }
-            // activate window events
-            window.addEventListener("keydown", function(evt) {
-                // spacebar detected
-                if(evt.code === "Space" && SCREEN !== SCREEN_SNAKE)
-                    newGame();
-            }, true);
+            newGame();
         }
-        /* Snake is on the Go (Driver Function)  */
+
+        /* Game Logic */
         /////////////////////////////////////////////////////////////
-        let mainLoop = function() {
-            let _x = snake[0].x;
-            let _y = snake[0].y;
-            snake_dir = snake_next_dir;   // read async event key
-            // Direction 0 - Up, 1 - Right, 2 - Down, 3 - Left
-            switch (snake_dir) {
-                case 0: _y--; break;
-                case 1: _x++; break;
-                case 2: _y++; break;
-                case 3: _x--; break;
-            }
-            snake.pop(); // tail is removed
-            snake.unshift({x: _x, y: _y}); // head is new in new position/orientation
-
-            // Wall Checker
-            if (wall === 1) {
-                // Wall on, Game over test
-                if (snake[0].x < 0 || snake[0].x === canvas.width / BLOCK || snake[0].y < 0 || snake[0].y === canvas.height / BLOCK) {
-                    showScreen(SCREEN_GAME_OVER);
-                    return;
-                }
-            } else {
-                // Wall Off, Circle around
-                for (let i = 0, x = snake.length; i < x; i++) {
-                    if (snake[i].x < 0) {
-                        snake[i].x = snake[i].x + (canvas.width / BLOCK);
-                    }
-                    if (snake[i].x === canvas.width / BLOCK) {
-                        snake[i].x = snake[i].x - (canvas.width / BLOCK);
-                    }
-                    if (snake[i].y < 0) {
-                        snake[i].y = snake[i].y + (canvas.height / BLOCK);
-                    }
-                    if (snake[i].y === canvas.height / BLOCK) {
-                        snake[i].y = snake[i].y - (canvas.height / BLOCK);
-                    }
-                }
-            }
-
-    // Snake vs Snake checker
-    for (let i = 1; i < snake.length; i++) {
-        // Game over test
-        if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
-            showScreen(SCREEN_GAME_OVER);
-            return;
-        }
-    }
-
-    // Snake eats food checker
-    let isFoodEaten = false;
-    if (checkBlock(snake[0].x, snake[0].y, food.x, food.y)) {
-        snake.push({x: snake[0].x, y: snake[0].y});
-        altScore(++score);
-        addFood();
-        isFoodEaten = true;
-    }
-
-    // Repaint canvas
-    ctx.beginPath();
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Paint snake
-    for (let i = 0; i < snake.length; i++) {
-        activeDot(snake[i].x, snake[i].y, isFoodEaten);
-    }
-
-    // Paint food
-    activeDot(food.x, food.y, isFoodEaten);
-
-    // Reset the food-eaten glow for the next frame
-    if (isFoodEaten) {
-        setTimeout(() => {
-            isFoodEaten = false;
-        }, 10000000);
-    }
-
-    // Recursive call after speed delay, déjà vu
-    setTimeout(mainLoop, snake_speed);
-}
-
-        /* New Game setup */
-        /////////////////////////////////////////////////////////////
-        let newGame = function(){
-            // snake game screen
-            showScreen(SCREEN_SNAKE);
-            screen_snake.focus();
-            // game score to zero
+        function newGame(){
             score = 0;
-            altScore(score);
-            // initial snake
-            snake = [];
-            snake.push({x: 0, y: 15});
-            snake_next_dir = 1;
-            // food on canvas
-            addFood();
-            // activate canvas event
-            canvas.onkeydown = function(evt) {
-                changeDir(evt.keyCode);
-            }
-            mainLoop();
+            ele_score.innerHTML = score;
+            snake = [{x: 5, y: 5}];
+            snake_dir = "RIGHT";
+            snake_next_dir = snake_dir;
+            snake_speed = 120;
+            food.x = 10;
+            food.y = 10;
+            wall = true;
+            showScreen(SCREEN_SNAKE);
+            startGame();
         }
-        /* Key Inputs and Actions */
-        /////////////////////////////////////////////////////////////
-        let changeDir = function(key){
-            // test key and switch direction
-            switch(key) {
-                case 37:    // left arrow
-                    if (snake_dir !== 1)    // not right
-                        snake_next_dir = 3; // then switch left
-                    break;
-                case 38:    // up arrow
-                    if (snake_dir !== 2)    // not down
-                        snake_next_dir = 0; // then switch up
-                    break;
-                case 39:    // right arrow
-                    if (snake_dir !== 3)    // not left
-                        snake_next_dir = 1; // then switch right
-                    break;
-                case 40:    // down arrow
-                    if (snake_dir !== 0)    // not up
-                        snake_next_dir = 2; // then switch down
-                    break;
-            }
+
+        function startGame(){
+            let gameInterval = setInterval(function(){
+                moveSnake();
+                if(checkGameOver()){clearInterval(gameInterval); showScreen(SCREEN_GAME_OVER);}
+                drawGame();
+            }, snake_speed);
         }
-        /* Dot for Food or Snake part */
-        /////////////////////////////////////////////////////////////
-        let activeDot = function (x, y, isFoodEaten = false) {
-            if (isFoodEaten) {
-                ctx.shadowBlur = 100000; // More intense glow
-                ctx.shadowColor = "lime"; // The glow color (neon green)
+
+        function moveSnake(){
+            let head = snake[0];
+            let newHead = {x: head.x, y: head.y};
+            switch(snake_next_dir){
+                case "UP": newHead.y--; break;
+                case "DOWN": newHead.y++; break;
+                case "LEFT": newHead.x--; break;
+                case "RIGHT": newHead.x++; break;
+            }
+            snake.unshift(newHead);
+            if(snake[0].x === food.x && snake[0].y === food.y){
+                score++;
+                ele_score.innerHTML = score;
+                food.x = Math.floor(Math.random() * 32);
+                food.y = Math.floor(Math.random() * 32);
             } else {
-                ctx.shadowBlur = 20; // Default glow effect
-                ctx.shadowColor = "magenta"; // The glow color (neon green)
+                snake.pop();
             }
+            snake_dir = snake_next_dir;
+        }
 
-            ctx.fillStyle = "magenta"; // The main color of the snake
-            ctx.fillRect(x * BLOCK, y * BLOCK, BLOCK, BLOCK);
-            ctx.shadowBlur = 0; // Reset shadow blur to prevent affecting other elements
-        };
+        function checkGameOver(){
+            let head = snake[0];
+            if(head.x < 0 || head.x >= 32 || head.y < 0 || head.y >= 32){return true;}
+            for(let i = 1; i < snake.length; i++){
+                if(snake[i].x === head.x && snake[i].y === head.y){return true;}
+            }
+            return false;
+        }
 
-
-
-        /* Random food placement */
-        /////////////////////////////////////////////////////////////
-        let addFood = function(){
-            food.x = Math.floor(Math.random() * ((canvas.width / BLOCK) - 1));
-            food.y = Math.floor(Math.random() * ((canvas.height / BLOCK) - 1));
+        function drawGame(){
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Draw Snake
             for(let i = 0; i < snake.length; i++){
-                if(checkBlock(food.x, food.y, snake[i].x, snake[i].y)){
-                    addFood();
-                }
+                ctx.fillStyle = i === 0 ? "#00FF00" : "#008000";
+                ctx.fillRect(snake[i].x * BLOCK, snake[i].y * BLOCK, BLOCK, BLOCK);
             }
-        }
-        /* Collision Detection */
-        /////////////////////////////////////////////////////////////
-        let checkBlock = function(x, y, _x, _y){
-            return (x === _x && y === _y);
-        }
-        /* Update Score */
-        /////////////////////////////////////////////////////////////
-        let altScore = function(score_val){
-            ele_score.innerHTML = String(score_val);
-        }
-        /////////////////////////////////////////////////////////////
-        // Change the snake speed...
-        // 150 = slow
-        // 100 = normal
-        // 50 = fast
-        let setSnakeSpeed = function(speed_value){
-            snake_speed = speed_value;
-        }
-        /////////////////////////////////////////////////////////////
-        let setWall = function(wall_value){
-            wall = wall_value;
-            if(wall === 0){screen_snake.style.borderColor = "#606060";}
-            if(wall === 1){screen_snake.style.borderColor = "#FFFFFF";}
+            // Draw Food
+            ctx.fillStyle = "#FF0000";
+            ctx.fillRect(food.x * BLOCK, food.y * BLOCK, BLOCK, BLOCK);
         }
     })();
 </script>
