@@ -2,7 +2,6 @@
 layout: post
 title: Snake Game
 search_exclude: true
-description: Login and explore our social media hub for everything DNHS
 hide: true
 menu: nav/home.html
 ---
@@ -13,56 +12,82 @@ menu: nav/home.html
         height: 100%;
         margin: 0;
         overflow: hidden;
+        font-family: 'Roboto', sans-serif;
+        background: linear-gradient(45deg, #121212, #0c0c0c);
     }
 
     body {
-        font-family: Arial, sans-serif;
-        background-color: #121212;
         color: #ffffff;
     }
 
     .wrap {
         margin-left: auto;
         margin-right: auto;
+        max-width: 320px;
     }
 
     canvas {
-        display: block; /* Ensures canvas takes up full space without overflow */
-        margin: 0;
-        padding: 0;
+        display: block;
+        margin: 0 auto;
         border-style: solid;
-        border-width: 10px;
-        border-color: #ffffff;
+        border-width: 5px;
+        border-color: #00FF00;
+        box-shadow: 0 0 20px lime;
     }
 
     canvas:focus {
         outline: none;
     }
 
-    /* Neon glow and modal styles */
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.8);
-        padding-top: 60px;
+    h2 {
         text-align: center;
+        color: #fff;
+        font-size: 3em;
+        text-shadow: 0 0 20px lime;
+        margin-top: 20px;
+    }
+
+    .container {
+        text-align: center;
+        padding: 20px;
+    }
+
+    header {
+        font-size: 1.5em;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #00FF00;
+        text-shadow: 0 0 10px lime;
+    }
+
+    .link-alert {
+        color: #00FF00;
+        text-decoration: none;
+        font-size: 1.2em;
+        padding: 10px 20px;
+        margin: 10px;
+        border: 2px solid #00FF00;
+        border-radius: 5px;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .link-alert:hover {
+        background-color: #00FF00;
+        color: #121212;
+        box-shadow: 0 0 10px lime;
     }
 
     .modal-content {
         background-color: #121212;
         color: #fff;
-        border: 3px solid #fff;
+        border: 3px solid #00FF00;
         width: 40%;
         margin: auto;
         padding: 30px;
         font-size: 24px;
         box-shadow: 0 0 20px lime;
         border-radius: 10px;
+        text-align: center;
     }
 
     .modal-content .score {
@@ -71,9 +96,12 @@ menu: nav/home.html
         color: lime;
     }
 
+    .modal-content p {
+        font-size: 20px;
+    }
+
     .close {
         color: #aaa;
-        float: right;
         font-size: 28px;
         font-weight: bold;
     }
@@ -85,34 +113,58 @@ menu: nav/home.html
         cursor: pointer;
     }
 
-    #menu {
+    #menu, #gameover, #setting {
+        transition: opacity 0.3s ease;
+    }
+
+    /* Neon glow effect for interactive elements */
+    .link-alert:hover,
+    #new_game:hover,
+    #new_game1:hover,
+    #new_game2:hover {
+        color: #00FF00;
+        text-shadow: 0 0 15px lime, 0 0 10px lime;
+    }
+
+    /* Add transition effect for screens */
+    #menu, #gameover, #setting {
+        opacity: 0;
+        display: none;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    #menu.active, #gameover.active, #setting.active {
+        opacity: 1;
         display: block;
     }
 
-    #gameover {
-        display: none;
+    /* Customize game over screen */
+    #gameover p {
+        font-size: 1.5em;
+        text-shadow: 0 0 10px lime;
     }
 
-    #setting {
-        display: none;
-    }
-
-    #setting input {
-        display: none;
+    #setting input[type="radio"] {
+        margin-right: 10px;
     }
 
     #setting label {
         cursor: pointer;
+        font-size: 1.1em;
+        color: #00FF00;
+        padding: 5px;
+        transition: color 0.3s ease;
     }
 
-    #setting input:checked + label {
-        background-color: #fff;
-        color: #000;
+    #setting label:hover {
+        color: lime;
     }
 
-    .link-alert:hover {
-        cursor: pointer;
+    #setting input[type="radio"]:checked + label {
+        background-color: #00FF00;
+        color: #121212;
     }
+
 </style>
 
 <h2>Snake</h2>
