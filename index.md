@@ -230,8 +230,6 @@ menu: nav/home.html
         const SCREEN_SNAKE = 0;
         const screen_snake = document.getElementById("snake");
         const ele_score = document.getElementById("score_value");
-        const speed_setting = document.getElementsByName("speed");
-        const wall_setting = document.getElementsByName("wall");
         // HTML Screen IDs (div)
         const SCREEN_MENU = -1, SCREEN_GAME_OVER = 1, SCREEN_SETTING = 2;
         const screen_menu = document.getElementById("menu");
@@ -253,12 +251,11 @@ menu: nav/home.html
         let food = {x: 0, y: 0};
         let score;
         let wall;
+        let snakeColorIndex = 0;
+        const snakeColors = ["#00FF00", "#008000", "#FF00FF", "#FFFF00", "#00FFFF", "#FF4500"];
+
         /* Display Control */
         /////////////////////////////////////////////////////////////
-        // 0 for the game
-        // 1 for the main menu
-        // 2 for the settings screen
-        // 3 for the game over screen
         let showScreen = function(screen_opt){
             SCREEN = screen_opt;
             switch(screen_opt){
@@ -282,7 +279,7 @@ menu: nav/home.html
                     screen_game_over.style.display = "none";
                     break;
             }
-        }
+        };
 
         const modal = document.getElementById("scoreModal");
         const closeModal = document.getElementsByClassName("close")[0];
@@ -295,14 +292,14 @@ menu: nav/home.html
         closeModal.onclick = function() {
             modal.style.display = "none";
             newGame();
-        }
+        };
 
         window.onclick = function(event) {
             if (event.target === modal) {
                 modal.style.display = "none";
                 newGame();
             }
-        }
+        };
 
         /* Actions and Events  */
         /////////////////////////////////////////////////////////////
@@ -320,9 +317,9 @@ menu: nav/home.html
                 else if(dir_key == 38 && snake_dir != "DOWN"){snake_next_dir = "UP";}
                 else if(dir_key == 39 && snake_dir != "LEFT"){snake_next_dir = "RIGHT";}
                 else if(dir_key == 40 && snake_dir != "UP"){snake_next_dir = "DOWN";}
-            }
+            };
             newGame();
-        }
+        };
 
         /* Game Logic */
         /////////////////////////////////////////////////////////////
@@ -336,6 +333,7 @@ menu: nav/home.html
             food.x = 10;
             food.y = 10;
             wall = true;
+            snakeColorIndex = 0;
             showScreen(SCREEN_SNAKE);
             startGame();
         }
@@ -363,6 +361,7 @@ menu: nav/home.html
                 ele_score.innerHTML = score;
                 food.x = Math.floor(Math.random() * 32);
                 food.y = Math.floor(Math.random() * 32);
+                snakeColorIndex = (snakeColorIndex + 1) % snakeColors.length;
             } else {
                 snake.pop();
             }
@@ -382,7 +381,7 @@ menu: nav/home.html
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             // Draw Snake
             for(let i = 0; i < snake.length; i++){
-                ctx.fillStyle = i === 0 ? "#00FF00" : "#008000";
+                ctx.fillStyle = i === 0 ? snakeColors[snakeColorIndex] : "#008000";
                 ctx.fillRect(snake[i].x * BLOCK, snake[i].y * BLOCK, BLOCK, BLOCK);
             }
             // Draw Food
