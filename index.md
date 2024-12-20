@@ -218,12 +218,12 @@ menu: nav/home.html
         }
         /* Snake is on the Go (Driver Function)  */
         /////////////////////////////////////////////////////////////
-        let mainLoop = function(){
+        let mainLoop = function() {
             let _x = snake[0].x;
             let _y = snake[0].y;
             snake_dir = snake_next_dir;   // read async event key
             // Direction 0 - Up, 1 - Right, 2 - Down, 3 - Left
-            switch(snake_dir){
+            switch (snake_dir) {
                 case 0: _y--; break;
                 case 1: _x++; break;
                 case 2: _y++; break;
@@ -231,60 +231,74 @@ menu: nav/home.html
             }
             snake.pop(); // tail is removed
             snake.unshift({x: _x, y: _y}); // head is new in new position/orientation
+
             // Wall Checker
-            if(wall === 1){
+            if (wall === 1) {
                 // Wall on, Game over test
-                if (snake[0].x < 0 || snake[0].x === canvas.width / BLOCK || snake[0].y < 0 || snake[0].y === canvas.height / BLOCK){
+                if (snake[0].x < 0 || snake[0].x === canvas.width / BLOCK || snake[0].y < 0 || snake[0].y === canvas.height / BLOCK) {
                     showScreen(SCREEN_GAME_OVER);
                     return;
                 }
-            }else{
+            } else {
                 // Wall Off, Circle around
-                for(let i = 0, x = snake.length; i < x; i++){
-                    if(snake[i].x < 0){
+                for (let i = 0, x = snake.length; i < x; i++) {
+                    if (snake[i].x < 0) {
                         snake[i].x = snake[i].x + (canvas.width / BLOCK);
                     }
-                    if(snake[i].x === canvas.width / BLOCK){
+                    if (snake[i].x === canvas.width / BLOCK) {
                         snake[i].x = snake[i].x - (canvas.width / BLOCK);
                     }
-                    if(snake[i].y < 0){
+                    if (snake[i].y < 0) {
                         snake[i].y = snake[i].y + (canvas.height / BLOCK);
                     }
-                    if(snake[i].y === canvas.height / BLOCK){
+                    if (snake[i].y === canvas.height / BLOCK) {
                         snake[i].y = snake[i].y - (canvas.height / BLOCK);
                     }
                 }
             }
-            // Snake vs Snake checker
-            for(let i = 1; i < snake.length; i++){
-                // Game over test
-                if (snake[0].x === snake[i].x && snake[0].y === snake[i].y){
-                    showScreen(SCREEN_GAME_OVER);
-                    return;
-                }
-            }
-            // Snake eats food checker
-            if(checkBlock(snake[0].x, snake[0].y, food.x, food.y)){
-                snake[snake.length] = {x: snake[0].x, y: snake[0].y};
-                altScore(++score);
-                addFood();
-                activeDot(food.x, food.y);
-            }
-            // Repaint canvas
-            ctx.beginPath();
-            ctx.fillStyle = "black";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            // Paint snake
-            for(let i = 0; i < snake.length; i++){
-                activeDot(snake[i].x, snake[i].y);
-            }
-            // Paint food
-            activeDot(food.x, food.y);
-            // Debug
-            //document.getElementById("debug").innerHTML = snake_dir + " " + snake_next_dir + " " + snake[0].x + " " + snake[0].y;
-            // Recursive call after speed delay, déjà vu
-            setTimeout(mainLoop, snake_speed);
+
+    // Snake vs Snake checker
+    for (let i = 1; i < snake.length; i++) {
+        // Game over test
+        if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
+            showScreen(SCREEN_GAME_OVER);
+            return;
         }
+    }
+
+    // Snake eats food checker
+    let isFoodEaten = false;
+    if (checkBlock(snake[0].x, snake[0].y, food.x, food.y)) {
+        snake.push({x: snake[0].x, y: snake[0].y});
+        altScore(++score);
+        addFood();
+        isFoodEaten = true;
+    }
+
+    // Repaint canvas
+    ctx.beginPath();
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Paint snake
+    for (let i = 0; i < snake.length; i++) {
+        activeDot(snake[i].x, snake[i].y, isFoodEaten);
+    }
+
+    // Paint food
+    activeDot(food.x, food.y, isFoodEaten);
+
+    // Reset the food-eaten glow for the next frame
+    if (isFoodEaten) {
+        setTimeout(() => {
+            isFoodEaten = false;
+        }, 10000000);
+    }
+
+    // Recursive call after speed delay, déjà vu
+    setTimeout(mainLoop, snake_speed);
+}
+
         /* New Game setup */
         /////////////////////////////////////////////////////////////
         let newGame = function(){
@@ -331,13 +345,21 @@ menu: nav/home.html
         }
         /* Dot for Food or Snake part */
         /////////////////////////////////////////////////////////////
-        let activeDot = function (x, y) {
-            ctx.shadowBlur = 20; // Creates the glow effect
-            ctx.shadowColor = "lime"; // The glow color (neon green)
-            ctx.fillStyle = "lime"; // The main color of the snake
+        let activeDot = function (x, y, isFoodEaten = false) {
+            if (isFoodEaten) {
+                ctx.shadowBlur = 100000; // More intense glow
+                ctx.shadowColor = "lime"; // The glow color (neon green)
+            } else {
+                ctx.shadowBlur = 20; // Default glow effect
+                ctx.shadowColor = "magenta"; // The glow color (neon green)
+            }
+
+            ctx.fillStyle = "magenta"; // The main color of the snake
             ctx.fillRect(x * BLOCK, y * BLOCK, BLOCK, BLOCK);
             ctx.shadowBlur = 0; // Reset shadow blur to prevent affecting other elements
         };
+
+
 
         /* Random food placement */
         /////////////////////////////////////////////////////////////
