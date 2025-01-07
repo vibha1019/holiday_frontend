@@ -8,7 +8,7 @@ comments: true
 
 <div class="holiday-page">
     <header class="holiday-header">
-        <h1>🎁 Happy Holidays Gift List 🎄</h1>
+        <h1>🎁 Holidays Gift List 🎄</h1>
     </header>
     <div class="categories-grid">
         <div class="category-box" id="home-decor">
