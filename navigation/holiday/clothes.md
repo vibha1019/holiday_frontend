@@ -58,6 +58,9 @@ comments: true
         button:hover {
             background: #218838;
         }
+        .comment-box {
+            display: none;
+        }
         /* Product List */
         .product-list {
             display: none; /* Initially hidden */
@@ -137,11 +140,43 @@ comments: true
             <span class="reaction-count dislike-count">0</span>
         </div>
     </div>
+    <div id="comment-box" class="comment-box">
+    <div class="container">
+                <div class="form-container">
+                    <h2>Tell Us Why You Liked This Post!</h2>
+                    <form id="selectionForm">
+                        <label for="group_id">Group:</label>
+                        <select id="group_id" name="group_id" required>
+                            <option value="">Select a category</option>
+                        </select>
+                        <label for="channel_id">Channel:</label>
+                        <select id="channel_id" name="channel_id" required>
+                            <option value="">Select an Age Range</option>
+                        </select>
+                        <button type="submit">Select</button>
+                    </form>
+                </div>
+            </div>
+            <div class="container">
+                <div class="form-container">
+                    <h2>Add New Post</h2>
+                    <form id="postForm">
+                        <label for="title">Gift Title:</label>
+                        <input type="text" id="title" name="title" required>
+                        <label for="comment">Description:</label>
+                        <textarea id="comment" name="comment" required></textarea>
+                        <button type="submit">Add Post</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     <script>
         // Function to toggle product list visibility
         function toggleProductList() {
             const productList = document.getElementById('product-list');
             productList.classList.toggle('active');
+            const commentBox = document.getElementById('comment-box');
+            commentBox.classList.toggle('active');
         }
         // Like/Dislike functionality
         const likesData = {};
@@ -181,176 +216,178 @@ comments: true
         }
     </script>
 </html>
-        // THIS IS NOW AI CHAT BOX CODE PLS DO NOT MESS WITH IT
-    </script>
-    <html lang="en">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            position: relative;
-            height: 100vh;
-            background-color: #f9f9f9;
-        }
-        #help-button {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 10px 20px;
-            background-color: #5F9EA0 !important; /* Light blue */
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        #help-button:hover {
-            background-color: #63b6e3;
-        }
-        #chat-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 350px;
-            max-height: 500px;
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        #chat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            background-color: #333;
-            color: white;
-            border-bottom: 1px solid #ddd;
-        }
-        #chat-header h4 {
-            margin: 0;
-            font-size: 16px;
-        }
-        #close-chat {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-        }
-        #close-chat:hover {
-            color: #ff6666;
-        }
-        #chat-box {
-            flex-grow: 1;
-            padding: 10px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-        }
-        .message {
-            margin: 10px;
-            padding: 10px;
-            border-radius: 10px;
-            max-width: 75%;
-            word-wrap: break-word;
-            display: inline-block;
-        }
-        .assistant {
-            background-color: #333;
-            color: white;
-            align-self: flex-start;
-            text-align: left;
-        }
-        .user {
-            background-color: #2f4f4f;
-            color: white;
-            align-self: flex-end;
-            text-align: right;
-        }
-        #input-container {
-            display: flex;
-            padding: 10px;
-            border-top: 1px solid #ddd;
-        }
-        input[type="text"] {
-            flex-grow: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-        button {
-            margin-left: 5px;
-            padding: 10px;
-            background-color: #333;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        button:hover {
-            background-color: #555;
-        }
-    </style>
-    <button id="help-button" onclick="toggleChat()">Need Help?</button>
-    <div id="chat-container">
-        <div id="chat-header">
-            <h4>Giftinator 3000</h4>
-            <button id="close-chat" onclick="toggleChat()">×</button>
-        </div>
-        <div id="chat-box"></div>
-        <div id="input-container">
-            <input type="text" id="user-input" placeholder="Type your message..." />
-            <button onclick="sendMessage()">Send</button>
-        </div>
-    </div>
-    <script>
-        const chatBox = document.getElementById('chat-box');
-        const userInput = document.getElementById('user-input');
-        const chatContainer = document.getElementById('chat-container');
-        function toggleChat() {
-            chatContainer.style.display = chatContainer.style.display === 'flex' ? 'none' : 'flex';
-        }
-        async function sendMessage() {
-            const message = userInput.value;
-            if (!message) return;
-            appendMessage('user', message);
-            userInput.value = '';
-            try {
-                const response = await fetch('http://127.0.0.1:8887/chat', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ user_input: message }),
-                });
-                const data = await response.json();
-                if (response.ok) {
-                    appendMessage('assistant', data.response);
-                } else {
-                    appendMessage('assistant', `Error: ${data.error}`);
-                }
-            } catch (error) {
-                appendMessage('assistant', `Error: ${error.message}`);
+<script type="module">
+    // Import server URI and standard fetch options
+    import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+    /**
+     * Fetch groups for dropdown selection
+     * User picks from dropdown
+     */
+    async function fetchGroups() {
+        try {
+            const response = await fetch(`${pythonURI}/api/groups/filter`, {
+                ...fetchOptions,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ section_name: "Holiday" }) // Adjust the section name if needed
+            });
+            if (!response.ok) {
+                throw new Error('Failed to fetch groups: ' + response.statusText);
             }
+            const groups = await response.json();
+            const groupSelect = document.getElementById('group_id');
+            groups.forEach(group => {
+                const option = document.createElement('option');
+                option.value = group.name; // Use group name for payload
+                option.textContent = group.name;
+                groupSelect.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Error fetching groups:', error);
         }
-        function appendMessage(sender, message) {
-            const messageElement = document.createElement('div');
-            messageElement.className = `message ${sender}`;
-            messageElement.innerText = message;
-            chatBox.appendChild(messageElement);
-            chatBox.scrollTop = chatBox.scrollHeight;
+    }
+    /**
+     * Fetch channels based on selected group
+     * User picks from dropdown
+     */
+    async function fetchChannels(groupName) {
+        try {
+            const response = await fetch(`${pythonURI}/api/channels/filter`, {
+                ...fetchOptions,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ group_name: groupName }) // Pass selected group name here
+            });
+            if (!response.ok) {
+                throw new Error('Failed to fetch channels: ' + response.statusText);
+            }
+            const channels = await response.json();
+            const channelSelect = document.getElementById('channel_id');
+            channelSelect.innerHTML = '<option value="">Select a channel</option>'; // Reset channels
+            channels.forEach(channel => {
+                const option = document.createElement('option');
+                option.value = channel.id;
+                option.textContent = channel.name;
+                channelSelect.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Error fetching channels:', error);
         }
-    </script>
-
-
+    }
+    /**
+     * Handle group selection change
+     * Channel Dropdown refresh to match group_id change
+     */
+    document.getElementById('group_id').addEventListener('change', function() {
+        const groupName = this.value;
+        if (groupName) {
+            fetchChannels(groupName);  // Fetch channels for the selected group
+        } else {
+            document.getElementById('channel_id').innerHTML = '<option value="">Select a channel</option>'; // Reset channels
+        }
+    });
+    /**
+     * Handle form submission for selection
+     * Select Button: Computer fetches and displays posts
+     */
+    document.getElementById('selectionForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const groupId = document.getElementById('group_id').value;
+        const channelId = document.getElementById('channel_id').value;
+        if (groupId && channelId) {
+            fetchData(channelId);
+        } else {
+            alert('Please select both group and channel.');
+        }
+    });
+    /**
+     * Handle form submission for adding a post
+     * Add Form Button: Computer handles form submission with request
+     */
+    document.getElementById('postForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        // Extract data from form
+        const title = document.getElementById('title').value;
+        const comment = document.getElementById('comment').value;
+        const channelId = document.getElementById('channel_id').value;
+        // Create API payload
+        const postData = {
+            title: title,
+            comment: comment,
+            channel_id: channelId
+        };
+        // Trap errors
+        try {
+            // Send POST request to backend, purpose is to write to database
+            const response = await fetch(`${pythonURI}/api/post`, {
+                ...fetchOptions,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(postData)
+            });
+            if (!response.ok) {
+                throw new Error('Failed to add post: ' + response.statusText);
+            }
+            // Successful post
+            const result = await response.json();
+            alert('Post added successfully!');
+            document.getElementById('postForm').reset();
+            fetchData(channelId);
+        } catch (error) {
+            // Present alert on error from backend
+            console.error('Error adding post:', error);
+            alert('Error adding post: ' + error.message);
+        }
+    });
+    /**
+     * Fetch posts based on selected channel
+     * Handle response: Fetch and display posts
+     */
+    async function fetchData(channelId) {
+        try {
+            const response = await fetch(`${pythonURI}/api/posts/filter`, {
+                ...fetchOptions,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ channel_id: channelId })
+            });
+            if (!response.ok) {
+                throw new Error('Failed to fetch posts: ' + response.statusText);
+            }
+            // Parse the JSON data
+            const postData = await response.json();
+            // Extract posts count
+            const postCount = postData.length || 0;
+            // Update the HTML elements with the data
+            document.getElementById('count').innerHTML = `<h2>Count ${postCount}</h2>`;
+            // Get the details div
+            const detailsDiv = document.getElementById('details');
+            detailsDiv.innerHTML = ''; // Clear previous posts
+            // Iterate over the postData and create HTML elements for each item
+            postData.forEach(postItem => {
+                const postElement = document.createElement('div');
+                postElement.className = 'post-item';
+                postElement.innerHTML = `
+                    <h3>${postItem.title}</h3>
+                    <p><strong>Channel:</strong> ${postItem.channel_name}</p>
+                    <p><strong>User:</strong> ${postItem.user_name}</p>
+                    <p>${postItem.comment}</p>
+                `;
+                detailsDiv.appendChild(postElement);
+            });
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+    // Fetch groups when the page loads
+    fetchGroups();
+</script>
 
