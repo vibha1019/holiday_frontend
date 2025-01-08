@@ -115,7 +115,10 @@ comments: true
     const comment = document.getElementById('comment').value;
     const group = document.getElementById('group-select').value;
     const channel = document.getElementById('channel-select').value;
-    const channelID = document.getElementById('postForm').getAttribute('data-channel-id'); // Retrieve the saved channel ID
+    const channelID = document.getElementById('postForm').getAttribute
+    ('data-channel-id'); // Retrieve the saved channel ID
+    console.log("Stars value being submitted:", postData.stars);
+
     const postData = {
       title: title,
       comment: comment,
