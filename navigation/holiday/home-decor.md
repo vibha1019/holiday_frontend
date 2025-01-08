@@ -24,7 +24,7 @@ comments: true
     <p></p>
 
   <!-- New Post Form -->
-  <div class="post-form-container" id="post-form" style="display: none;">
+  `<div class="post-form-container" id="post-form" style="display: none;">
     <h2>Post Review</h2>
     <form id="postForm">
       <label for="title">Gift Title:</label>
@@ -32,6 +32,16 @@ comments: true
       <p></p>
       <label for="comment">Comment:</label>
       <textarea id="comment" name="comment" required></textarea>
+      <!-- Star Rating Input -->
+      <label for="stars">Rate this gift (out of 5):</label>
+      <div id="stars-container">
+        <span class="star" data-value="1">★</span>
+        <span class="star" data-value="2">★</span>
+        <span class="star" data-value="3">★</span>
+        <span class="star" data-value="4">★</span>
+        <span class="star" data-value="5">★</span>
+      </div>
+      <input type="hidden" id="stars" name="stars" value="0" required>
       <!-- Dropdowns for Group and Channel Selection -->
       <div class="dropdown-container">
         <label for="group-select">Group:</label>
@@ -48,7 +58,7 @@ comments: true
       </div>
       <button type="submit">Add Post</button>
     </form>
-  </div>
+  </div>`
 </div>
 
 <script>
@@ -81,6 +91,21 @@ comments: true
     const channelID = button.getAttribute('data-channel-id');
     document.getElementById('postForm').setAttribute('data-channel-id', channelID);
   }
+  
+    document.querySelectorAll('.star').forEach((star) => {
+    star.addEventListener('click', function () {
+      const value = this.getAttribute('data-value');
+      document.getElementById('stars').value = value;
+
+      // Highlight selected stars
+      document.querySelectorAll('.star').forEach((s) => {
+        s.classList.remove('selected');
+        if (s.getAttribute('data-value') <= value) {
+          s.classList.add('selected');
+        }
+      });
+    });
+  });
 
   // Handle form submission
   document.getElementById('postForm').addEventListener('submit', async (e) => {
@@ -95,6 +120,8 @@ comments: true
       title: title,
       comment: comment,
       channel_id: channelID,
+      stars: document.getElementById('stars').value, // Add the stars field
+
     };
 
     try {
@@ -258,6 +285,30 @@ comments: true
   
 </style>
 
+<style>
+  #stars-container {
+    display: flex;
+    gap: 5px;
+    margin: 10px 0;
+  }
+
+  .star {
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #d3d3d3; /* Light gray for unselected stars */
+    transition: color 0.3s;
+  }
+
+  .star.selected {
+    color: #ffcc4d; /* Golden-yellow for selected stars */
+  }
+
+  .star:hover,
+  .star:hover ~ .star {
+    color: #ffcc4d; /* Highlight stars on hover */
+  }
+</style>
+
 <script type="module">
     import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
 
@@ -284,9 +335,11 @@ comments: true
                         <p><strong>${userName}</strong></p>
                     </div>
                     <div class="post-body">
-                        <p><strong>Gift Title:</strong> ${post.title || "No Title"}</p>
-                        <p>${post.comment}</p>
+                      <p><strong>Gift Title:</strong> ${post.title || "No Title"}</p>
+                      <p>${post.comment}</p>
+                      <p><strong>Rating:</strong> ${'★'.repeat(post.stars || 0)}${'☆'.repeat(5 - (post.stars || 0))}</p>
                     </div>
+
                 `;
                 postContainer.appendChild(postCard);
             });
