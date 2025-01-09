@@ -80,69 +80,61 @@ permalink: /searchbar
 </style>
 <script>
     async function searchItems() {
-    const input = document.getElementById('searchInput').value.trim().toLowerCase();
-    const resultsDiv = document.getElementById('results');
-    resultsDiv.innerHTML = ''; // Clear previous results
-    if (input) {
-        try {
-            const response = await fetch(`http://127.0.0.1:8887/search?q=${encodeURIComponent(input)}`, { method: 'GET' });
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            const items = await response.json();
-            if (items.length > 0) {
-                items.forEach(item => {
-                    const resultDiv = document.createElement('div');
-                    resultDiv.className = 'result';
-                    resultDiv.textContent = item.name;
-                    resultDiv.onclick = () => {
-                        window.location.href = item.link; // Redirect to item's link
-                    };
-                    resultsDiv.appendChild(resultDiv);
+        const input = document.getElementById('searchInput').value.trim().toLowerCase();
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = ''; // Clear previous results
+        if (input) {
+            try {
+                const response = await fetch(`http://127.0.0.1:8887/search?q=${encodeURIComponent(input)}`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
                 });
-            } else {
-                resultsDiv.textContent = 'No results found.';
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const items = await response.json();
+                if (items.length > 0) {
+                    items.forEach(item => {
+                        const resultDiv = document.createElement('div');
+                        resultDiv.className = 'result';
+                        resultDiv.textContent = item.name;
+                        // On click, increment tags and log them
+                        resultDiv.onclick = async () => {
+                            await incrementTags(item.name);
+                        };
+                        resultsDiv.appendChild(resultDiv);
+                    });
+                } else {
+                    resultsDiv.textContent = 'No results found.';
+                }
+            } catch (error) {
+                console.error('Error fetching search results:', error);
+                resultsDiv.textContent = 'An error occurred while searching. Please try again.';
             }
-        } catch (error) {
-            console.error('Error fetching search results:', error);
-            resultsDiv.textContent = 'An error occurred while searching. Please try again.';
         }
+    }
+    async function incrementTags(itemName) {
+    try {
+        const response = await fetch('http://127.0.0.1:8887/increment_tag', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: itemName }),
+            credentials: 'include', // Ensure credentials are included for CORS
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP status code: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(data.message); // Log the saved message
+        console.log('Tags:', data.tags); // Log the updated tags in the console
+    } catch (error) {
+        console.error('Error updating tags:', error);
     }
 }
-// Attach function to global scope
-window.searchItems = searchItems;
-    async function getCredentials() {
-        try {
-            const response = await fetch('http://127.0.0.1:8887/api/id', { method: 'GET' });
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            const data = await response.json();
-            console.log('Fetched credentials:', data);
-        } catch (error) {
-            console.error('Fetch error: ', error);
-        }
-    }
-    async function handleItemClick(itemName) {
-        try {
-            const response = await fetch('http://127.0.0.1:8887/click', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: itemName }),
-            });
-            if (!response.ok) {
-                throw new Error(`HTTP status code: ${response.status}`);
-            }
-            const data = await response.json();
-            console.log(data.message); // Log the saved message
-            console.log('Tags:', data.tags); // Log the tags in the console
-        } catch (error) {
-            console.error('Error saving tags:', error);
-        }
-    }
     // Attach the search function to the window scope
     window.searchItems = searchItems;
     document.addEventListener('DOMContentLoaded', () => {
-        getCredentials();
+        console.log('Search bar initialized');
     });
 </script>
