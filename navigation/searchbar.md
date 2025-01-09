@@ -19,16 +19,7 @@ permalink: /searchbar
         </div>
     </div>
 </div>
-
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: white;
-    }
-    
-    /* Content Section */
     .content {
         display: flex;
         justify-content: center;
@@ -88,45 +79,56 @@ permalink: /searchbar
         transform: translateY(-2px);
     }
 </style>
-
 <script>
-    var items = [
-        { name: "Teddy Bear", link: "holiday/toys", tags: ["all","teddy","bear","toys"] },   
-        { name: "Lego Set", link: "holiday/toys", tags: ["all", "lego", "set", "toys"] },
-        { name: "Remote Control Car", link: "holiday/toys", tags: ["all","remote","control","car", "toys"] },
-        { name: "Holiday Candles", link: "holiday/home-decor", tags: ["all","holiday","candles","home-decor"]},
-        { name: "Festive Wreath", link: "holiday/home-decor", tags: ["all","festive","wreath","home-decor"] },
-        { name: "Decorative Ornaments", link: "holiday/home-decor", tags: ["all","decorative","ornaments","home-decor"] },
-        { name: "Wireless Headphones", link: "holiday/electronics", tags: ["all","wireless","headphones","electronics"]},
-        { name: "Smartwatch", link: "holiday/electronics", tags: ["all","smartwatch", "electronics"] },
-        { name: "Gaming Console", link: "holiday/electronics", tags: ["all","gaming","console", "electronics"] },
-        { name: "Cozy Holiday Sweater", link: "holiday/clothes", tags: ["all","cozy","holiday","sweater","clothes"] },
-        { name: "Woolen Scarf", link: "holiday/clothes", tags: ["all","woolen","scarf","clothes"] },
-        { name: "Winter Gloves", link: "holiday/clothes", tags: ["all","winter","gloves","clothes"] },
-        { name: "Holiday Cookies", link: "holiday/food", tags: ["all","holiday","cookies","food"] },
-        { name: "Chocolate Gift Box", link: "holiday/food", tags: ["all","chocolate","gift","box","food"] },
-        { name: "Gourmet Cheese Set", link: "holiday/food", tags: ["all","gourmet","cheese","set", "food"]},
-        { name: "Scented Candle", link: "holiday/scented", tags: ["all", "candle","scented"] },
-        { name: "Aromatic Diffuser", link: "holiday/scented", tags: ["all","aromatic","diffuser","scented"] },
-        { name: "Perfume Gift Set", link: "holiday/scented", tags: ["all","perfume","gift","set","scented"] }
-    ];
-    
-    function searchItems() {
-        const input = document.getElementById('searchInput').value.toLowerCase();
+    async function getCredentials() {
+    try {
+        const response = await fetch('http://127.0.0.1:8887/api/id', {
+            method: 'GET',
+            credentials: 'include', // Include credentials like cookies
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log('Fetched credentials:', data);
+    } catch (error) {
+        console.error('Fetch error: ', error);
+    }
+}
+// Example usage when an item is clicked
+document.addEventListener('click', () => {
+    getCredentials();
+});
+    async function searchItems() {
+        const input = document.getElementById('searchInput').value.trim().toLowerCase();
         const resultsDiv = document.getElementById('results');
         resultsDiv.innerHTML = ''; // Clear previous results
-        if (input.trim() !== "") {
-            items.forEach(item => {
-                if (item.name.toLowerCase().includes(input)) {
-                    const resultDiv = document.createElement('div');
-                    resultDiv.className = 'result';
-                    resultDiv.textContent = item.name;
-                    resultDiv.onclick = () => {
-                        window.location.href = item.link;
-                    };
-                    resultsDiv.appendChild(resultDiv);
+        if (input) {
+            try {
+                const response = await fetch(`http://127.0.0.1:8887/search?q=${encodeURIComponent(input)}`, { method: 'GET' });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-            });
+                const items = await response.json();
+                if (items.length > 0) {
+                    items.forEach(item => {
+                        const resultDiv = document.createElement('div');
+                        resultDiv.className = 'result';
+                        resultDiv.textContent = item.name;
+                        resultDiv.onclick = () => {
+                            window.location.href = item.link; // Redirect to item's link
+                        };
+                        resultsDiv.appendChild(resultDiv);
+                    });
+                } else {
+                    resultsDiv.textContent = 'No results found.';
+                }
+            } catch (error) {
+                console.error('Error fetching search results:', error);
+                resultsDiv.textContent = 'An error occurred while searching. Please try again.';
+            }
         }
     }
+    // Attach function to global scope
+    window.searchItems = searchItems;
 </script>
