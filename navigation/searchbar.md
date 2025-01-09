@@ -38,12 +38,12 @@ permalink: /searchbar
     .title {
         font-size: 28px;
         color: darkred;
-        margin-bottom: 20px.
+        margin-bottom: 20px;
     }
     .search-bar {
         display: flex;
         flex-direction: column;
-        align-items: center.
+        align-items: center;
     }
     #searchInput {
         width: 100%;
@@ -53,17 +53,17 @@ permalink: /searchbar
         font-size: 16px;
         box-sizing: border-box;
         outline: none;
-        transition: border-color 0.3s, box-shadow 0.3s.
+        transition: border-color 0.3s, box-shadow 0.3s;
     }
     #searchInput:focus {
         border-color: green;
-        box-shadow: 0 0 10px rgba(255, 255, 0, 0.5).
+        box-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
     }
     #results {
         margin-top: 20px;
         text-align: left;
         max-height: 300px;
-        overflow-y: auto.
+        overflow-y: auto;
     }
     .result {
         margin: 5px 0;
@@ -71,11 +71,11 @@ permalink: /searchbar
         background: green;
         color: white;
         border-radius: 5px;
-        cursor: pointer.
+        cursor: pointer;
     }
     .result:hover {
         background: darkred;
-        transform: translateY(-2px).
+        transform: translateY(-2px);
     }
 </style>
 <script>
@@ -99,7 +99,6 @@ permalink: /searchbar
                         const resultDiv = document.createElement('div');
                         resultDiv.className = 'result';
                         resultDiv.textContent = item.name;
-                        // On click, increment tags and log them
                         resultDiv.onclick = async () => {
                             await incrementTags(item.name);
                         };
@@ -115,24 +114,23 @@ permalink: /searchbar
         }
     }
     async function incrementTags(itemName) {
-    try {
-        const response = await fetch('http://127.0.0.1:8887/increment_tag', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: itemName }),
-            credentials: 'include', // Ensure credentials are included for CORS
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP status code: ${response.status}`);
+        try {
+            const response = await fetch('http://127.0.0.1:8887/increment_tag', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: itemName }),
+                credentials: 'include',
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP status code: ${response.status}`);
+            }
+            const data = await response.json();
+            console.log(data.message);
+            console.log('Tags:', data.tags);
+        } catch (error) {
+            console.error('Error updating tags:', error);
         }
-        const data = await response.json();
-        console.log(data.message); // Log the saved message
-        console.log('Tags:', data.tags); // Log the updated tags in the console
-    } catch (error) {
-        console.error('Error updating tags:', error);
     }
-}
-    // Attach the search function to the window scope
     window.searchItems = searchItems;
     document.addEventListener('DOMContentLoaded', () => {
         console.log('Search bar initialized');
