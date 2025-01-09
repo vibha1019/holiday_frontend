@@ -226,7 +226,6 @@ comments: true
 
 <style>
   body {
-  background-image: url("{{ site.baseurl }}/images/dnerostore/bkgd.png");
   background-color: #a8e6a3; /* Light green background */
   background-size: cover;
   background-position: center;
