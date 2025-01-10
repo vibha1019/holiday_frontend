@@ -99,8 +99,10 @@ permalink: /searchbar
                         const resultDiv = document.createElement('div');
                         resultDiv.className = 'result';
                         resultDiv.textContent = item.name;
+                        // Onclick handler for saving tags and redirecting to the link
                         resultDiv.onclick = async () => {
-                            await incrementTags(item.name);
+                            await incrementTags(item.name); // Save tags
+                            window.location.href = item.link; // Redirect to the associated link
                         };
                         resultsDiv.appendChild(resultDiv);
                     });
