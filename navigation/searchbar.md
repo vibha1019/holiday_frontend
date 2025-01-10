@@ -11,9 +11,9 @@ permalink: /searchbar
                 <input 
                     type="text" 
                     id="searchInput" 
-                    placeholder="Search for an item..." 
+                    placeholder="Search for an item or tag..." 
                     oninput="searchItems()"
-                >
+                />
             </div>
             <div id="results"></div>
         </div>
