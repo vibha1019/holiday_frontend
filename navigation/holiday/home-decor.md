@@ -117,7 +117,6 @@ comments: true
     const channel = document.getElementById('channel-select').value;
     const channelID = document.getElementById('postForm').getAttribute
     ('data-channel-id'); // Retrieve the saved channel ID
-    console.log("Stars value being submitted:", postData.stars);
 
     const postData = {
       title: title,
@@ -126,6 +125,7 @@ comments: true
       stars: document.getElementById('stars').value, // Add the stars field
 
     };
+    console.log("Stars value being submitted:", postData.stars);
 
     try {
       const response = await fetch(`${pythonURI}/api/post`, {
@@ -200,11 +200,13 @@ comments: true
     const group = document.getElementById('group-select').value;
     const channel = document.getElementById('channel-select').value;
     const channelID = document.getElementById('postForm').getAttribute('data-channel-id'); // Retrieve the saved channel ID
-    const postData = {
+   const postData = {
       title: title,
       comment: comment,
-      channel_id: channelID
-    }
+      channel_id: channelID,
+      stars: document.getElementById('stars').value, // Add the stars field
+    };
+
 
     try {
       const response = await fetch(`${pythonURI}/api/post`, {
@@ -355,7 +357,6 @@ comments: true
 
 <style>
   body {
-  background-image: url("{{ site.baseurl }}/images/dnerostore/bkgd.png");
   background-color: #1a1a1a; /* Fallback dark background */
   background-size: cover;
   background-position: center;
