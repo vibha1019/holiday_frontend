@@ -45,3 +45,59 @@ function changeMonth(offset) {
 
 // Initialize the calendar
 renderCalendar();
+
+// Function to open the event form modal
+function openModal(date) {
+    document.getElementById("eventModal").style.display = "block";
+    // You can also pass the selected date to the form, for example, by default
+    document.getElementById("startDate").value = date;
+    document.getElementById("endDate").value = date; // Default end date same as start date
+}
+
+// Function to close the modal
+function closeModal() {
+    document.getElementById("eventModal").style.display = "none";
+}
+
+// Handle the form submission to create a new event
+document.getElementById("eventForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    
+    const eventData = {
+        name: document.getElementById("eventName").value,
+        location: document.getElementById("eventLocation").value,
+        start_date: document.getElementById("startDate").value,
+        end_date: document.getElementById("endDate").value
+    };
+
+    // Send the event data to your API endpoint
+    fetch('/api/event', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem("token") // Adjust this if using JWT token
+        },
+        body: JSON.stringify(eventData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert("Event created successfully!");
+        closeModal();
+        // Optionally refresh the calendar to show the new event
+    })
+    .catch(error => {
+        console.error("Error creating event:", error);
+        alert("Error creating event.");
+    });
+});
+
+// When the page loads, assign the event listener to each day cell
+document.addEventListener("DOMContentLoaded", function() {
+    const days = document.querySelectorAll(".day");
+    days.forEach(day => {
+        day.addEventListener("click", function() {
+            const selectedDate = day.getAttribute("data-date"); // Add the data-date attribute to each day
+            openModal(selectedDate);
+        });
+    });
+});
