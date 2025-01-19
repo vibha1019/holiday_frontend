@@ -71,7 +71,7 @@ document.getElementById("eventForm").addEventListener("submit", function(event) 
     };
 
     // Send the event data to your API endpoint
-    fetch('/api/event', {
+    fetch('http://127.0.0.1:8887/api/event', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
