@@ -66,9 +66,12 @@ document.getElementById("eventForm").addEventListener("submit", function(event) 
     const eventData = {
         name: document.getElementById("eventName").value,
         location: document.getElementById("eventLocation").value,
-        start_date: document.getElementById("startDate").value,
-        end_date: document.getElementById("endDate").value
+        start_date: document.getElementById("startDate").value,  // YYYY-MM-DD format
+        end_date: document.getElementById("endDate").value,      // YYYY-MM-DD format
+        description: document.getElementById("eventDescription").value // Add the description field
     };
+
+    console.log("Event Data:", eventData);  // Log the event data to check before sending
 
     // Send the event data to your API endpoint
     fetch('http://127.0.0.1:8887/api/event', {
@@ -96,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const days = document.querySelectorAll(".day");
     days.forEach(day => {
         day.addEventListener("click", function() {
-            const selectedDate = day.getAttribute("data-date"); // Add the data-date attribute to each day
+            const selectedDate = day.textContent; // Use textContent for day
             openModal(selectedDate);
         });
     });
