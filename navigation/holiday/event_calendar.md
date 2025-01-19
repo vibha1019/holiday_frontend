@@ -31,15 +31,11 @@ comments: true
         <h3>Add Event</h3>
         <form id="eventForm">
             <label for="eventName" style="color: black;">Event Name:</label>
-            <input type="text" id="eventName" name="eventName" required><br><br>       
+            <input type="text" id="eventName" name="eventName" required><br><br>
             <label for="eventLocation" style="color: black;">Location:</label>
             <input type="text" id="eventLocation" name="eventLocation" required><br><br>
-            <label for="startDate" style="color: black;">Start Date:</label>
-            <input type="datetime-local" id="startDate" name="startDate" required><br><br>
-            <label for="endDate" style="color: black;">End Date:</label>
-            <input type="datetime-local" id="endDate" name="endDate" required><br><br>
-            <label for="eventDescription" style="color: black;">Description:</label>
-            <textarea id="eventDescription" name="eventDescription" required></textarea><br><br>
+            <label for="startDate" style="color: black;">Date:</label>
+            <input type="date" id="startDate" name="startDate" required><br><br>
             <button type="submit">Save Event</button>
         </form>
     </div>

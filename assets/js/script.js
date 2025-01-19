@@ -49,9 +49,10 @@ renderCalendar();
 // Function to open the event form modal
 function openModal(date) {
     document.getElementById("eventModal").style.display = "block";
-    // You can also pass the selected date to the form, for example, by default
-    document.getElementById("startDate").value = date;
-    document.getElementById("endDate").value = date; // Default end date same as start date
+    // Prefill the date field with the selected date in YYYY-MM-DD format
+    const formattedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), date).toISOString().split('T')[0];
+    console.log(formattedDate); // Debug the date to ensure it's correct
+    document.getElementById("startDate").value = formattedDate;
 }
 
 // Function to close the modal
@@ -63,12 +64,16 @@ function closeModal() {
 document.getElementById("eventForm").addEventListener("submit", function(event) {
     event.preventDefault();
     
+    const token = localStorage.getItem("token");
+    if (!token) {
+        alert("You are not logged in.");
+        return;
+    }
+
     const eventData = {
         name: document.getElementById("eventName").value,
         location: document.getElementById("eventLocation").value,
-        start_date: document.getElementById("startDate").value,  // YYYY-MM-DD format
-        end_date: document.getElementById("endDate").value,      // YYYY-MM-DD format
-        description: document.getElementById("eventDescription").value // Add the description field
+        date: document.getElementById("startDate").value,  // This will be in YYYY-MM-DD format
     };
 
     console.log("Event Data:", eventData);  // Log the event data to check before sending
@@ -78,7 +83,7 @@ document.getElementById("eventForm").addEventListener("submit", function(event) 
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem("token") // Adjust this if using JWT token
+            'Authorization': 'Bearer ' + token // Include the token in the Authorization header
         },
         body: JSON.stringify(eventData)
     })
