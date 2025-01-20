@@ -6,22 +6,32 @@ author: Vibha Mandayam
 comments: true
 ---
 
-<div class="calendar-container">
-    <div class="calendar-header">
-        <button class="prev-month" onclick="changeMonth(-1)">&#10094;</button>
-        <div class="month-year" id="month-year"></div>
-        <button class="next-month" onclick="changeMonth(1)">&#10095;</button>
+<div class="main-content">
+    <!-- Calendar on the left -->
+    <div class="calendar-container">
+        <div class="calendar-header">
+            <button class="prev-month" onclick="changeMonth(-1)">&#10094;</button>
+            <div class="month-year" id="month-year"></div>
+            <button class="next-month" onclick="changeMonth(1)">&#10095;</button>
+        </div>
+        <div class="calendar-grid">
+            <div class="day-name">Sun</div>
+            <div class="day-name">Mon</div>
+            <div class="day-name">Tue</div>
+            <div class="day-name">Wed</div>
+            <div class="day-name">Thu</div>
+            <div class="day-name">Fri</div>
+            <div class="day-name">Sat</div>
+        </div>
+        <div class="calendar-days" id="calendar-days"></div>
     </div>
-    <div class="calendar-grid">
-        <div class="day-name">Sun</div>
-        <div class="day-name">Mon</div>
-        <div class="day-name">Tue</div>
-        <div class="day-name">Wed</div>
-        <div class="day-name">Thu</div>
-        <div class="day-name">Fri</div>
-        <div class="day-name">Sat</div>
+    <!-- Sidebar for Upcoming Events on the right -->
+    <div class="upcoming-events">
+        <h3>Upcoming Events</h3>
+        <div id="event-list">
+            <!-- Event cards will be dynamically populated here -->
+        </div>
     </div>
-    <div class="calendar-days" id="calendar-days"></div>
 </div>
 
 <!-- Modal for Event Form -->
@@ -173,6 +183,42 @@ comments: true
     }
 }
 
+    function renderSidebar(events) {
+        const eventList = document.getElementById("event-list");
+        eventList.innerHTML = ""; // Clear existing events
+
+        const upcomingEvents = events.filter(event => {
+            const eventDate = new Date(event.date);
+            return eventDate >= new Date(); // Only show future or current events
+        });
+
+        if (upcomingEvents.length === 0) {
+            eventList.innerHTML = "<p>No upcoming events.</p>";
+            return;
+        }
+
+        upcomingEvents.forEach(event => {
+            const eventCard = document.createElement("div");
+            eventCard.classList.add("event-card");
+
+            const eventDate = document.createElement("div");
+            eventDate.classList.add("event-date");
+            const [year, month, day] = event.date.split("-");
+            eventDate.innerHTML = `<span>${day}</span><span>${month}</span>`;
+
+            const eventDetails = document.createElement("div");
+            eventDetails.classList.add("event-details");
+            eventDetails.innerHTML = `
+                <p class="event-title">${event.name}</p>
+                <p class="event-location">${event.location}</p>
+            `;
+
+            eventCard.appendChild(eventDate);
+            eventCard.appendChild(eventDetails);
+            eventList.appendChild(eventCard);
+        });
+    }
+
 
   function openModal(date) {
       document.getElementById("eventModal").style.display = "block";  // Show the modal
@@ -183,8 +229,21 @@ comments: true
   }
 
   function closeModal() {
-      document.getElementById("eventModal").style.display = "none";  // Hide the modal
-  }
+    const modal = document.getElementById("eventModal");
+    if (modal) {
+        modal.style.display = "none"; // Hide the modal
+    } else {
+        console.error("Modal element not found!");
+    }
+}
+    // Close modal when clicking outside the modal content
+    window.addEventListener("click", function(event) {
+        const modal = document.getElementById("eventModal");
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+
 
   // Handle the form submission to create a new event
   document.getElementById("eventForm").addEventListener("submit", async function(event) {
@@ -230,5 +289,7 @@ comments: true
         currentMonth = 0; // Wrap around to January
     }
     renderCalendar(events);  // Re-render calendar with the updated month
+    renderSidebar(events);
+
   }
 </script>
