@@ -112,6 +112,11 @@ comments: true
         document.getElementById("eventModal").style.display = "none";
     }
 
+</script>
+
+
+<script type="module">
+  import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
     // Handle the form submission to create a new event
     document.getElementById("eventForm").addEventListener("submit", async function(event) {
         event.preventDefault();
@@ -125,7 +130,7 @@ comments: true
         console.log("Event Data:", eventData);  // Log the event data to check before sending
 
         try {
-            const response = await fetch(`http://127.0.0.1:8887/api/event`, {
+            const response = await fetch(`${pythonURI}/api/event`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(eventData),
@@ -142,4 +147,5 @@ comments: true
             alert("Error creating event.");
         }
     });
+
 </script>
