@@ -106,39 +106,6 @@ comments: true
       });
     });
   });
-
-  // Handle form submission
-  document.getElementById('postForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const title = document.getElementById('title').value;
-    const comment = document.getElementById('comment').value;
-    const group = document.getElementById('group-select').value;
-    const channel = document.getElementById('channel-select').value;
-    const channelID = document.getElementById('postForm').getAttribute
-    ('data-channel-id'); // Retrieve the saved channel ID
-
-    const postData = {
-      title: title,
-      comment: comment,
-      channel_id: channelID,
-      stars: document.getElementById('stars').value, // Add the stars field
-
-    };
-
-    try {
-      const response = await fetch(`${pythonURI}/api/post`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(postData),
-      });
-
-      if (!response.ok) throw new Error('Failed to add post: ' + response.statusText);
-      alert("Post added successfully!");
-    } catch (error) {
-      console.error('Error adding post:', error);
-    }
-  });
 </script>
 
 <script type="module">
