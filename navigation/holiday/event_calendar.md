@@ -45,7 +45,6 @@ comments: true
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/styles.css">
 
 <script>
-    console.log("Script loaded");  // Check in the console if this message appears
 
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     let currentDate = new Date();
@@ -114,38 +113,41 @@ comments: true
 
 </script>
 
-
 <script type="module">
   import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
-    // Handle the form submission to create a new event
-    document.getElementById("eventForm").addEventListener("submit", async function(event) {
-        event.preventDefault();
 
-        const eventData = {
-            name: document.getElementById("eventName").value,
-            location: document.getElementById("eventLocation").value,
-            date: document.getElementById("startDate").value,  // This will be in YYYY-MM-DD format
-        };
+  // Handle the form submission to create a new event
+  document.getElementById("eventForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
 
-        console.log("Event Data:", eventData);  // Log the event data to check before sending
+    const postData = {
+        name: document.getElementById("eventName").value,
+        location: document.getElementById("eventLocation").value,
+        date: document.getElementById("startDate").value,  // This will be in YYYY-MM-DD format
+    };
 
-        try {
-            const response = await fetch(`${pythonURI}/api/event`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(eventData),
-            });
+    console.log("Event Data:", postData);  // Log the event data to check before sending
 
-            if (!response.ok) throw new Error('Failed to add event: ' + response.statusText);
+    try {
+      const response = await fetch(`${pythonURI}/api/event`, {
+        ...fetchOptions,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(postData)
+      });
 
-            const data = await response.json();
-            alert("Event created successfully!");
-            closeModal();
-            // Optionally refresh the calendar to show the new event
-        } catch (error) {
-            console.error('Error creating event:', error);
-            alert("Error creating event.");
-        }
-    });
+      // Check if the response is not OK and provide a more specific error message
+      if (!response.ok) {
+        const errorMessage = await response.text(); // Extract error message from response
+        throw new Error(`Failed to add event: ${response.statusText} - ${errorMessage}`);
+      }
 
+      alert("Event added successfully!");
+
+    } catch (error) {
+      // Catch errors and provide more useful information
+      console.error('Error adding event:', error.message);
+      alert(`Error adding event: ${error.message}`);
+    }
+  });
 </script>
