@@ -7,13 +7,14 @@ body {
     align-items: center;
     height: 100vh;
     background-color: #f4f4f4;
+    color: #333; /* Darker text for better contrast */
 }
 
 .calendar-container {
     width: 300px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    background-color: white;
+    background-color: #ecf0f1; /* Light gray background for the calendar */
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -54,7 +55,7 @@ button:hover {
     font-weight: bold;
     padding: 5px;
     background-color: #ecf0f1;
-    color: #34495e;
+    color: #34495e; /* Darker color for the day names */
     font-size: 14px; /* Adjusted for better readability */
 }
 
@@ -69,13 +70,14 @@ button:hover {
     padding: 10px;
     cursor: pointer;
     transition: background-color 0.2s;
-    color: #333;
+    color: #333;  /* Darker text for the days */
     position: relative;
     font-size: 14px; /* Adjusted for readability */
 }
 
 .day:hover {
     background-color: #f39c12;
+    color: white;  /* Change text color on hover to white */
 }
 
 .day.current-day {
@@ -150,6 +152,7 @@ input[type="text"], input[type="date"] {
     font-size: 14px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    color: #333;  /* Ensure input text is darker */
 }
 
 button[type="submit"] {
@@ -168,8 +171,9 @@ button[type="submit"]:hover {
 }
 
 .modal-content h3 {
-    color: black;
+    color: #333;  /* Dark text color for headings */
 }
+
 /* Main container for flexbox layout */
 .main-content {
     display: flex;
@@ -184,7 +188,7 @@ button[type="submit"]:hover {
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 10px;
-    background-color: white;
+    background-color: #ecf0f1; /* Light gray background for the calendar */
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -193,7 +197,7 @@ button[type="submit"]:hover {
     width: 350px; /* Increase this value to make it wider */
     border: 1px solid #ccc;
     border-radius: 8px;
-    background-color: white;
+    background-color: #f9f9f9; /* Light gray background for the sidebar */
     padding: 10px;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
 }
@@ -218,6 +222,7 @@ button[type="submit"]:hover {
     background-color: #fff;
 }
 
+/* Specific text color for event date */
 .event-card .event-date {
     width: 50px;
     text-align: center;
@@ -226,20 +231,20 @@ button[type="submit"]:hover {
     background-color: #e0e0e0;
     border-radius: 4px;
     padding: 5px 0;
+    color: #333 !important;  /* Use !important to force the color */
 }
 
-.event-card .event-details {
-    flex-grow: 1;
-}
-
+/* Specific text color for event title */
 .event-card .event-title {
     font-size: 14px;
     font-weight: bold;
+    color: #333 !important;  /* Use !important to force the color */
 }
 
+/* Specific text color for event location */
 .event-card .event-location {
     font-size: 12px;
-    color: #555;
+    color: #555 !important;  /* Use !important to force the color */
 }
 
 .upcoming-events h3 {
