@@ -10,9 +10,9 @@ comments: true
     <!-- Calendar on the left -->
     <div class="calendar-container">
         <div class="calendar-header">
-            <button class="prev-month" onclick="changeMonth(-1)">&#10094;</button>
+            <button id="prev-month">&#10094;</button>
             <div class="month-year" id="month-year"></div>
-            <button class="next-month" onclick="changeMonth(1)">&#10095;</button>
+            <button id="next-month">&#10095;</button>
         </div>
         <div class="calendar-grid">
             <div class="day-name">Sun</div>
@@ -56,6 +56,7 @@ comments: true
 <script type="module">
   import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
   console.log("Event Calendar script loaded");
+
   // Handle the form submission to create a new event
   document.getElementById("eventForm").addEventListener("submit", async function(event) {
     event.preventDefault();
@@ -90,8 +91,10 @@ comments: true
       alert(`Error adding event: ${error.message}`);
     }
   });
+
   let currentMonth = new Date().getMonth(); // Track the current month
   let events = [];  // Store the events globally
+
   document.addEventListener('DOMContentLoaded', function() {
       console.log("Base URL:", pythonURI);  // Debugging line
       // Fetch the user ID and then get the events for the user
@@ -110,7 +113,16 @@ comments: true
           .catch(err => {
               console.error("Error fetching user ID: ", err);
           });
+
+      // Attach event listeners for month navigation buttons
+      document.getElementById('prev-month').addEventListener('click', function() {
+          changeMonth(-1);  // Go to the previous month
+      });
+      document.getElementById('next-month').addEventListener('click', function() {
+          changeMonth(1);   // Go to the next month
+      });
   });
+
   function getUserId(baseurl) {
       const URL = baseurl + '/api/id';  // Endpoint to get the user info (including user ID)
       return fetch(URL, fetchOptions)
@@ -133,6 +145,7 @@ comments: true
               return null;
           });
   }
+
   function getUserEvents(userId) {
       const URL = pythonURI + '/api/events/user/' + userId;  // Get events for the specific user
       return fetch(URL, fetchOptions)
@@ -152,6 +165,7 @@ comments: true
               return [];
           });
   }
+
   function renderCalendar(events) {
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     let currentDate = new Date();
@@ -194,10 +208,10 @@ comments: true
         calendarDays.appendChild(dayCell);
     }
   }
- function renderSidebar(events) {
+
+  function renderSidebar(events) {
     const upcomingEventsContainer = document.getElementById("event-list");
     upcomingEventsContainer.innerHTML = "";  // Clear existing events
-    // No filtering here, just loop through all events
     events.forEach(event => {
         const eventItem = document.createElement("div");
         eventItem.classList.add("event-item");
@@ -228,33 +242,23 @@ comments: true
         eventItem.appendChild(eventDate);
         upcomingEventsContainer.appendChild(eventItem);
     });
-}
+  }
+
   function openModal(date) {
       document.getElementById("eventModal").style.display = "block";
       const currentDate = new Date();
       const formattedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), date).toISOString().split('T')[0];
       document.getElementById("startDate").value = formattedDate;
   }
+
   function closeModal() {
-    const modal = document.getElementById("eventModal");
-    if (modal) {
-        modal.style.display = "none";
-    }
+      document.getElementById("eventModal").style.display = "none";
   }
-  window.addEventListener("click", function(event) {
-    const modal = document.getElementById("eventModal");
-    if (event.target === modal) {
-        modal.style.display = "none";
-    }
-  });
-  function changeMonth(offset) {
-    currentMonth += offset;
-    if (currentMonth < 0) {
-        currentMonth = 11;
-    } else if (currentMonth > 11) {
-        currentMonth = 0;
-    }
-    renderCalendar(events);
-    renderSidebar(events);
+
+  function changeMonth(direction) {
+      currentMonth += direction;
+      if (currentMonth < 0) currentMonth = 11;
+      if (currentMonth > 11) currentMonth = 0;
+      renderCalendar(events);  // Re-render the calendar with the updated month
   }
 </script>
