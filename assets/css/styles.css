@@ -250,3 +250,8 @@ button[type="submit"]:hover {
 .upcoming-events h3 {
     color: black;
 }
+
+#event-list {
+    max-height: 400px;  /* Adjust as needed */
+    overflow-y: auto;  /* Enables vertical scrolling */
+}

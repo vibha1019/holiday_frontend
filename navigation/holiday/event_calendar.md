@@ -27,7 +27,7 @@ comments: true
     </div>
     <!-- Sidebar for Upcoming Events on the right -->
     <div class="upcoming-events">
-        <h3>Upcoming Events</h3>
+        <h3 style="color: black; font-size: 24px; font-weight: bold;">Upcoming Events</h3>
         <div id="event-list">
             <!-- Event cards will be dynamically populated here -->
         </div>
@@ -56,6 +56,40 @@ comments: true
 <script type="module">
   import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
   console.log("Event Calendar script loaded");
+  // Handle the form submission to create a new event
+  document.getElementById("eventForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+    const postData = {
+        name: document.getElementById("eventName").value,
+        location: document.getElementById("eventLocation").value,
+        date: document.getElementById("startDate").value,  // This will be in YYYY-MM-DD format
+    };
+    console.log("Event Data:", postData);  // Log the event data to check before sending
+    try {
+      const response = await fetch(`${pythonURI}/api/event`, {
+        ...fetchOptions,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(postData)
+      });
+      // Check if the response is not OK and provide a more specific error message
+      if (!response.ok) {
+        const errorMessage = await response.text(); // Extract error message from response
+        throw new Error(`Failed to add event: ${response.statusText} - ${errorMessage}`);
+      }
+      alert("Event added successfully!");
+      // After posting the event, add it to the events array locally
+      const newEvent = { ...postData };  // Create a new event object
+      events.push(newEvent);  // Add the new event to the global events array
+      // Re-render the sidebar and calendar to include the new event
+      renderSidebar(events);
+      renderCalendar(events);
+    } catch (error) {
+      // Catch errors and provide more useful information
+      console.error('Error adding event:', error.message);
+      alert(`Error adding event: ${error.message}`);
+    }
+  });
   let currentMonth = new Date().getMonth(); // Track the current month
   let events = [];  // Store the events globally
   document.addEventListener('DOMContentLoaded', function() {
@@ -147,10 +181,7 @@ comments: true
         }
         // Check if the current day has an event
         const eventDateString = `${currentDate.getFullYear()}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        console.log("Checking date:", eventDateString);  // Log the day being checked
-        console.log("Event dates:", events.map(event => event.date));  // Log all event dates
         if (events.some(event => event.date === eventDateString)) {
-            console.log(`Event found on ${eventDateString}`);
             const dot = document.createElement("span");
             dot.classList.add("event-dot");  // Add a class for styling blue dots
             dayCell.appendChild(dot);
@@ -158,111 +189,72 @@ comments: true
         dayCell.textContent = day;
         // When a day is clicked, open the modal and prefill the date
         dayCell.addEventListener("click", function() {
-            openModal(day); // Pass the clicked day to the modal
+            openModal(day);
         });
         calendarDays.appendChild(dayCell);
     }
-}
-  function renderSidebar(events) {
-      const upcomingEventsContainer = document.getElementById("event-list");
-      upcomingEventsContainer.innerHTML = "";  // Clear existing events
-      const upcomingEvents = events.filter(event => {
-          const eventDate = new Date(event.date);
-          return eventDate >= new Date(); // Only show future or current events
-      });
-      // If no upcoming events
-      if (upcomingEvents.length === 0) {
-          const noEventsMessage = document.createElement("div");
-          noEventsMessage.classList.add("no-events-message");
-          noEventsMessage.textContent = "No upcoming events.";
-          upcomingEventsContainer.appendChild(noEventsMessage);
-          return;
-      }
-      // Loop through upcoming events
-      upcomingEvents.forEach(event => {
-          const eventItem = document.createElement("div");
-          eventItem.classList.add("event-item");
-          // Event Name
-          const eventName = document.createElement("div");
-          eventName.classList.add("event-name");
-          eventName.textContent = event.name;
-          eventName.style.color = "black"; // Ensure event name text is black
-          // Event Location
-          const eventLocation = document.createElement("div");
-          eventLocation.classList.add("event-location");
-          eventLocation.textContent = event.location;
-          eventLocation.style.color = "black"; // Ensure event location text is black
-          // Event Date
-          const eventDate = document.createElement("div");
-          eventDate.classList.add("event-date");
-          const eventDateObject = new Date(event.date);
-          eventDate.textContent = `${eventDateObject.toLocaleDateString()}`;
-          eventDate.style.color = "black"; // Ensure event date text is black
-          eventItem.appendChild(eventName);
-          eventItem.appendChild(eventLocation);
-          eventItem.appendChild(eventDate);
-          upcomingEventsContainer.appendChild(eventItem);
-      });
   }
+ function renderSidebar(events) {
+    const upcomingEventsContainer = document.getElementById("event-list");
+    upcomingEventsContainer.innerHTML = "";  // Clear existing events
+    // No filtering here, just loop through all events
+    events.forEach(event => {
+        const eventItem = document.createElement("div");
+        eventItem.classList.add("event-item");
+        eventItem.style.padding = "15px";
+        eventItem.style.border = "1px solid #ddd";
+        eventItem.style.marginBottom = "15px";
+        eventItem.style.borderRadius = "8px";
+        eventItem.style.backgroundColor = "#f9f9f9";
+        // Event Name
+        const eventName = document.createElement("div");
+        eventName.classList.add("event-name");
+        eventName.textContent = event.name;
+        eventName.style.fontWeight = "bold";
+        eventName.style.color = "black"; // Ensure event name is black
+        // Event Location
+        const eventLocation = document.createElement("div");
+        eventLocation.classList.add("event-location");
+        eventLocation.textContent = event.location;
+        eventLocation.style.color = "black"; // Ensure event location text is black
+        // Event Date
+        const eventDate = document.createElement("div");
+        eventDate.classList.add("event-date");
+        const eventDateObject = new Date(event.date);
+        eventDate.textContent = `${eventDateObject.toLocaleDateString()}`;
+        eventDate.style.color = "black"; // Ensure event date text is black
+        eventItem.appendChild(eventName);
+        eventItem.appendChild(eventLocation);
+        eventItem.appendChild(eventDate);
+        upcomingEventsContainer.appendChild(eventItem);
+    });
+}
   function openModal(date) {
-      document.getElementById("eventModal").style.display = "block";  // Show the modal
-      // Prefill the date field with the selected date in YYYY-MM-DD format
+      document.getElementById("eventModal").style.display = "block";
       const currentDate = new Date();
       const formattedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), date).toISOString().split('T')[0];
-      document.getElementById("startDate").value = formattedDate;  // Populate the date input
+      document.getElementById("startDate").value = formattedDate;
   }
   function closeModal() {
     const modal = document.getElementById("eventModal");
     if (modal) {
-        modal.style.display = "none"; // Hide the modal
-    } else {
-        console.error("Modal element not found!");
+        modal.style.display = "none";
     }
-}
-    // Close modal when clicking outside the modal content
-    window.addEventListener("click", function(event) {
-        const modal = document.getElementById("eventModal");
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    });
-  // Handle the form submission to create a new event
-  document.getElementById("eventForm").addEventListener("submit", async function(event) {
-    event.preventDefault();
-    const postData = {
-        name: document.getElementById("eventName").value,
-        location: document.getElementById("eventLocation").value,
-        date: document.getElementById("startDate").value,  // This will be in YYYY-MM-DD format
-    };
-    console.log("Event Data:", postData);  // Log the event data to check before sending
-    try {
-      const response = await fetch(`${pythonURI}/api/event`, {
-        ...fetchOptions,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(postData)
-      });
-      // Check if the response is not OK and provide a more specific error message
-      if (!response.ok) {
-        const errorMessage = await response.text(); // Extract error message from response
-        throw new Error(`Failed to add event: ${response.statusText} - ${errorMessage}`);
-      }
-      alert("Event added successfully!");
-    } catch (error) {
-      // Catch errors and provide more useful information
-      console.error('Error adding event:', error.message);
-      alert(`Error adding event: ${error.message}`);
+  }
+  window.addEventListener("click", function(event) {
+    const modal = document.getElementById("eventModal");
+    if (event.target === modal) {
+        modal.style.display = "none";
     }
   });
-  // Function to change the month
   function changeMonth(offset) {
     currentMonth += offset;
     if (currentMonth < 0) {
-        currentMonth = 11; // Wrap around to December
+        currentMonth = 11;
     } else if (currentMonth > 11) {
-        currentMonth = 0; // Wrap around to January
+        currentMonth = 0;
     }
-    renderCalendar(events);  // Re-render calendar with the updated month
-    renderSidebar(events);   // Update sidebar with events for the new month
+    renderCalendar(events);
+    renderSidebar(events);
   }
 </script>
