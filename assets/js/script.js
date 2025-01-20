@@ -34,6 +34,10 @@ function renderCalendar() {
         }
 
         dayCell.textContent = day;
+        dayCell.addEventListener("click", function() {
+            openModal(day); // Pass the correct day to the modal
+        });
+
         calendarDays.appendChild(dayCell);
     }
 }
@@ -51,7 +55,6 @@ function openModal(date) {
     document.getElementById("eventModal").style.display = "block";
     // Prefill the date field with the selected date in YYYY-MM-DD format
     const formattedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), date).toISOString().split('T')[0];
-    console.log(formattedDate); // Debug the date to ensure it's correct
     document.getElementById("startDate").value = formattedDate;
 }
 
@@ -63,12 +66,6 @@ function closeModal() {
 // Handle the form submission to create a new event
 document.getElementById("eventForm").addEventListener("submit", function(event) {
     event.preventDefault();
-    
-    const token = localStorage.getItem("token");
-    if (!token) {
-        alert("You are not logged in.");
-        return;
-    }
 
     const eventData = {
         name: document.getElementById("eventName").value,
@@ -83,7 +80,6 @@ document.getElementById("eventForm").addEventListener("submit", function(event) 
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token // Include the token in the Authorization header
         },
         body: JSON.stringify(eventData)
     })
@@ -96,16 +92,5 @@ document.getElementById("eventForm").addEventListener("submit", function(event) 
     .catch(error => {
         console.error("Error creating event:", error);
         alert("Error creating event.");
-    });
-});
-
-// When the page loads, assign the event listener to each day cell
-document.addEventListener("DOMContentLoaded", function() {
-    const days = document.querySelectorAll(".day");
-    days.forEach(day => {
-        day.addEventListener("click", function() {
-            const selectedDate = day.textContent; // Use textContent for day
-            openModal(selectedDate);
-        });
     });
 });
