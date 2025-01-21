@@ -205,7 +205,9 @@ comments: true
   function renderSidebar(events) {
     const upcomingEventsContainer = document.getElementById("event-list");
     upcomingEventsContainer.innerHTML = "";  // Clear existing events
-    events.forEach(event => {
+    // Sort events by date in ascending order
+    const sortedEvents = events.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
+    sortedEvents.forEach(event => {
         const eventItem = document.createElement("div");
         eventItem.classList.add("event-item");
         eventItem.style.padding = "15px";
@@ -235,7 +237,7 @@ comments: true
         eventItem.appendChild(eventDate);
         upcomingEventsContainer.appendChild(eventItem);
     });
-  }
+}
   function openModal(date) {
       document.getElementById("eventModal").style.display = "block";
       const currentDate = new Date();
