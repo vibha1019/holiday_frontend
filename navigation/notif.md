@@ -21,45 +21,6 @@ comments: true
     <div id="message" class="message"></div>
 </div>
 
-<!-- <script>
-    document.getElementById('notificationForm').addEventListener('submit', function(event) {
-        event.preventDefault();  // Prevent the form from submitting normally
-        const content = document.getElementById('content').value;
-        const recipient_id = document.getElementById('recipient_id').value;
-        const token = 'your_jwt_token_here';  // Replace this with the actual JWT token
-        const notificationData = {
-            content: content,
-            recipient_id: recipient_id
-        };
-        fetch('/api/notifications/notification', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(notificationData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message && data.message === "Notification created successfully") {
-                document.getElementById('message').innerHTML = 'Notification sent successfully!';
-                document.getElementById('message').classList.add('success');
-                document.getElementById('message').classList.remove('error');
-            } else {
-                document.getElementById('message').innerHTML = 'Error sending notification. Please try again.';
-                document.getElementById('message').classList.add('error');
-                document.getElementById('message').classList.remove('success');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            document.getElementById('message').innerHTML = 'Error sending notification. Please try again.';
-            document.getElementById('message').classList.add('error');
-            document.getElementById('message').classList.remove('success');
-        });
-    });
-</script> -->
-
 <script type="module">
   import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
   console.log("Notification script loaded");
