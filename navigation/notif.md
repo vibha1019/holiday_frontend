@@ -21,6 +21,11 @@ comments: true
     <div id="message" class="message"></div>
 </div>
 
+<!-- Add this section to display fetched notifications -->
+<h2>Your Notifications</h2>
+<div id="notificationsList"></div>
+<button id="fetchNotifications">Fetch Notifications</button>
+
 <script type="module">
   import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
   console.log("Notification script loaded");
@@ -57,4 +62,54 @@ comments: true
       alert("Failed to send notification.");
     }
   });
+
+  // Function to fetch notifications for the current user
+  async function fetchNotifications() {
+    try {
+      const response = await fetch(`${pythonURI}/api/notifications`, {
+        ...fetchOptions,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        const errorMessage = await response.text();  // Extract error message from response
+        throw new Error(`Failed to fetch notifications: ${response.statusText} - ${errorMessage}`);
+      }
+
+      const notifications = await response.json();
+      displayNotifications(notifications);
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Failed to fetch notifications.");
+    }
+  }
+
+  // Function to display notifications in the UI
+  function displayNotifications(notifications) {
+    const notificationsList = document.getElementById("notificationsList");
+    notificationsList.innerHTML = '';  // Clear the current notifications list
+
+    if (notifications.length === 0) {
+      notificationsList.innerHTML = "<p>No notifications available.</p>";
+      return;
+    }
+
+    notifications.forEach(notification => {
+      const notificationElement = document.createElement("div");
+      notificationElement.classList.add("notification-item");
+
+      notificationElement.innerHTML = `
+        <p><strong>Notification:</strong> ${notification.content}</p>
+        <p><small>Received at: ${new Date(notification.created_at).toLocaleString()}</small></p>
+      `;
+
+      notificationsList.appendChild(notificationElement);
+    });
+  }
+
+  // Fetch notifications when the "Fetch Notifications" button is clicked
+  document.getElementById("fetchNotifications").addEventListener("click", fetchNotifications);
 </script>
