@@ -246,6 +246,7 @@ comments: true
   }
   function closeModal() {
     document.getElementById("eventModal").style.display = "none";
+    document.getElementById("eventForm").reset();
   }
   function changeMonth(direction) {
       currentMonth += direction;
