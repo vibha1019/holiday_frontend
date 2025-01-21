@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Check Notifications Here
+title: Notifications
 permalink: /notif/
 author: Kushi Gade
 comments: true
@@ -8,23 +8,21 @@ comments: true
 
 <!-- Link to the external CSS file -->
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/notif_styles.css">
-
-<h1>Send Notification</h1>
+<h1 class="page-title">Send Notification</h1>
 <div class="form-container">
     <form id="notificationForm">
         <label for="content">Notification Content:</label>
         <textarea id="content" name="content" required placeholder="Enter notification content..."></textarea>
         <label for="recipient_id">Recipient User ID:</label>
         <input type="number" id="recipient_id" name="recipient_id" required placeholder="Enter recipient's user ID">
-        <button type="submit">Send Notification</button>
+        <button type="submit" class="primary-btn">Send Notification</button>
     </form>
     <div id="message" class="message"></div>
 </div>
 
-<!-- Add this section to display fetched notifications -->
-<h2>Your Notifications</h2>
-<div id="notificationsList"></div>
-<button id="fetchNotifications">Fetch Notifications</button>
+<h2 class="section-title">Your Notifications</h2>
+<div id="notificationsList" class="notifications-container"></div>
+<button id="fetchNotifications" class="primary-btn">Fetch Notifications</button>
 
 <script type="module">
   import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
@@ -101,10 +99,11 @@ comments: true
       const notificationElement = document.createElement("div");
       notificationElement.classList.add("notification-item");
 
-      notificationElement.innerHTML = `
-        <p><strong>Notification:</strong> ${notification.content}</p>
-        <p><small>Received at: ${new Date(notification.created_at).toLocaleString()}</small></p>
-      `;
+    notificationElement.innerHTML = `
+      <p style="color: black;"><strong>Notification:</strong> ${notification.content}</p>
+      <p style="color: black;"><small>Received at: ${new Date(notification.created_at).toLocaleString()}</small></p>
+    `;
+
 
       notificationsList.appendChild(notificationElement);
     });
