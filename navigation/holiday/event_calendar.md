@@ -84,6 +84,7 @@ comments: true
       // Re-render the sidebar and calendar to include the new event
       renderSidebar(events);
       renderCalendar(events);
+      closeModal(); // Close the modal here
     } catch (error) {
       // Catch errors and provide more useful information
       console.error('Error adding event:', error.message);
@@ -242,7 +243,7 @@ comments: true
       document.getElementById("startDate").value = formattedDate;
   }
   function closeModal() {
-      document.getElementById("eventModal").style.display = "none";
+    document.getElementById("eventModal").style.display = "none";
   }
   function changeMonth(direction) {
       currentMonth += direction;
@@ -250,4 +251,11 @@ comments: true
       if (currentMonth > 11) currentMonth = 0;
       renderCalendar(events);  // Re-render the calendar with the updated month
   }
+  window.addEventListener("click", function(event) {
+    const modal = document.getElementById("eventModal");
+    if (event.target === modal) {
+        closeModal();
+    }
+});
+
 </script>
