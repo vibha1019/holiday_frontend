@@ -229,8 +229,13 @@ comments: true
         // Event Date
         const eventDate = document.createElement("div");
         eventDate.classList.add("event-date");
-        const eventDateObject = new Date(event.date);
-        eventDate.textContent = `${eventDateObject.toLocaleDateString()}`;
+        const eventDateParts = event.date.split('-'); // Split 'YYYY-MM-DD'
+        const eventDateObject = new Date(
+            parseInt(eventDateParts[0]), // Year
+            parseInt(eventDateParts[1]) - 1, // Month (0-indexed)
+            parseInt(eventDateParts[2]) // Day
+        );
+        eventDate.textContent = eventDateObject.toLocaleDateString();
         eventDate.style.color = "black"; // Ensure event date text is black
         eventItem.appendChild(eventName);
         eventItem.appendChild(eventLocation);
@@ -239,11 +244,11 @@ comments: true
     });
 }
   function openModal(date) {
-      document.getElementById("eventModal").style.display = "block";
-      const currentDate = new Date();
-      const formattedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), date).toISOString().split('T')[0];
-      document.getElementById("startDate").value = formattedDate;
-  }
+    document.getElementById("eventModal").style.display = "block";
+    const currentYear = new Date().getFullYear(); // Keep current year constant
+    const formattedDate = new Date(currentYear, currentMonth, date).toISOString().split('T')[0];
+    document.getElementById("startDate").value = formattedDate;
+}
   function closeModal() {
     document.getElementById("eventModal").style.display = "none";
     document.getElementById("eventForm").reset();
