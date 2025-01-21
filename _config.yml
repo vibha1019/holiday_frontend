@@ -20,3 +20,4 @@ header_pages:
   - navigation/holiday.md
   - navigation/searchbar.md
   - navigation/holiday/event_calendar.md
+  - navigation/notif.md
