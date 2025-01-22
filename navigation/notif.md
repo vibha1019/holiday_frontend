@@ -24,7 +24,6 @@ comments: true
 
 <h2 class="section-title">Your Notifications</h2>
 <div id="notificationsList" class="notifications-container"></div>
-<button id="fetchNotifications" class="primary-btn">Fetch Notifications</button>
 
 <script type="module">
   import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
