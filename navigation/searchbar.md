@@ -80,15 +80,16 @@ permalink: /searchbar
 </style>
 <script>
     async function searchItems() {
-        const input = document.getElementById('searchInput').value.trim().toLowerCase();
+        // Get the input element by ID
+        const input = document.getElementById('searchInput').value.trim().toLowerCase(); // Fixed the ID
         const resultsDiv = document.getElementById('results');
         resultsDiv.innerHTML = ''; // Clear previous results
         if (input) {
             try {
-                const response = await fetch(`http://127.0.0.1:8887/search?q=${encodeURIComponent(input)}`, {
+                const response = await fetch(`http://127.0.0.1:8887/api/search?q=${encodeURIComponent(input)}`, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
+                    credentials: 'include', // Include credentials to match backend settings
                 });
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
@@ -114,10 +115,10 @@ permalink: /searchbar
                 resultsDiv.textContent = 'An error occurred while searching. Please try again.';
             }
         }
-    }
+    } 
     async function incrementTags(itemName) {
         try {
-            const response = await fetch('http://127.0.0.1:8887/increment_tag', {
+            const response = await fetch(`http://127.0.0.1:8887/api/search/?q=${encodeURIComponent(increment_tag)}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: itemName }),
@@ -133,7 +134,6 @@ permalink: /searchbar
             console.error('Error updating tags:', error);
         }
     }
-    window.searchItems = searchItems;
     document.addEventListener('DOMContentLoaded', () => {
         console.log('Search bar initialized');
     });
