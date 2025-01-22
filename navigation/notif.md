@@ -149,10 +149,9 @@ async function populateUserDropdown() {
       notificationsList.appendChild(notificationElement);
     });
   }
-
-  // Fetch notifications on button click
-  document.getElementById("fetchNotifications").addEventListener("click", fetchNotifications);
-
   // Populate user dropdown on page load
-  document.addEventListener('DOMContentLoaded', populateUserDropdown);
+  document.addEventListener('DOMContentLoaded', () => {
+    populateUserDropdown(); // Populate the user dropdown
+    fetchNotifications(); // Fetch notifications immediately when page loads
+  });
 </script>
