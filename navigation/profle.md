@@ -1,7 +1,7 @@
 ---
 layout: post
 title: User Profile
-permalink: /profile/
+permalink: /profile_page/
 author: Spencer Lyons
 comments: true
 ---
