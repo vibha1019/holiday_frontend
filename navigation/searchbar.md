@@ -85,11 +85,11 @@ permalink: /searchbar
         resultsDiv.innerHTML = ''; // Clear previous results
         if (input) {
             try {
-                const response = await fetch(`http://127.0.0.1:8887/search?q=${encodeURIComponent(input)}`, {
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                });
+                const response = await fetch(`http://127.0.0.1:8887/api/search?q=${encodeURIComponent(input)}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include' // Necessary for cookies/sessions.
+            });
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
