@@ -8,13 +8,12 @@ comments: true
 
 <!-- Link to the external CSS file -->
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/profile_style.css">
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="/assets/css/profile_style.css">
 </head>
 <body>
     <div class="profile-header">
@@ -30,7 +29,7 @@ comments: true
     </div>
     <script>
         // API Endpoint
-        const apiUrl = 'https://127.0.0.1/profile'; // Replace with your API URL
+        const apiUrl = 'http://127.0.0.1:8887/api/user_profile_'; // Replace with your API URL
         // Fetch user data and populate the profile
         async function loadProfile() {
             try {
