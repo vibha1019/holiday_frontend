@@ -17,9 +17,9 @@ comments: true
 </head>
 <body>
     <div class="profile-header">
-        <img src="/images/logo.png" alt="Profile Picture" class="profile-picture" />
-        <div class="username" id="username">Loading...</div>
-        <div class="theme-preference" id="theme-preference">Loading...</div>
+        <img src="http://127.0.0.1:8887/socialmedia_frontend/images/logo.png" alt="Profile Picture" class="profile-picture" />
+        <div class="name" id="username">Loading...</div>
+        <div class="theme" id="theme-preference">Loading...</div>
     </div>
     <script>
         // API Endpoint
@@ -27,12 +27,13 @@ comments: true
         // Fetch user data and populate the profile
         async function loadProfile() {
             try {
-                const response = await fetch(`${apiUrl}`);
+                const userId = 1;
+                const response = await fetch(`${apiUrl}?user_id=${userId}`);
                 const data = await response.json();
                 // Populate profile details
-                document.getElementById('link').src = data.link || '/images/logo.png';
-                document.getElementById('name').textContent = data.name || 'Unknown User';
-                document.getElementById('theme').textContent = `Preferred Theme: ${data.theme || 'Light'}`;
+                document.getElementById('link').src = data.link || 'http://127.0.0.1:8887/socialmedia_frontend/images/logo.png';
+                document.getElementById('username').textContent = data.name || 'Unknown User';
+                document.getElementById('theme-prefrence').textContent = `Preferred Theme: ${data.theme || 'Light'}`;
             } catch (error) {
                 console.error('Error fetching profile data:', error);
             }
