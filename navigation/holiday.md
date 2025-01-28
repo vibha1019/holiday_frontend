@@ -199,130 +199,76 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 </script>
-
+<!DOCTYPE html>
 <html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giftinator 3000</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            position: relative;
-            height: 100vh;
-            background-color: #f9f9f9;
-        }
-        #help-button {
-            position: fixed;
-            bottom: 20px;
-            left: 20px; /* Move the button to the left */
-            padding: 10px 20px;
-            background-color: #B22222 !important; /* Light blue */
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        #help-button:hover {
-            background-color: #63b6e3;
-        }
         #chat-container {
-            position: fixed;
-            bottom: 20px;
-            left: 20px; /* Align chat box with the button */
-            width: 350px;
-            max-height: 500px;
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             display: none;
             flex-direction: column;
-            overflow: hidden;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: #f9f9f9;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         #chat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background: #4caf50;
+            color: white;
             padding: 10px;
-            background-color: #333;
-            color: white;
-            border-bottom: 1px solid #ddd;
-        }
-        #chat-header h4 {
-            margin: 0;
-            font-size: 16px;
-        }
-        #close-chat {
-            background: none;
-            border: none;
-            color: white;
             font-size: 18px;
-            cursor: pointer;
-        }
-        #close-chat:hover {
-            color: #ff6666;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
         }
         #chat-box {
-            flex-grow: 1;
+            flex: 1;
             padding: 10px;
             overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-        }
-        .message {
-            margin: 10px;
-            padding: 10px;
-            border-radius: 10px;
-            max-width: 75%;
-            word-wrap: break-word;
-            display: inline-block;
-        }
-        .assistant {
-            background-color: #333;
-            color: white;
-            align-self: flex-start;
-            text-align: left;
-        }
-        .user {
-            background-color: #2f4f4f;
-            color: white;
-            align-self: flex-end;
-            text-align: right;
         }
         #input-container {
             display: flex;
             padding: 10px;
             border-top: 1px solid #ddd;
         }
-        input[type="text"] {
-            flex-grow: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
+        #input-container input {
+            flex: 1;
+            padding: 5px;
+            margin-right: 5px;
         }
-        button {
-            margin-left: 5px;
-            padding: 10px;
-            background-color: #333;
+        #input-container button {
+            padding: 5px 10px;
+            background: #4caf50;
             color: white;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
-            font-size: 14px;
         }
-        button:hover {
-            background-color: #555;
+        #help-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
         }
     </style>
+</head>
+<body>
     <button id="help-button" onclick="toggleChat()">Need Help?</button>
     <div id="chat-container">
         <div id="chat-header">
-            <h4>Giftinator 3000</h4>
-            <button id="close-chat" onclick="toggleChat()">×</button>
+            <span>Giftinator 3000</span>
+            <button onclick="toggleChat()" style="float: right; background: none; border: none; color: white;">×</button>
         </div>
         <div id="chat-box"></div>
         <div id="input-container">
@@ -334,21 +280,25 @@ document.addEventListener("DOMContentLoaded", function() {
         const chatBox = document.getElementById('chat-box');
         const userInput = document.getElementById('user-input');
         const chatContainer = document.getElementById('chat-container');
+        const userId = 1; // Replace with actual user ID logic
         function toggleChat() {
             chatContainer.style.display = chatContainer.style.display === 'flex' ? 'none' : 'flex';
         }
         async function sendMessage() {
-            const message = userInput.value;
+            const message = userInput.value.trim();
+            const yesNo = confirm("Is this related to gift suggestions?") ? 1 : 0;
             if (!message) return;
             appendMessage('user', message);
             userInput.value = '';
             try {
-                const response = await fetch('http://127.0.0.1:8887/chat', {
+                const response = await fetch('/api/gift/chat', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ user_input: message }),
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_input: message,
+                        user_id: userId,
+                        yesNo: yesNo,
+                    }),
                 });
                 const data = await response.json();
                 if (response.ok) {
@@ -361,13 +311,11 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         }
         function appendMessage(sender, message) {
-            const messageElement = document.createElement('div');
-            messageElement.className = `message ${sender}`;
-            messageElement.innerText = message;
-            chatBox.appendChild(messageElement);
+            const messageDiv = document.createElement('div');
+            messageDiv.textContent = `${sender === 'user' ? 'You' : 'Giftinator'}: ${message}`;
+            chatBox.appendChild(messageDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
     </script>
-
-
-
+</body>
+</html>
