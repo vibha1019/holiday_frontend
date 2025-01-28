@@ -13,44 +13,26 @@ comments: true
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
-    <link rel="stylesheet" href="/assets/css/profile_style.css">
+    <link rel="stylesheet" href="/socialmedia_frontend/assets/css/profile_style.css">
 </head>
 <body>
     <div class="profile-header">
-        <img src="" alt="Profile Picture" class="profile-picture" id="profile-picture" />
+        <img src="/images/logo.png" alt="Profile Picture" class="profile-picture" />
         <div class="username" id="username">Loading...</div>
         <div class="theme-preference" id="theme-preference">Loading...</div>
     </div>
-    <div class="posts-container">
-        <div class="posts-title">My Posts</div>
-        <div class="posts-list" id="posts-list">
-            <!-- Posts will be loaded here dynamically -->
-        </div>
-    </div>
     <script>
         // API Endpoint
-        const apiUrl = 'http://127.0.0.1:8887/api/user_profile_'; // Replace with your API URL
+        const apiUrl = 'http://127.0.0.1:8887/api/user_profile'; // Replace with your API URL
         // Fetch user data and populate the profile
         async function loadProfile() {
             try {
                 const response = await fetch(`${apiUrl}`);
                 const data = await response.json();
                 // Populate profile details
-                document.getElementById('profile-picture').src = data.profilePicture || 'default-pic.jpg';
-                document.getElementById('username').textContent = data.username || 'Unknown User';
-                document.getElementById('theme-preference').textContent = `Preferred Theme: ${data.theme || 'Light'}`;
-                // Populate posts
-                const postsList = document.getElementById('posts-list');
-                postsList.innerHTML = ''; // Clear any existing content
-                data.posts.forEach(post => {
-                    const postItem = document.createElement('div');
-                    postItem.className = 'post-item';
-                    postItem.innerHTML = `
-                        <div class="post-title">${post.title}</div>
-                        <div class="post-date">${new Date(post.date).toLocaleDateString()}</div>
-                    `;
-                    postsList.appendChild(postItem);
-                });
+                document.getElementById('link').src = data.link || '/images/logo.png';
+                document.getElementById('name').textContent = data.name || 'Unknown User';
+                document.getElementById('theme').textContent = `Preferred Theme: ${data.theme || 'Light'}`;
             } catch (error) {
                 console.error('Error fetching profile data:', error);
             }
@@ -60,4 +42,3 @@ comments: true
     </script>
 </body>
 </html>
-
