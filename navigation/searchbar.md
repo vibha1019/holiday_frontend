@@ -86,10 +86,10 @@ permalink: /searchbar
         if (input) {
             try {
                 const response = await fetch(`http://127.0.0.1:8887/api/search?q=${encodeURIComponent(input)}`, {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include' // Necessary for cookies/sessions.
-            });
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                });
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -99,9 +99,8 @@ permalink: /searchbar
                         const resultDiv = document.createElement('div');
                         resultDiv.className = 'result';
                         resultDiv.textContent = item.name;
-                        // Onclick handler for saving tags and redirecting to the link
                         resultDiv.onclick = async () => {
-                            await incrementTags(item.name); // Save tags
+                            await incrementTags(item.name); // Save item selection
                             window.location.href = item.link; // Redirect to the associated link
                         };
                         resultsDiv.appendChild(resultDiv);
@@ -117,7 +116,7 @@ permalink: /searchbar
     }
     async function incrementTags(itemName) {
         try {
-            const response = await fetch('http://127.0.0.1:8887/increment_tag', {
+            const response = await fetch('http://127.0.0.1:8887/api/search/increment_tag', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: itemName }),
@@ -128,7 +127,6 @@ permalink: /searchbar
             }
             const data = await response.json();
             console.log(data.message);
-            console.log('Tags:', data.tags);
         } catch (error) {
             console.error('Error updating tags:', error);
         }
