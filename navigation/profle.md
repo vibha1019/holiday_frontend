@@ -20,6 +20,7 @@ comments: true
         <img src="http://127.0.0.1:8887/socialmedia_frontend/images/logo.png" alt="Profile Picture" class="profile-picture" />
         <div class="name" id="username">Loading...</div>
         <div class="theme" id="theme-preference">Loading...</div>
+        <button id="delete-btn" class="delete-button">Delete Profile</button>
     </div>
     <script>
         // API Endpoint
@@ -39,7 +40,35 @@ comments: true
             }
         }
         // Load profile on page load
-        document.addEventListener('DOMContentLoaded', loadProfile);
+        async function deleteProfile() {
+            const confirmation = confirm('Are you sure you want to delete this profile?');
+            if (!confirmation) return;
+            try {
+                const response = await fetch(`${apiUrl}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ user_id: 1 }) // Replace 1 with the actual user ID
+                });
+                if (response.ok) {
+                    alert('Profile deleted successfully!');
+                    document.getElementById('link').src = '/images/logo.png';
+                    document.getElementById('name').textContent = 'Unknown User';
+                    document.getElementById('theme').textContent = 'Preferred Theme: Light';
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error deleting profile: ${errorData.message}`);
+                }
+            } catch (error) {
+                console.error('Error deleting profile:', error);
+            }
+        }
+        // Load profile on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProfile();
+            document.getElementById('delete-btn').addEventListener('click', deleteProfile);
+        });
     </script>
 </body>
 </html>
