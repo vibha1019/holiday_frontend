@@ -6,8 +6,8 @@ permalink: /aws/
 ---
 
 ## Project Structure
+![diagram]({{ site.baseurl }}/images/aws_blog_diagram.png)
 
-Our project is structured to ensure smooth integration between the frontend and backend, focusing on real-time event management and user interaction. Below is an outline of our repository setup, including subdomains and port configurations.
 
 ### Backend
 - Our backend is **Flask-based**, running on port **8887** for API requests.
@@ -22,7 +22,7 @@ Our project is structured to ensure smooth integration between the frontend and 
 - The user interface updates accordingly based on API responses.
 
 ---
-## How Our Features Interact with the Frontend & Backend
+## Features Working with Frontend to Backend
 
 ### **Event Calendar**
 - **Backend:** Handles CRUD operations for events via `/api/events`.
