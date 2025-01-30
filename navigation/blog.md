@@ -5,8 +5,6 @@ search_exclude: true
 permalink: /aws/
 ---
 
-# AWS Deployment Blog
-
 ## Project Structure
 
 Our project is structured to ensure smooth integration between the frontend and backend, focusing on real-time event management and user interaction. Below is an outline of our repository setup, including subdomains and port configurations.
