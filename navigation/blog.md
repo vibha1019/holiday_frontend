@@ -36,6 +36,7 @@ permalink: /aws/
 ### **Search Bar**
 - **Backend:** Implements search functionality at `/api/search`, querying event names and descriptions.
 - **Frontend:** Filters and displays search results dynamically.
+- **Database:** Stores/adds tags to items user interacts with to create a future profile of intrests and liked items
 
 ### **Profile Creator**
 - **Backend:** Manages user accounts and profile data via `/api/profile`.
