@@ -101,4 +101,3 @@ Our project is structured to ensure smooth integration between the frontend and 
 - **Daily Backups (To Be Implemented):** Helps prevent data loss.  
 
 ---
-## **Conclusion**
