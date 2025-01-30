@@ -82,7 +82,8 @@ menu: nav/home.html
             <button id="submit-review">Send</button>
         </div>
     </div>
-    <script>
+    <script type="module">
+        import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
         document.getElementById("review-button").addEventListener("click", function () {
             document.getElementById("review-popup").style.display = "block";
         });
@@ -95,25 +96,23 @@ menu: nav/home.html
                 alert("Please enter a review before submitting.");
                 return;
             }
-            const token = localStorage.getItem("authToken"); // Ensure authentication
-            if (!token) {
-                alert("You must be logged in to submit a review.");
-                return;
-            }
-            const response = await fetch("/api/survey", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify({ message: reviewText })
-            });
-            if (response.ok) {
-                alert("Thank you for your review!");
-                document.getElementById("review-popup").style.display = "none";
-                document.getElementById("review-text").value = "";
-            } else {
-                alert("Failed to submit review. Please try again.");
+            try {
+                const response = await fetch(`${pythonURI}/api/survey`, {
+                    ...fetchOptions,
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: reviewText })
+                });
+                if (response.ok) {
+                    alert("Thank you for your review!");
+                    document.getElementById("review-popup").style.display = "none";
+                    document.getElementById("review-text").value = "";
+                } else {
+                    alert("Failed to submit review. Please try again.");
+                }
+            } catch (error) {
+                console.error("Error submitting review:", error);
+                alert("An error occurred while submitting the review. Please try again.");
             }
         });
     </script>
