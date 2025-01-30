@@ -6,7 +6,6 @@ author: Spencer Lyons
 comments: true
 ---
 
-<!-- Link to the external CSS file -->
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/profile_style.css">
 <html lang="en">
 <head>
@@ -17,24 +16,26 @@ comments: true
 </head>
 <body>
     <div class="profile-header">
-        <img src="http://127.0.0.1:8887/socialmedia_frontend/images/logo.png" alt="Profile Picture" class="profile-picture" />
+        <img id="link" src="http://127.0.0.1:8887/socialmedia_frontend/images/logo.png" alt="Profile Picture" />
         <div class="name" id="username">Loading...</div>
         <div class="theme" id="theme-preference">Loading...</div>
         <button id="delete-btn" class="delete-button">Delete Profile</button>
     </div>
     <script>
-        // API Endpoint
-        const apiUrl = 'http://127.0.0.1:8887/api/user_profile'; // Replace with your API URL
+        const userId = localStorage.getItem("user_id");
+        console.log("User ID:", userId);
+        if (userId) {
+            const apiUrl = `http://127.0.0.1:8887/user/${userID}/profile`; // Adjust for actual user ID
+        }
         // Fetch user data and populate the profile
         async function loadProfile() {
             try {
-                const userId = 1;
-                const response = await fetch(`${apiUrl}?user_id=${userId}`);
+                const response = await fetch(apiUrl);
                 const data = await response.json();
                 // Populate profile details
                 document.getElementById('link').src = data.link || 'http://127.0.0.1:8887/socialmedia_frontend/images/logo.png';
                 document.getElementById('username').textContent = data.name || 'Unknown User';
-                document.getElementById('theme-prefrence').textContent = `Preferred Theme: ${data.theme || 'Light'}`;
+                document.getElementById('theme-preference').textContent = `Preferred Theme: ${data.theme || 'Light'}`;
             } catch (error) {
                 console.error('Error fetching profile data:', error);
             }
