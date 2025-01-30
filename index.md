@@ -120,3 +120,10 @@ menu: nav/home.html
     </script>
 </body>
 </html>
+
+
+<table style="background-color: #da95f5;">
+    <tr>
+        <td><a href="{{site.baseurl}}/aws">AWS Deployment Blog</a></td>
+    </tr>
+</table>
