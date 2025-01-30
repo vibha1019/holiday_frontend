@@ -307,6 +307,7 @@ DEPENDENCIES
   execjs (~> 2.8)
   faraday-retry (~> 2.2)
   github-pages
+  jekyll-remote-theme
   webrick (~> 1.7)
 
 BUNDLED WITH
