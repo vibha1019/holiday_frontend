@@ -8,10 +8,8 @@ permalink: /aws/
 ## Project Structure
 ![diagram]({{ site.baseurl }}/images/aws_blog_diagram.png)
 
-testing something
 ### Backend
-- Our backend is **Flask-based**, running on port **8887** for API requests.
-- We will change it to start with **82** 
+- Our backend is **Flask-based**, running on port **8287** for API requests.
 - It processes event data, manages user profiles, and handles notifications.
 - All API routes are managed in `main.py`, with separate modules for each feature.
 
@@ -36,7 +34,7 @@ testing something
 ### **Search Bar**
 - **Backend:** Implements search functionality at `/api/search`, querying event names and descriptions.
 - **Frontend:** Filters and displays search results dynamically.
-- **Database:** Stores/adds tags to items user interacts with to create a future profile of intrests and liked items
+- **Database:** Stores/adds tags to items user interacts with to create a future profile of interests and liked items.
 
 ### **Profile Creator**
 - **Backend:** Manages user accounts and profile data via `/api/profile`.
@@ -50,32 +48,63 @@ testing something
 ---
 ## **Deployment Process on AWS**
 
-## Prerequisites  
+### Prerequisites  
 - Ensure the frontend and backend are properly connected and tested locally.  
 - Prepare the necessary configuration files, including `Dockerfile`, `docker-compose.yml`, and `nginx` settings.  
 - Set up a DNS subdomain using AWS Route 53.  
 
-## Port Selection & Docker Setup  
-- Choose a backend port (e.g., `8087`) and ensure consistency across all configuration files.  
+### **Initial Deployment Steps**
+1. Clone the repository:
+   ```sh
+   git clone <repo-url>
+   cd <project-directory>
+   ```
+
+2. Create a `.env` file inside the backend project folder and add necessary environment variables (such as passwords).
+
+3. Initialize the database:
+   ```sh
+   ./scripts/db_init.py
+   ```
+
+4. Build and deploy using Docker:
+   ```sh
+   docker-compose build
+   docker-compose up -d
+   ```
+
+5. Verify the running container:
+   ```sh
+   docker ps
+   ```
+
+6. Test the server:
+   ```sh
+   curl localhost:8287  # Ensure the port matches your updated backend port
+   ```
+
+### **Port Selection & Docker Setup**  
+- Choose a backend port (`8287`) and ensure consistency across all configuration files.  
 - Update `main.py`, `Dockerfile`, and `docker-compose.yml` to use the correct port.  
 - Test the Docker container locally using `docker-compose up`.  
 
-## AWS EC2 Access & Deployment  
+### **AWS EC2 Access & Deployment**  
 - Log in to AWS EC2 and clone the backend repository.  
 - Build and deploy the backend using:
   ```sh
   docker-compose up -d --build
+  ```
 
-## DNS & Nginx Setup
+### **DNS & Nginx Setup**
 - Configure a subdomain via AWS Route 53.
 - Set up an Nginx reverse proxy to route requests to the backend.
 - Activate and validate the Nginx configuration.
 
-## SSL & HTTPS Configuration
+### **SSL & HTTPS Configuration**
 - Use Certbot to obtain an SSL certificate for HTTPS.
 - Redirect all HTTP traffic to HTTPS for secure access.
 
-## Maintaining Deployment
+### **Maintaining Deployment**
 - Before making changes, pull the latest code from GitHub.
 - Test changes locally before pushing updates.
 - Restart the deployment on AWS by pulling changes and rebuilding the container.
