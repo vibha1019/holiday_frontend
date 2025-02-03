@@ -19,6 +19,7 @@ permalink: /searchbar
         </div>
     </div>
 </div>
+
 <style>
     .content {
         display: flex;
@@ -78,21 +79,27 @@ permalink: /searchbar
         transform: translateY(-2px);
     }
 </style>
-<script>
+
+<script type="module">
+    import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+
     async function searchItems() {
         const input = document.getElementById('searchInput').value.trim().toLowerCase();
         const resultsDiv = document.getElementById('results');
         resultsDiv.innerHTML = ''; // Clear previous results
+
         if (input) {
             try {
-                const response = await fetch(`http://127.0.0.1:8209/api/search?q=${encodeURIComponent(input)}`, {
+                const response = await fetch(`${pythonURI}/api/search?q=${encodeURIComponent(input)}`, {
+                    ...fetchOptions,
                     method: 'GET',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' }
                 });
+
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
+
                 const items = await response.json();
                 if (items.length > 0) {
                     items.forEach(item => {
@@ -114,24 +121,29 @@ permalink: /searchbar
             }
         }
     }
+
     async function incrementTags(itemName) {
         try {
-            const response = await fetch('http://127.0.0.1:8209/api/search/increment_tag', {
+            const response = await fetch(`${pythonURI}/api/search/increment_tag`, {
+                ...fetchOptions,
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: itemName }),
-                credentials: 'include',
+                body: JSON.stringify({ name: itemName })
             });
+
             if (!response.ok) {
                 throw new Error(`HTTP status code: ${response.status}`);
             }
+
             const data = await response.json();
             console.log(data.message);
         } catch (error) {
             console.error('Error updating tags:', error);
         }
     }
+
     window.searchItems = searchItems;
+
     document.addEventListener('DOMContentLoaded', () => {
         console.log('Search bar initialized');
     });
