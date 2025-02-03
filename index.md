@@ -43,6 +43,9 @@ menu: nav/home.html
             flex-direction: column;
             align-items: center;
         }
+        .popup-content h2 {
+            color: black; /* Ensures the title is black */
+        }
         textarea {
             width: 100%;
             height: 80px;
@@ -118,7 +121,6 @@ menu: nav/home.html
     </script>
 </body>
 </html>
-
 
 <table style="background-color: #da95f5;">
     <tr>
