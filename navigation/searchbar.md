@@ -85,7 +85,7 @@ permalink: /searchbar
         resultsDiv.innerHTML = ''; // Clear previous results
         if (input) {
             try {
-                const response = await fetch(`http://127.0.0.1:8887/api/search?q=${encodeURIComponent(input)}`, {
+                const response = await fetch(`http://127.0.0.1:8209/api/search?q=${encodeURIComponent(input)}`, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
                     credentials: 'include',
@@ -116,7 +116,7 @@ permalink: /searchbar
     }
     async function incrementTags(itemName) {
         try {
-            const response = await fetch('http://127.0.0.1:8887/api/search/increment_tag', {
+            const response = await fetch('http://127.0.0.1:8209/api/search/increment_tag', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: itemName }),

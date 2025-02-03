@@ -16,7 +16,7 @@ comments: true
 </head>
 <body>
     <div class="profile-header">
-        <img id="link" src="http://127.0.0.1:8887/socialmedia_frontend/images/logo.png" alt="Profile Picture" />
+        <img id="link" src="http://127.0.0.1:8209/socialmedia_frontend/images/logo.png" alt="Profile Picture" />
         <div class="name" id="username">Loading...</div>
         <div class="theme" id="theme-preference">Loading...</div>
         <button id="delete-btn" class="delete-button">Delete Profile</button>
@@ -25,7 +25,7 @@ comments: true
         const userId = localStorage.getItem("user_id");
         console.log("User ID:", userId);
         if (userId) {
-            const apiUrl = `http://127.0.0.1:8887/user/${userID}/profile`; // Adjust for actual user ID
+            const apiUrl = `http://127.0.0.1:8209/user/${userID}/profile`; // Adjust for actual user ID
         }
         // Fetch user data and populate the profile
         async function loadProfile() {
@@ -33,7 +33,7 @@ comments: true
                 const response = await fetch(apiUrl);
                 const data = await response.json();
                 // Populate profile details
-                document.getElementById('link').src = data.link || 'http://127.0.0.1:8887/socialmedia_frontend/images/logo.png';
+                document.getElementById('link').src = data.link || 'http://127.0.0.1:8209/socialmedia_frontend/images/logo.png';
                 document.getElementById('username').textContent = data.name || 'Unknown User';
                 document.getElementById('theme-preference').textContent = `Preferred Theme: ${data.theme || 'Light'}`;
             } catch (error) {
