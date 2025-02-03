@@ -51,7 +51,7 @@ jobs:
         run: |
           bundle exec jekyll build  # Build your Jekyll site
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4  # Update to the latest version for artifact uploads
+        uses: actions/upload-pages-artifact@v3  # Update to the latest version for artifact uploads
 
 
   # Deployment job
