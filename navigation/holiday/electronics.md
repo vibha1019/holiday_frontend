@@ -139,7 +139,6 @@ comments: true
                 electronicsProducts.style.display = "none";
             }
         }
-        // THIS IS NOW AI CHATBOX CODE: PLS DO NOT MESS WITH IT
     </script>
 </html>
 
