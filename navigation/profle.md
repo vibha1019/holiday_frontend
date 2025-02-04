@@ -31,7 +31,9 @@ comments: true
         async function loadProfile() {
             try {
                 const response = await fetch(apiUrl);
-                const data = await response.json();
+                ...fetchOptions,
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
                 // Populate profile details
                 document.getElementById('link').src = data.link || '/images/logo.png';
                 document.getElementById('username').textContent = data.name || 'Unknown User';
@@ -46,11 +48,10 @@ comments: true
             if (!confirmation) return;
             try {
                 const response = await fetch(`${apiUrl}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ user_id: 1 }) // Replace 1 with the actual user ID
+                    ...fetchOptions,
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: 1 })
                 });
                 if (response.ok) {
                     alert('Profile deleted successfully!');
