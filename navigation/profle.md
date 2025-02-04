@@ -16,7 +16,7 @@ comments: true
 </head>
 <body>
     <div class="profile-header">
-        5<img id="link" src="http://127.0.0.1:8209/socialmedia_frontend/images/logo.png" alt="Profile Picture" />
+        5<img id="link" src="{{ site.baseurl }}/images/logo.png" alt="Profile Picture" />
         <div class="name" id="username">Loading...</div>
         <div class="theme" id="theme-preference">Loading...</div>
         <button id="delete-btn" class="delete-button">Delete Profile</button>
