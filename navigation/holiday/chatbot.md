@@ -149,7 +149,7 @@ comments: true
             appendMessage('user', message);
             userInput.value = '';
             try {
-                const response = await fetch('http://127.0.0.1:8209/chat', {
+                const response = await fetch(`${pythonURI}/api/event`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
