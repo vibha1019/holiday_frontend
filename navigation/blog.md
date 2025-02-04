@@ -9,7 +9,7 @@ permalink: /aws/
 ![diagram]({{ site.baseurl }}/images/aws_blog_diagram.png)
 
 ### Backend
-- Our backend is **Flask-based**, running on port **8287** for API requests.
+- Our backend is **Flask-based**, running on port **8209** for API requests.
 - It processes event data, manages user profiles, and handles notifications.
 - All API routes are managed in `main.py`, with separate modules for each feature.
 
@@ -80,11 +80,11 @@ permalink: /aws/
 
 6. Test the server:
    ```sh
-   curl localhost:8287  # Ensure the port matches your updated backend port
+   curl localhost:8209  # Ensure the port matches your updated backend port
    ```
 
 ### **Port Selection & Docker Setup**  
-- Choose a backend port (`8287`) and ensure consistency across all configuration files.  
+- Choose a backend port (`8209`) and ensure consistency across all configuration files.  
 - Update `main.py`, `Dockerfile`, and `docker-compose.yml` to use the correct port.  
 - Test the Docker container locally using `docker-compose up`.  
 
