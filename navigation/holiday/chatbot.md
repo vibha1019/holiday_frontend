@@ -149,12 +149,13 @@ comments: true
             appendMessage('user', message);
             userInput.value = '';
             try {
-                const response = await fetch('http://127.0.0.1:8887/chat', {
+                const response = await fetch('http://127.0.0.1:8209/chat', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({ user_input: message }),
+                    credentials: 'include' // Ensures cookies/auth headers work
                 });
                 const data = await response.json();
                 if (response.ok) {
