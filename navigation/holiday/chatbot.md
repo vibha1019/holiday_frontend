@@ -127,22 +127,28 @@ comments: true
         </style>
     </head>
     <body>
-        <button id="help-button" onclick="toggleChat()">Need Help?</button>
+        <button id="help-button">Need Help?</button>
         <div id="chat-container">
             <div id="chat-header">
                 <h4>Giftinator 3000</h4>
-                <button id="close-chat" onclick="toggleChat()">×</button>
+                <button id="close-chat">×</button>
             </div>
             <div id="chat-box"></div>
             <div id="input-container">
                 <input type="text" id="user-input" placeholder="Type your message..." />
-                <button onclick="sendMessage()">Send</button>
+                <button id="send-message-button">Send</button>
             </div>
         </div>
-        <script>
+        <script type="module">
+            import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
             const chatBox = document.getElementById('chat-box');
             const userInput = document.getElementById('user-input');
             const chatContainer = document.getElementById('chat-container');
+            const sendMessageButton = document.getElementById('send-message-button');
+            // Adding event listeners for the help button, close chat button, and send message button
+            document.getElementById('help-button').addEventListener('click', toggleChat);
+            document.getElementById('close-chat').addEventListener('click', toggleChat);
+            sendMessageButton.addEventListener('click', sendMessage); // Event listener for send message button
             function toggleChat() {
                 chatContainer.style.display = chatContainer.style.display === 'flex' ? 'none' : 'flex';
             }
@@ -152,11 +158,10 @@ comments: true
                 appendMessage('user', message);
                 userInput.value = '';
                 try {
-                    const response = await fetch('http://127.0.0.1:8206/chat', {
+                    const response = await fetch(`${pythonURI}/chat`, {
+                        ...fetchOptions,
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ user_input: message }),
                         credentials: 'include' // Ensures cookies/auth headers work
                     });
