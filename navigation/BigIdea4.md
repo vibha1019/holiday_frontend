@@ -88,4 +88,86 @@ permalink: /bigidea4/
 - **HTTPS (Secure HTTP):**  
   - Like HTTP but with security encryption.  
   - Uses **TCP port 443**.  
+
+
+
+# 4.2 Fault Tolerance (Video #3)
+
+## CSN-1.E - Learning Objective
+
+For fault-toleranct systems, like the Internet:
+  a. Describe the benefits of fault tolerance.
+  b. Explain how a given system is fault-tolerant.
+  c. Identify vulnerabilities to failure in a system.
+
+## Essential Knowledge
+
+**CSN-1.E1:** The Internet has been engineered to be fault tolerant, with abstractions for routing and transmitting data.
+
+**CSN-1.E2:** Redundancy is the inclusion of extra components that can be used to mitigate failure of a system if other components fail.
+
+**CSN-1.E3:** One way to accomplish network redundancy is by having more than one path between any to connected devices.
+
+**CSN-1.E4:** If a particular device or connection on the internet fails, subsequent data will be sent via a different route, if possible.
+
+**CSN-1.E5:** When a system can support failures and still continue to function, is is called fault tolerant. This is important because elements of complex systems fail at unexpected times, often in groups, and fault tolerance allows users to continue to use the network.
+
+**CSN-1.E6:** Redundancy within a system often requires additional resources but can provide the benefit of fault tolerance.
+
+**CSN-1.E7:** The redundancy of routing options between two points increases the reliability of the Internet and helps it scale to the more devices and more people.
+
+## Network Examples
+
+Networks must be both efficient while also allowing for conservation of resources.
+
+Ex: **A** to **B** to **C** to **D** to **E** to **F** to **G**
+
 ```
+for path in points:
+  if path == "A":
+    return 1
+  elif path == "B":
+    return 2
+  elif path == "C":
+    ...
+  elif path == "G":
+    return 7
+```
+
+This path is great at conserving resources but cannot continue if one path breaks (i.e. **B** breaks, removing access to rest of network)
+
+Ex: **A** to **All other points**, **B** to **All other points**, etc.
+
+```
+for point in points:
+  for i in range(1,len(points)+1):
+    return i
+```
+
+This path is great at preventing the previous issue but does not conserve resources (i.e. **B** breaks, but **All other paths** are still connected. But heavy on resource use.)
+
+This path is fault-tolerant.
+
+Ex: **A** to **F** and **E**, **B** to **G** and **D**, etc.
+
+```
+for point in points:
+  if point == "A":
+    return (6, 5)
+  elif point == "B":
+    return (7, 4)
+  elif point == "C":
+    ...
+  elif point == "G":
+    return (1, 2)
+```
+
+This example is fault-tolerant because if one path breaks, another always connects to the same point in the network. There are multiple paths data can travel to each point in the network, allowing for better fault-tolerance.
+
+This network is also efficient in resources, by not creating paths to each point per point. Rather, each point has a select few paths closest to it, that continue onwards. This format also allows for better implementation of new points that can send and recieve data.
+
+
+## Main Take Aways
+
+The internet is a fault tolerant system, through tests and different examples, we can see the vulnerabilites and failures of the different network connections. For a network to be fault-tolerant it must make sure all paths are able to connect whether or not a path fails, but it must also make up for an ineffective way of management of resources.
+
