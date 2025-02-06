@@ -171,3 +171,14 @@ This network is also efficient in resources, by not creating paths to each point
 
 The internet is a fault tolerant system, through tests and different examples, we can see the vulnerabilites and failures of the different network connections. For a network to be fault-tolerant it must make sure all paths are able to connect whether or not a path fails, but it must also make up for an ineffective way of management of resources.
 
+
+# 4.3 Parallel and Distributed Programming (Video #5)
+
+## Learning Objectives
+
+**CSN-2.A:** For sequential, parallel, and distributed computing
+a. Compare problem solutions.
+b. Determine the efficiency of solutions and describe benefits and challenges of parallel and distributed programming.
+
+**CSN-2.B:** Describe Benefits and challenges of parallel and distributed programming.
+
