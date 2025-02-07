@@ -16,9 +16,9 @@ minima:
 plugins:
   - jekyll-remote-theme
 header_pages:
-  - navigation/holiday.md
   - navigation/searchbar.md
   - navigation/holiday/chatbot.md
   - navigation/holiday/event_calendar.md
   - navigation/notif.md
   - navigation/survey.md
+  - navigation/about.md
