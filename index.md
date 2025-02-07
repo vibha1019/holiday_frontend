@@ -6,6 +6,105 @@ hide: true
 menu: nav/home.html
 ---
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popup Login Alert</title>
+    <style>
+        /* Overlay background */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            display: none; /* Initially hidden */
+        }
+        /* Popup container */
+        .popup-container {
+            background: white;
+            padding: 20px;
+            width: 320px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        /* Close (X) button */
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            color: black;
+            cursor: pointer;
+        }
+        .close-btn:hover {
+            color: red;
+        }
+        /* Popup heading and text */
+        .popup-container h2 {
+            margin-bottom: 10px;
+            font-size: 18px;
+            color: black; /* Text color set to black */
+        }
+        /* Login button */
+        .popup-button {
+            background: #008080;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .popup-button:hover {
+            background: #005f5f;
+        }
+    </style>
+</head>
+<body>
+    <!-- Popup Alert -->
+    <div class="popup-overlay" id="popup">
+        <div class="popup-container">
+            <span class="close-btn" onclick="closePopup()">✖</span>
+            <h2>Please Login/Sign-up to access all website features</h2>
+            <a href="login.html" class="popup-button">Go to Login Page</a>
+        </div>
+    </div>
+    <script>
+        // Show the popup when the page loads
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("popup").style.display = "flex";
+        });
+        // Function to close the popup
+        function closePopup() {
+            document.getElementById("popup").style.display = "none";
+        }
+        // Hide popup when clicking outside the box
+        document.getElementById("popup").addEventListener("click", function(event) {
+            if (event.target === this) {
+                closePopup();
+            }
+        });
+    </script>
+
+</body>
+</html>
+
+
+
 <style>
     
 .sidebar {
@@ -42,7 +141,7 @@ menu: nav/home.html
   <a href="{{ site.baseurl }}/holiday/chatbot/">🤖 ChatBot</a>
   <a href="{{ site.baseurl }}/holiday/event_calendar/">📅 Calender Events</a>
   <a href="{{ site.baseurl }}/holiday/notif/">🔔 Notifcation</a>
-  <a href="{{ site.baseurl }}/survey/">"📰 Survey</a>
+  <a href="{{ site.baseurl }}/survey/">📰 Survey</a>
 </div>
 
 
