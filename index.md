@@ -84,6 +84,7 @@ menu: nav/home.html
         </div>
     </div>
     <script>
+        import getCredentials from login.js
         // Show the popup when the page loads
         document.addEventListener("DOMContentLoaded", function() {
             const baseurl = document.querySelector('.trigger').getAttribute('data-baseurl');
