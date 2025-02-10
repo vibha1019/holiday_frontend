@@ -15,7 +15,7 @@ comments: true
 </head>
 <body>
     <div class="profile-header">
-        <img id="link" src="{{ site.baseurl }}/images/logo.png" width="50" height="50" alt="Profile Picture" />
+        <img id="link" src="{{ site.baseurl }}/images/gifitinatorlogo.png" width="50" height="50" alt="Profile Picture" /> 
         <div class="name" id="username">default_user</div>
         <div class="theme" id="theme-preference">dark</div>
         <button id="delete-btn" class="delete-button">Delete Profile</button>
@@ -35,7 +35,7 @@ comments: true
                     console.log("User ID not found.")
                 } else {
                     // Populate profile details
-                    document.getElementById('link').src = data.link || '/images/logo.png';
+                    document.getElementById('link').src = data.link || '/images/gifitinatorlogo.png';
                     document.getElementById('username').textContent = data.name || 'Unknown User';
                     document.getElementById('theme-preference').textContent = `Preferred Theme: ${data.theme || 'Light'}`;
                 }
@@ -56,7 +56,7 @@ comments: true
                 });
                 if (response.ok) {
                     alert('Profile deleted successfully!');
-                    document.getElementById('link').src = '/images/logo.png';
+                    document.getElementById('link').src = '/images/gifitinatorlogo.png';
                     document.getElementById('username').textContent = 'Unknown User';
                     document.getElementById('theme-preference').textContent = 'Preferred Theme: Light';
                     localStorage.removeItem("user_id");
