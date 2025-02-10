@@ -6,7 +6,6 @@ hide: true
 menu: nav/home.html
 ---
 
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -142,11 +141,11 @@ menu: nav/home.html
 <div class="sidebar">
   <h3>Menu</h3>
   <a href="#logout">🏠 Home Page</a>
-  <a href="#home"> 🔍Search Bar</a>
-  <a href="{{ site.baseurl }}/holiday/chatbot/">🤖 ChatBot</a>
-  <a href="{{ site.baseurl }}/holiday/event_calendar/">📅 Calender Events</a>
-  <a href="{{ site.baseurl }}/holiday/notif/">🔔 Notifcation</a>
-  <a href="{{ site.baseurl }}/survey/">📰 Survey</a>
+  <a href="{{site.baseurl}}/searchbar"> 🔍Search Bar</a>
+  <a href="{{site.baseurl}}/holiday/chatbot/">🤖 ChatBot</a>
+  <a href="{{site.baseurl}}/holiday/event_calendar/">📅 Calender Events</a>
+  <a href="{{site.baseurl}}/notif/">🔔 Notifcation</a>
+  <a href="{{site.baseurl}}/survey/">📰 Survey</a>
 </div>
 
 
