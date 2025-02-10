@@ -85,12 +85,7 @@ menu: nav/home.html
     <script>
         // Show the popup when the page loads
         document.addEventListener("DOMContentLoaded", function() {
-            const baseurl = document.querySelector('.trigger').getAttribute('data-baseurl');
-            console.log("Base URL:", baseurl);
-            const username = await getCredentials(baseurl);
-            if (!username) {
-                document.getElementById("popup").style.display = "flex";
-            }
+            document.getElementById("popup").style.display = "flex";
         });
         // Function to close the popup
         function closePopup() {
