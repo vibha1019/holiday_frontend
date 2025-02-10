@@ -72,15 +72,11 @@ comments: true
         document.addEventListener('DOMContentLoaded', async function() {
             const baseurl = document.querySelector('.trigger').getAttribute('data-baseurl');
             console.log("Base URL:", baseurl);
-            const username = await getCredentials(baseurl); // Fetch the username
-            const loginArea = document.getElementById('loginArea');
-            const userId = await getUserId(username); // Fetch user ID based on username
+            const username = await getCredentials(baseurl);
+            const loginArea = document.getElementById('profile-header');
             if (username) {
-                const userId = await loadProfile(username); // Fetch user ID based on username
+                loadProfile(username); // Fetch user ID based on username
                 document.getElementById('delete-btn').addEventListener('click', deleteProfile);
-                if (userId) {
-                    localStorage.setItem('user_id', userId); // Store user ID in localStorage
-                }
                 loginArea.innerHTML = `<a href="${baseurl}/profile/${username}">${username}</a>`;
             } else {
                 loginArea.innerHTML = `<a href="${baseurl}/login">Login</a>`;
