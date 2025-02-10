@@ -6,6 +6,7 @@ hide: true
 menu: nav/home.html
 ---
 
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -85,7 +86,12 @@ menu: nav/home.html
     <script>
         // Show the popup when the page loads
         document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById("popup").style.display = "flex";
+            const baseurl = document.querySelector('.trigger').getAttribute('data-baseurl');
+            console.log("Base URL:", baseurl);
+            const username = await getCredentials(baseurl);
+            if (!username) {
+                document.getElementById("popup").style.display = "flex";
+            }
         });
         // Function to close the popup
         function closePopup() {
@@ -136,11 +142,11 @@ menu: nav/home.html
 <div class="sidebar">
   <h3>Menu</h3>
   <a href="#logout">🏠 Home Page</a>
-  <a href="{{site.baseurl}}/searchbar"> 🔍Search Bar</a>
-  <a href="{{site.baseurl}}/holiday/chatbot/">🤖 ChatBot</a>
-  <a href="{{site.baseurl}}/holiday/event_calendar/">📅 Calender Events</a>
-  <a href="{{site.baseurl}}/notif/">🔔 Notifcation</a>
-  <a href="{{site.baseurl}}/survey/">📰 Survey</a>
+  <a href="#home"> 🔍Search Bar</a>
+  <a href="{{ site.baseurl }}/holiday/chatbot/">🤖 ChatBot</a>
+  <a href="{{ site.baseurl }}/holiday/event_calendar/">📅 Calender Events</a>
+  <a href="{{ site.baseurl }}/holiday/notif/">🔔 Notifcation</a>
+  <a href="{{ site.baseurl }}/survey/">📰 Survey</a>
 </div>
 
 
