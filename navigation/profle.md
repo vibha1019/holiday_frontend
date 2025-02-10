@@ -6,7 +6,6 @@ author: Spencer Lyons
 comments: true
 ---
 
-<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/profile_style.css">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -24,16 +23,21 @@ comments: true
     <script>
         const userId = localStorage.getItem("user_id");
         console.log("User ID:", userId);
+        const apiUrl = `${pythonURI}/api/1/profile`;
         if (userId) {
             const apiUrl = `${pythonURI}/api/${userID}/profile`; // Adjust for actual user ID
+        } else {
+            console.log("User ID not found.")
         }
         // Fetch user data and populate the profile
         async function loadProfile() {
             try {
-                const response = await fetch(apiUrl);
-                ...fetchOptions,
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
+                const response = await fetch(apiUrl, {
+                    ...fetchOptions,
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await response.json();
                 // Populate profile details
                 document.getElementById('link').src = data.link || '/images/logo.png';
                 document.getElementById('username').textContent = data.name || 'Unknown User';
@@ -56,8 +60,9 @@ comments: true
                 if (response.ok) {
                     alert('Profile deleted successfully!');
                     document.getElementById('link').src = '/images/logo.png';
-                    document.getElementById('name').textContent = 'Unknown User';
-                    document.getElementById('theme').textContent = 'Preferred Theme: Light';
+                    document.getElementById('username').textContent = 'Unknown User';
+                    document.getElementById('theme-preference').textContent = 'Preferred Theme: Light';
+                    localStorage.removeItem("user_id");
                 } else {
                     const errorData = await response.json();
                     alert(`Error deleting profile: ${errorData.message}`);
