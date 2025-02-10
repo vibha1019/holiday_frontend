@@ -15,22 +15,15 @@ comments: true
 </head>
 <body>
     <div class="profile-header">
-        5<img id="link" src="{{ site.baseurl }}/images/logo.png" alt="Profile Picture" />
-        <div class="name" id="username">Loading...</div>
-        <div class="theme" id="theme-preference">Loading...</div>
+        <img id="link" src="{{ site.baseurl }}/images/logo.png" width="50" height="50" alt="Profile Picture" />
+        <div class="name" id="username">default_user</div>
+        <div class="theme" id="theme-preference">dark</div>
         <button id="delete-btn" class="delete-button">Delete Profile</button>
     </div>
     <script>
-        const userId = localStorage.getItem("user_id");
-        console.log("User ID:", userId);
-        const apiUrl = `${pythonURI}/api/1/profile`;
-        if (userId) {
-            const apiUrl = `${pythonURI}/api/${userID}/profile`; // Adjust for actual user ID
-        } else {
-            console.log("User ID not found.")
-        }
         // Fetch user data and populate the profile
-        async function loadProfile() {
+        async function loadProfile(username) {
+            const apiUrl = `${pythonURI}/api/user_profile/${username}`;
             try {
                 const response = await fetch(apiUrl, {
                     ...fetchOptions,
@@ -38,10 +31,14 @@ comments: true
                     headers: { 'Content-Type': 'application/json' }
                 });
                 const data = await response.json();
-                // Populate profile details
-                document.getElementById('link').src = data.link || '/images/logo.png';
-                document.getElementById('username').textContent = data.name || 'Unknown User';
-                document.getElementById('theme-preference').textContent = `Preferred Theme: ${data.theme || 'Light'}`;
+                if (!data.user_id) {
+                    console.log("User ID not found.")
+                } else {
+                    // Populate profile details
+                    document.getElementById('link').src = data.link || '/images/logo.png';
+                    document.getElementById('username').textContent = data.name || 'Unknown User';
+                    document.getElementById('theme-preference').textContent = `Preferred Theme: ${data.theme || 'Light'}`;
+                }
             } catch (error) {
                 console.error('Error fetching profile data:', error);
             }
@@ -72,9 +69,23 @@ comments: true
             }
         }
         // Load profile on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            loadProfile();
-            document.getElementById('delete-btn').addEventListener('click', deleteProfile);
+        document.addEventListener('DOMContentLoaded', async function() {
+            const baseurl = document.querySelector('.trigger').getAttribute('data-baseurl');
+            console.log("Base URL:", baseurl);
+            const username = await getCredentials(baseurl); // Fetch the username
+            const loginArea = document.getElementById('loginArea');
+            const userId = await getUserId(username); // Fetch user ID based on username
+            if (username) {
+                const userId = await loadProfile(username); // Fetch user ID based on username
+                document.getElementById('delete-btn').addEventListener('click', deleteProfile);
+                if (userId) {
+                    localStorage.setItem('user_id', userId); // Store user ID in localStorage
+                }
+                loginArea.innerHTML = `<a href="${baseurl}/profile/${username}">${username}</a>`;
+            } else {
+                loginArea.innerHTML = `<a href="${baseurl}/login">Login</a>`;
+                localStorage.setItem('authenticated', 'false');
+            }
         });
     </script>
 </body>
