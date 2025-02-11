@@ -2,8 +2,8 @@ title: Holiday Giftinator
 description: "Social Media for Del Norte High School"
 owner_name: Vibha, Soni, Nora, Spencer, Kushi
 github_username: nighthawkcoders
-github_repo: "socialmedia_frontend" 
-baseurl: "/socialmedia_frontend"
+github_repo: "holiday_frontend" 
+baseurl: "/holiday_frontend"
 future: true
 remote_theme: jekyll/minima
 minima:
