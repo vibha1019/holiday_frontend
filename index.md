@@ -82,20 +82,25 @@ hide: true
         </div>
     </div>
     <script>
-        import getCredentials from login.js
-        // Show the popup when the page loads
         document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById("popup").style.display = "flex";
-        });
-        // Function to close the popup
-        function closePopup() {
-            document.getElementById("popup").style.display = "none";
-        }
-        // Hide popup when clicking outside the box
-        document.getElementById("popup").addEventListener("click", function(event) {
-            if (event.target === this) {
-                closePopup();
+            // Check authentication status from localStorage
+            const isAuthenticated = localStorage.getItem('authenticated') === 'true';
+            if (!isAuthenticated) {
+                // Show the popup if user is NOT logged in
+                document.getElementById("popup").style.display = "flex";
             }
+            // Function to close the popup
+            function closePopup() {
+                document.getElementById("popup").style.display = "none";
+            }
+            // Close popup when clicking the (X) button
+            document.querySelector(".close-btn").addEventListener("click", closePopup);
+            // Hide popup when clicking outside the box
+            document.getElementById("popup").addEventListener("click", function(event) {
+                if (event.target === this) {
+                    closePopup();
+                }
+            });
         });
     </script>
 </body>
