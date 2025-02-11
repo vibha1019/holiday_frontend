@@ -143,7 +143,7 @@ hide: true
   <a href="{{site.baseurl}}">🏠 Home Page</a>
   <a href="{{ site.baseurl }}/holiday/searchbar/"> 🔍Search Bar</a>
   <a href="{{ site.baseurl }}/holiday/chatbot/">🤖 ChatBot</a>
-  <a href="{{ site.baseurl }}/holiday/event_calendar/">📅 Calender Events</a>
+  <a href="{{ site.baseurl }}/holiday/event_calendar/">📅 Event Calendar</a>
   <a href="{{ site.baseurl }}/holiday/notif/">🔔 Notification</a>
   <a href="{{ site.baseurl }}/holiday/survey/">📰 Survey</a>
   <a href="{{ site.baseurl }}/post/">📧 Post</a>
