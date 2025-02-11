@@ -1,7 +1,7 @@
 ---
 layout: post
 title: searchbar
-permalink: /holiday/searchbar
+permalink: /holiday/searchbar/
 ---
 <div style="font-family: Arial, sans-serif; margin: 0; padding: 0;">
     <div class="content">

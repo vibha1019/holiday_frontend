@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Notifications
-permalink: /holiday/notif
+permalink: /holiday/notif/
 author: Kushi Gade
 comments: true
 ---

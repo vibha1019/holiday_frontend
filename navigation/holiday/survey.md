@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Survey
-permalink: /holiday/survey
+permalink: /holiday/survey/
 author: Soni Dhenuva
 comments: true
 ---
