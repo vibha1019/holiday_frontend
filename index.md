@@ -141,11 +141,11 @@ hide: true
 <div class="sidebar">
   <h3>Menu</h3>
   <a href="{{site.baseurl}}">🏠 Home Page</a>
-  <a href="{{ site.baseurl }}/searchbar/"> 🔍Search Bar</a>
+  <a href="{{ site.baseurl }}/holiday/searchbar/"> 🔍Search Bar</a>
   <a href="{{ site.baseurl }}/holiday/chatbot/">🤖 ChatBot</a>
   <a href="{{ site.baseurl }}/holiday/event_calendar/">📅 Calender Events</a>
-  <a href="{{ site.baseurl }}/notif/">🔔 Notification</a>
-  <a href="{{ site.baseurl }}/survey/">📰 Survey</a>
+  <a href="{{ site.baseurl }}/holiday/notif/">🔔 Notification</a>
+  <a href="{{ site.baseurl }}/holiday/survey/">📰 Survey</a>
   <a href="{{ site.baseurl }}/post/">📧 Post</a>
   <a href="{{ site.baseurl }}/holiday/about/">📖 About Our Team</a>
 </div>
