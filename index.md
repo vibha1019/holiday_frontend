@@ -192,8 +192,8 @@ html, body {
     background-size: cover; /* Keeps the image covering the container */
     background-position: center;
     background-attachment: fixed; /* Keeps background fixed on scroll */
-    min-height: 100vh;
-    width: 68vw; /* Reduces the width of the container to 80% of the viewport */
+    min-height: 80vh;/*100vh */
+    width: 68vw; /* Reduces the width of the container to 80% of the viewport 68vh */
     margin: 0 auto; /* Centers the container */
     display: flex;
     flex-direction: column;
