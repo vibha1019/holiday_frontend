@@ -144,10 +144,10 @@ hide: true
   <a href="{{ site.baseurl }}/searchbar/"> 🔍Search Bar</a>
   <a href="{{ site.baseurl }}/holiday/chatbot/">🤖 ChatBot</a>
   <a href="{{ site.baseurl }}/holiday/event_calendar/">📅 Calender Events</a>
-  <a href="{{ site.baseurl }}/notif/">🔔 Notifcation</a>
+  <a href="{{ site.baseurl }}/notif/">🔔 Notification</a>
   <a href="{{ site.baseurl }}/survey/">📰 Survey</a>
   <a href="{{ site.baseurl }}/post/">📧 Post</a>
-  <a href="{{ site.baseurl }}/holiday/about/">📖 About of Our Team</a>
+  <a href="{{ site.baseurl }}/holiday/about/">📖 About Our Team</a>
 </div>
 
 
