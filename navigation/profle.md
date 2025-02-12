@@ -21,10 +21,10 @@ comments: true
         <button id="delete-btn" class="delete-button">Delete Profile</button>
     </div>
     <script type="module">
-        import getCredentials from login.js
-        // Fetch user data and populate the profile
+        import getCredentials from './login.js';
+        import { pythonURI, fetchOptions } from './config.js';
         async function loadProfile(credentials) {
-            const apiUrl = `${pythonURI}/api/user_profile/${username}`;
+            const apiUrl = `${pythonURI}/api/user_profile/${credentials.name}`;
             try {
                 const response = await fetch(apiUrl, {
                     ...fetchOptions,
@@ -33,24 +33,21 @@ comments: true
                 });
                 const data = await response.json();
                 if (!data.user_id) {
-                    console.log("User ID not found.")
+                    console.log("User ID not found.");
                 } else {
-                    // Populate profile details
                     document.getElementById('link').src = data.link || '/images/gifitinatorlogo.png';
                     document.getElementById('username').textContent = data.name || 'Unknown User';
                     document.getElementById('theme-preference').textContent = `Preferred Theme: ${data.theme || 'Light'}`;
-                    loginArea.innerHTML = `<a href="${baseurl}/profile/${data.name}">${data.name}</a>`;
                 }
             } catch (error) {
                 console.error('Error fetching profile data:', error);
             }
         }
-        // Load profile on page load
         async function deleteProfile() {
             const confirmation = confirm('Are you sure you want to delete this profile?');
             if (!confirmation) return;
             try {
-                const response = await fetch(`${apiUrl}`, {
+                const response = await fetch(`${pythonURI}/api/user_profile/delete`, {
                     ...fetchOptions,
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -70,20 +67,17 @@ comments: true
                 console.error('Error deleting profile:', error);
             }
         }
-        // Load profile on page load
         document.addEventListener('DOMContentLoaded', async function() {
             const isAuthenticated = localStorage.getItem('authenticated') === 'true';
-            const baseurl = document.querySelector('.trigger').getAttribute('data-baseurl');
-            const loginArea = document.getElementById('profile-header');
             if (isAuthenticated) {
-                const username = await getCredentials(baseurl);
-                loadProfile(username); // Fetch user ID based on username
-                document.getElementById('delete-btn').addEventListener('click', deleteProfile);
-                loginArea.innerHTML = `<a href="${baseurl}/profile/${username}">${username}</a>`;
+                const credentials = await getCredentials();
+                if (credentials) {
+                    loadProfile(credentials);
+                    document.getElementById('delete-btn').addEventListener('click', deleteProfile);
+                }
             } else {
-                // loginArea.innerHTML = `<a href="${baseurl}/login">Login</a>`;
                 localStorage.setItem('authenticated', 'false');
-                window.location.href = `${baseurl}/login.html`;
+                window.location.href = '/login.html';
             }
         });
     </script>
