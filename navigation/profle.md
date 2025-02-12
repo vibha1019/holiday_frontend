@@ -79,8 +79,9 @@ comments: true
                 document.getElementById('delete-btn').addEventListener('click', deleteProfile);
                 loginArea.innerHTML = `<a href="${baseurl}/profile/${username}">${username}</a>`;
             } else {
-                loginArea.innerHTML = `<a href="${baseurl}/login">Login</a>`;
+                // loginArea.innerHTML = `<a href="${baseurl}/login">Login</a>`;
                 localStorage.setItem('authenticated', 'false');
+                window.location.href = `${baseurl}/login.html`;
             }
         });
     </script>
