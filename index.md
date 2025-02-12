@@ -112,34 +112,80 @@ hide: true
 <style>
     
 .sidebar {
-    width: 200px; /* Slightly smaller width */
-    height: 60vh; /* Shorter height */
-    background: #2C3E50;
-    padding: 10px;
+    width: 260px; /* Wider for better visibility */
+    height: 75vh; /* Taller but not full height */
+    background: linear-gradient(135deg,rgb(134, 8, 8),rgb(48, 10, 10)); /* Dark red gradient */
+    padding: 15px;
     position: fixed;
-    left: 10px; /* Moves it further to the left */
-    top: 20vh; /* Centers vertically a bit */
+    left: 10px;
+    top: 12vh; /* Adjusted for better vertical centering */
     color: white;
-    font-family: Arial, sans-serif;
-    border-radius: 8px; /* Adds a subtle rounded effect */
+    font-family: 'Poppins', sans-serif; /* Modern font */
+    border-radius: 12px; /* Softer edges */
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 3px dotted white;
 }
-.sidebar a {
+
+/* Sidebar title */
+.sidebar h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-align: center;
+}
+.sidebar h3::after {
+    content: "";
     display: block;
-    color: white;
+    width: 100%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.5); /* Light separator line */
+    margin: 10px auto;
+    border-radius: 2px;
+}
+
+/* Sidebar links */
+.sidebar a {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    color: white !important;
     text-decoration: none;
-    padding: 8px 15px;
-    margin: 5px 0;
-    border-radius: 5px;
-    text-align: left;
-    font-size: 14px;
+    padding: 12px 18px;
+    margin: 8px 0;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease-in-out;
+    width: 100%;
 }
+
+/* Hover effect with glowing border */
 .sidebar a:hover {
-    background: #34495E;
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+    transform: scale(1.05); /* Slight pop effect */
 }
+
+/* Sidebar icons */
+.sidebar a::before {
+    content: ""; /* Default arrow icon */
+    margin-right: 10px;
+    transition: transform 0.3s ease;
+}
+
+/* Rotate icon on hover */
+.sidebar a:hover::before {
+    transform: translateX(5px);
+}
+
 </style>
 
 <div class="sidebar">
-  <h3>Menu</h3>
+  <h3>❄️ MENU ❄️</h3>
   <a href="{{site.baseurl}}">🏠 Home Page</a>
   <a href="{{ site.baseurl }}/holiday/searchbar/"> 🔍Search Bar</a>
   <a href="{{ site.baseurl }}/holiday/chatbot/">🤖 ChatBot</a>
