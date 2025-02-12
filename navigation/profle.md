@@ -70,11 +70,11 @@ comments: true
         }
         // Load profile on page load
         document.addEventListener('DOMContentLoaded', async function() {
+            const isAuthenticated = localStorage.getItem('authenticated') === 'true';
             const baseurl = document.querySelector('.trigger').getAttribute('data-baseurl');
-            console.log("Base URL:", baseurl);
-            const username = await getCredentials(baseurl);
             const loginArea = document.getElementById('profile-header');
-            if (username) {
+            if (isAuthenticated) {
+                const username = await getCredentials(baseurl);
                 loadProfile(username); // Fetch user ID based on username
                 document.getElementById('delete-btn').addEventListener('click', deleteProfile);
                 loginArea.innerHTML = `<a href="${baseurl}/profile/${username}">${username}</a>`;
