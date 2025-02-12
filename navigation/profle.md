@@ -24,14 +24,15 @@ comments: true
         import getCredentials from './login.js';
         import { pythonURI, fetchOptions } from './config.js';
         async function loadProfile(credentials) {
-            const apiUrl = `${pythonURI}/api/user_profile/${credentials.name}`;
+            // const apiUrl = `${pythonURI}/api/user_profile/${credentials.name}`;
             try {
-                const response = await fetch(apiUrl, {
-                    ...fetchOptions,
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                const data = await response.json();
+                //const response = await fetch(apiUrl, {
+                //    ...fetchOptions,
+                //    method: 'GET',
+                //    headers: { 'Content-Type': 'application/json' }
+                //});
+                //const data = await response.json();
+                const data = credentials;
                 if (!data.user_id) {
                     console.log("User ID not found.");
                 } else {
