@@ -21,8 +21,8 @@ comments: true
         <button id="delete-btn" class="delete-button">Delete Profile</button>
     </div>
     <script type="module">
-        import getCredentials from './login.js';
-        import { pythonURI, fetchOptions } from './config.js';
+        import getCredentials from '/assets/js/api/login.js';
+        import { pythonURI, fetchOptions } from '/assets/js/api/config.js';
         async function loadProfile() {
             try {
                 const credentials = await getCredentials();
