@@ -23,20 +23,25 @@ comments: true
     <script type="module">
         import getCredentials from './login.js';
         import { pythonURI, fetchOptions } from './config.js';
-        async function loadProfile(credentials) {
-            // const apiUrl = `${pythonURI}/api/user_profile/${credentials.name}`;
+        async function loadProfile() {
             try {
-                //const response = await fetch(apiUrl, {
-                //    ...fetchOptions,
-                //    method: 'GET',
-                //    headers: { 'Content-Type': 'application/json' }
-                //});
-                //const data = await response.json();
+                const credentials = await getCredentials();
+                if (!credentials) {
+                    console.log("No credentials found, redirecting to login.");
+                    window.location.href = '/login.html';
+                    return;
+                }
+                // const apiUrl = `${pythonURI}/api/user_profile/${credentials.name}`;
+                // const response = await fetch(apiUrl, {
+                //     ...fetchOptions,
+                //     method: 'GET',
+                //     headers: { 'Content-Type': 'application/json' }
+                // });
                 const data = credentials;
-                if (!data.user_id) {
+                if (!data.id) {
                     console.log("User ID not found.");
                 } else {
-                    document.getElementById('link').src = data.link || '/images/gifitinatorlogo.png';
+                    document.getElementById('link').src = data.pfp || '/images/gifitinatorlogo.png';
                     document.getElementById('username').textContent = data.name || 'Unknown User';
                     document.getElementById('theme-preference').textContent = `Preferred Theme: ${data.theme || 'Light'}`;
                 }
@@ -68,18 +73,9 @@ comments: true
                 console.error('Error deleting profile:', error);
             }
         }
-        document.addEventListener('DOMContentLoaded', async function() {
-            const isAuthenticated = localStorage.getItem('authenticated') === 'true';
-            if (isAuthenticated) {
-                const user = await getCredentials();
-                if (user) {
-                    loadProfile(user);
-                    document.getElementById('delete-btn').addEventListener('click', deleteProfile);
-                }
-            } else {
-                localStorage.setItem('authenticated', 'false');
-                window.location.href = '/login.html';
-            }
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProfile();
+            document.getElementById('delete-btn').addEventListener('click', deleteProfile);
         });
     </script>
 </body>
