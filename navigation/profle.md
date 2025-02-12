@@ -70,9 +70,9 @@ comments: true
         document.addEventListener('DOMContentLoaded', async function() {
             const isAuthenticated = localStorage.getItem('authenticated') === 'true';
             if (isAuthenticated) {
-                const credentials = await getCredentials();
-                if (credentials) {
-                    loadProfile(credentials);
+                const user = await getCredentials();
+                if (user) {
+                    loadProfile(user);
                     document.getElementById('delete-btn').addEventListener('click', deleteProfile);
                 }
             } else {
