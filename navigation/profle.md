@@ -21,8 +21,8 @@ comments: true
         <button id="delete-btn" class="delete-button">Delete Profile</button>
     </div>
     <script type="module">
-        import { getCredentials } from '{{ site.baseurl }}/assets/js/api/login.js';
-        import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+        import getCredentials from '{{ site.baseurl }}/assets/js/api/login.js'';
+        import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js'';
         async function loadProfile() {
             try {
                 const credentials = await getCredentials();
@@ -43,7 +43,7 @@ comments: true
                     return;
                 }
                 // Apply profile data
-                profilePic.src = credentials.pfp || '/images/gifitinatorlogo.png';
+                profilePic.src = `data:image/jpeg;base64,${credentials.pfp}` || '/images/gifitinatorlogo.png';
                 usernameElement.textContent = credentials.name || 'Unknown User';
                 themeElement.textContent = `Preferred Theme: ${credentials.theme || 'Dark'}`;
                 // Fallback for broken images
