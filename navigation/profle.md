@@ -26,26 +26,30 @@ comments: true
         async function loadProfile() {
             try {
                 const credentials = await getCredentials();
-                if (!credentials) {
+                // Debugging logs
+                console.log("Retrieved Credentials:", credentials);
+                if (!credentials || !credentials.name) {
                     console.log("No credentials found, redirecting to login.");
                     window.location.href = '/login.html';
                     return;
                 }
-                // const apiUrl = `${pythonURI}/api/user_profile/${credentials.name}`;
-                // const response = await fetch(apiUrl, {
-                //     ...fetchOptions,
-                //     method: 'GET',
-                //     headers: { 'Content-Type': 'application/json' }
-                // });
-                const data = credentials;
-                if (!data.id) {
-                    console.log("User ID not found.");
-                } else {
-                    console.log("User Data loaded:", data)
-                    document.getElementById('link').src = data.pfp || '/images/gifitinatorlogo.png';
-                    document.getElementById('username').textContent = data.name || 'Unknown User';
-                    document.getElementById('theme-preference').textContent = `Preferred Theme: ${data.theme || 'Light'}`;
+                // Get elements
+                const profilePic = document.getElementById('link');
+                const usernameElement = document.getElementById('username');
+                const themeElement = document.getElementById('theme-preference');
+                // Debugging: Check if elements exist
+                if (!profilePic || !usernameElement || !themeElement) {
+                    console.error("Profile elements not found in DOM.");
+                    return;
                 }
+                // Apply profile data
+                profilePic.src = credentials.pfp || '/images/gifitinatorlogo.png';
+                usernameElement.textContent = credentials.name || 'Unknown User';
+                themeElement.textContent = `Preferred Theme: ${credentials.theme || 'Dark'}`;
+                // Fallback for broken images
+                profilePic.onerror = function () {
+                    this.src = '/images/gifitinatorlogo.png';
+                };
             } catch (error) {
                 console.error('Error fetching profile data:', error);
             }
