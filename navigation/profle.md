@@ -41,6 +41,7 @@ comments: true
                 if (!data.id) {
                     console.log("User ID not found.");
                 } else {
+                    console.log("User Data loaded:", data)
                     document.getElementById('link').src = data.pfp || '/images/gifitinatorlogo.png';
                     document.getElementById('username').textContent = data.name || 'Unknown User';
                     document.getElementById('theme-preference').textContent = `Preferred Theme: ${data.theme || 'Light'}`;
