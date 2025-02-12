@@ -37,7 +37,7 @@ permalink: /aws/
 - **Database:** Stores/adds tags to items user interacts with to create a future profile of interests and liked items.
 
 ### **Profile Creator**
-- **Backend:** Manages user accounts and profile data via `/api/profile`.
+- **Backend:** Manages user accounts and profile data via `/api/profile_page`.
 - **Frontend:** Allows users to set up and edit their profiles.
 - **Authentication:** Uses **JWT** for secure logins.
 

@@ -20,7 +20,7 @@ comments: true
         <div class="theme" id="theme-preference">dark</div>
         <button id="delete-btn" class="delete-button">Delete Profile</button>
     </div>
-    <script>
+    <script type="module">
         // Fetch user data and populate the profile
         async function loadProfile(username) {
             const apiUrl = `${pythonURI}/api/user_profile/${username}`;
@@ -38,6 +38,7 @@ comments: true
                     document.getElementById('link').src = data.link || '/images/gifitinatorlogo.png';
                     document.getElementById('username').textContent = data.name || 'Unknown User';
                     document.getElementById('theme-preference').textContent = `Preferred Theme: ${data.theme || 'Light'}`;
+                    loginArea.innerHTML = `<a href="${baseurl}/profile/${data.name}">${data.name}</a>`;
                 }
             } catch (error) {
                 console.error('Error fetching profile data:', error);
