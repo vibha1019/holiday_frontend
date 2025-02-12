@@ -21,8 +21,9 @@ comments: true
         <button id="delete-btn" class="delete-button">Delete Profile</button>
     </div>
     <script type="module">
+        import getCredentials from login.js
         // Fetch user data and populate the profile
-        async function loadProfile(username) {
+        async function loadProfile(credentials) {
             const apiUrl = `${pythonURI}/api/user_profile/${username}`;
             try {
                 const response = await fetch(apiUrl, {
