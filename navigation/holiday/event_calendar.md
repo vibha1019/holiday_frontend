@@ -65,32 +65,29 @@ comments: true
         date: document.getElementById("startDate").value,  // This will be in YYYY-MM-DD format
     };
     console.log("Event Data:", postData);  // Log the event data to check before sending
-    try {
-      const response = await fetch(`${pythonURI}/api/event`, {
+    const response = await fetch(`${pythonURI}/api/event`, {
         ...fetchOptions,
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(postData)
-      });
-      // Check if the response is not OK and provide a more specific error message
-      if (!response.ok) {
-        const errorMessage = await response.text(); // Extract error message from response
-        throw new Error(`Failed to add event: ${response.statusText} - ${errorMessage}`);
-      }
-      alert("Event added successfully!");
-      // After posting the event, add it to the events array locally
-      const newEvent = { ...postData };  // Create a new event object
-      events.push(newEvent);  // Add the new event to the global events array
-      // Re-render the sidebar and calendar to include the new event
-      renderSidebar(events);
-      renderCalendar(events);
-      closeModal(); // Close the modal here
-    } catch (error) {
-      // Catch errors and provide more useful information
-      console.error('Error adding event:', error.message);
-      alert(`Error adding event: ${error.message}`);
-    }
-  });
+    });
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            throw new Error(`Failed to add event: ${response.statusText} - ${errorMessage}`);
+        }
+        const createdEvent = await response.json(); // Assuming API returns the full event
+        alert("Event added successfully!");
+        // Ensure the event has an ID before pushing it to events
+       // Ensure the event has an ID before pushing it to events
+        if (createdEvent.id) {
+            events.push(createdEvent); 
+        } else {
+            console.error("Error: Event created but no ID returned from API");
+        }
+        renderSidebar(events);
+        renderCalendar(events);
+        closeModal();
+    });
   let currentMonth = new Date().getMonth(); // Track the current month
   let events = [];  // Store the events globally
   document.addEventListener('DOMContentLoaded', function() {
