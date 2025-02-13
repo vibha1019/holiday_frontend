@@ -119,6 +119,27 @@ comments: true
           changeMonth(1);   // Go to the next month
       });
   });
+  // Function to delete an event
+    async function deleteEvent(eventId) {
+        try {
+            const response = await fetch(`${pythonURI}/api/event/${eventId}`, {
+                ...fetchOptions,
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+            });
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                throw new Error(`Failed to delete event: ${response.statusText} - ${errorMessage}`);
+            }
+            alert("Event deleted successfully!");
+            events = events.filter(event => event.id !== eventId);  // Remove from local array
+            renderSidebar(events);
+            renderCalendar(events);
+        } catch (error) {
+            console.error('Error deleting event:', error.message);
+            alert(`Error deleting event: ${error.message}`);
+        }
+    }
   function getUserId(baseurl) {
       const URL = baseurl + '/api/id';  // Endpoint to get the user info (including user ID)
       return fetch(URL, fetchOptions)
@@ -205,7 +226,6 @@ comments: true
   function renderSidebar(events) {
     const upcomingEventsContainer = document.getElementById("event-list");
     upcomingEventsContainer.innerHTML = "";  // Clear existing events
-    // Sort events by date in ascending order
     const sortedEvents = events.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
     sortedEvents.forEach(event => {
         const eventItem = document.createElement("div");
@@ -220,26 +240,39 @@ comments: true
         eventName.classList.add("event-name");
         eventName.textContent = event.name;
         eventName.style.fontWeight = "bold";
-        eventName.style.color = "black"; // Ensure event name is black
+        eventName.style.color = "black";
         // Event Location
         const eventLocation = document.createElement("div");
         eventLocation.classList.add("event-location");
         eventLocation.textContent = event.location;
-        eventLocation.style.color = "black"; // Ensure event location text is black
+        eventLocation.style.color = "black";
         // Event Date
         const eventDate = document.createElement("div");
         eventDate.classList.add("event-date");
-        const eventDateParts = event.date.split('-'); // Split 'YYYY-MM-DD'
-        const eventDateObject = new Date(
-            parseInt(eventDateParts[0]), // Year
-            parseInt(eventDateParts[1]) - 1, // Month (0-indexed)
-            parseInt(eventDateParts[2]) // Day
-        );
+        const eventDateObject = new Date(event.date);
         eventDate.textContent = eventDateObject.toLocaleDateString();
-        eventDate.style.color = "black"; // Ensure event date text is black
+        eventDate.style.color = "black";
+        // Delete Button
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete";
+        deleteButton.style.backgroundColor = "#ff4d4d";
+        deleteButton.style.color = "white";
+        deleteButton.style.border = "none";
+        deleteButton.style.padding = "5px 10px";
+        deleteButton.style.marginTop = "5px";
+        deleteButton.style.cursor = "pointer";
+        deleteButton.style.borderRadius = "5px";
+        // Add event listener for delete action
+        deleteButton.addEventListener("click", async () => {
+            const confirmDelete = confirm(`Are you sure you want to delete "${event.name}"?`);
+            if (confirmDelete) {
+                await deleteEvent(event.id);
+            }
+        });
         eventItem.appendChild(eventName);
         eventItem.appendChild(eventLocation);
         eventItem.appendChild(eventDate);
+        eventItem.appendChild(deleteButton);  // Append delete button
         upcomingEventsContainer.appendChild(eventItem);
     });
 }
@@ -265,5 +298,4 @@ comments: true
         closeModal();
     }
 });
-
 </script>
