@@ -26,7 +26,6 @@ comments: true
         async function loadProfile() {
             try {
                 const credentials = await getCredentials();
-                // Debugging logs
                 console.log("Retrieved Credentials:", credentials);
                 if (!credentials || !credentials.name) {
                     console.log("No credentials found, redirecting to login.");
@@ -37,16 +36,29 @@ comments: true
                 const profilePic = document.getElementById('link');
                 const usernameElement = document.getElementById('username');
                 const themeElement = document.getElementById('theme-preference');
-                // Debugging: Check if elements exist
                 if (!profilePic || !usernameElement || !themeElement) {
                     console.error("Profile elements not found in DOM.");
                     return;
                 }
                 // Apply profile data
-                profilePic.src = `data:image/jpeg;base64,${credentials.pfp}` || '/images/gifitinatorlogo.png';
                 usernameElement.textContent = credentials.name || 'Unknown User';
                 themeElement.textContent = `Preferred Theme: ${credentials.theme || 'Dark'}`;
-                // Fallback for broken images
+                // Determine how to load the profile picture
+                if (credentials.pfp) {
+                    if (credentials.pfp.startsWith("data:image")) {
+                        // Already a Base64 image
+                        profilePic.src = credentials.pfp;
+                    } else if (credentials.pfp.startsWith("/") || credentials.pfp.includes("http")) {
+                        // Direct URL or relative path
+                        profilePic.src = credentials.pfp;
+                    } else {
+                        // Assume it's a filename that needs to be fetched from the server
+                        profilePic.src = `/user-images/${credentials.pfp}`; // Adjust path as needed
+                    }
+                } else {
+                    profilePic.src = '/images/gifitinatorlogo.png'; // Fallback
+                }
+                // Fallback if the image fails to load
                 profilePic.onerror = function () {
                     this.src = '/images/gifitinatorlogo.png';
                 };
