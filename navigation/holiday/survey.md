@@ -17,7 +17,7 @@ comments: true
             left: 50%;
             transform: translate(-50%, -50%);
             padding: 10px 15px;
-            background-color:rgb(15, 99, 128) !important;
+            background-color: rgb(15, 99, 128) !important;
             color: black; /* Text color */
             border: none;
             border-radius: 5px;
@@ -54,6 +54,7 @@ comments: true
             border: 1px solid #ddd;
             border-radius: 5px;
             resize: none;
+            color: black; /* Text color inside textarea */
         }
         #submit-review {
             margin-top: 10px;
@@ -74,6 +75,30 @@ comments: true
             font-size: 20px;
             cursor: pointer;
         }
+        #survey-list {
+            margin-top: 20px;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .survey-box {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            color: black; /* Ensures text color is black */
+            font-size: 16px;
+        }
+        .survey-box .username {
+            font-weight: bold;
+            color: #333; /* Make the username stand out */
+        }
+        .survey-box p {
+            margin: 5px 0;
+            color: black; /* Ensure survey message text is black */
+        }
     </style>
 </head>
 <body>
@@ -86,14 +111,53 @@ comments: true
             <button id="submit-review">Send</button>
         </div>
     </div>
+    <!-- Display the list of all surveys -->
+    <div id="survey-list"></div>
     <script type="module">
         import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+        // Function to fetch and display all surveys with usernames
+        async function fetchSurveys() {
+            try {
+                const response = await fetch(`${pythonURI}/api/surveys`, {
+                    ...fetchOptions,
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (response.ok) {
+                    const surveys = await response.json();
+                    const surveyList = document.getElementById("survey-list");
+                    surveyList.innerHTML = ''; // Clear the current list
+                    surveys.forEach(survey => {
+                        const surveyBox = document.createElement('div');
+                        surveyBox.classList.add('survey-box');
+                        const usernameElement = document.createElement('div');
+                        usernameElement.classList.add('username');
+                        usernameElement.textContent = survey.username; // Display the username
+                        const surveyMessage = document.createElement('p');
+                        surveyMessage.textContent = survey.message; // Display the survey message
+                        surveyBox.appendChild(usernameElement);
+                        surveyBox.appendChild(surveyMessage);
+                        surveyList.appendChild(surveyBox);
+                    });
+                } else {
+                    alert("Failed to fetch surveys. Please try again.");
+                }
+            } catch (error) {
+                console.error("Error fetching surveys:", error);
+                alert("An error occurred while fetching surveys. Please try again.");
+            }
+        }
+        // Fetch surveys on page load
+        window.onload = fetchSurveys;
+        // Show the review popup when the review button is clicked
         document.getElementById("review-button").addEventListener("click", function () {
             document.getElementById("review-popup").style.display = "block";
         });
+        // Close the review popup
         document.querySelector(".close-popup").addEventListener("click", function () {
             document.getElementById("review-popup").style.display = "none";
         });
+        // Handle review submission
         document.getElementById("submit-review").addEventListener("click", async function () {
             let reviewText = document.getElementById("review-text").value;
             if (reviewText.trim() === "") {
@@ -111,6 +175,7 @@ comments: true
                     alert("Thank you for your review!");
                     document.getElementById("review-popup").style.display = "none";
                     document.getElementById("review-text").value = "";
+                    fetchSurveys(); // Refresh the survey list after submission
                 } else {
                     alert("Failed to submit review. Please try again.");
                 }
