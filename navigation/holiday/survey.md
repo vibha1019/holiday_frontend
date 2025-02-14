@@ -1,31 +1,28 @@
----
-layout: post
-title: Survey
-permalink: /holiday/survey/
-author: Soni Dhenuva
-comments: true
----
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Review Survey</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
         #review-button {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
             padding: 10px 15px;
-            background-color: rgb(15, 99, 128) !important;
-            color: black;
+            background-color: rgb(15, 99, 128);
+            color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
         }
         #review-button:hover {
-            background-color: #008080 !important;
+            background-color: #008080;
         }
         .popup {
             display: none;
@@ -44,9 +41,6 @@ comments: true
             flex-direction: column;
             align-items: center;
         }
-        .popup-content h2 {
-            color: black;
-        }
         textarea {
             width: 100%;
             height: 80px;
@@ -54,12 +48,11 @@ comments: true
             border: 1px solid #ddd;
             border-radius: 5px;
             resize: none;
-            color: black;
         }
         #submit-review {
             margin-top: 10px;
             padding: 10px 15px;
-            background-color: #008080 !important;
+            background-color: #008080;
             color: white;
             border: none;
             border-radius: 5px;
@@ -76,26 +69,51 @@ comments: true
             cursor: pointer;
         }
         #survey-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
             margin-top: 20px;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
         }
         .survey-box {
-            background-color: #f9f9f9;
+            background-color: white;
             padding: 15px;
             border-radius: 8px;
             border: 1px solid #ddd;
             box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-            color: black;
-            font-size: 16px;
-            height: 150px;
-            width: 150px;
+            text-align: left;
+            height: 180px;
+            width: 250px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
-        .survey-box p {
-            margin: 5px 0;
-            color: black;
+        .review-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .review-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            max-height: 120px;
+            padding-right: 5px;
+        }
+        .review-content::-webkit-scrollbar {
+            width: 5px;
+        }
+        .review-content::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 5px;
+        }
+        @media (max-width: 1024px) {
+            #survey-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 600px) {
+            #survey-list {
+                grid-template-columns: repeat(1, 1fr);
+            }
         }
     </style>
 </head>
@@ -110,15 +128,10 @@ comments: true
         </div>
     </div>
     <div id="survey-list"></div>
-    <script type="module">
-        import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+    <script>
         async function fetchSurveys() {
             try {
-                const response = await fetch(`${pythonURI}/api/surveys`, {
-                    ...fetchOptions,
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
-                });
+                const response = await fetch('/api/surveys'); 
                 if (response.ok) {
                     const surveys = await response.json();
                     const surveyList = document.getElementById("survey-list");
@@ -126,20 +139,24 @@ comments: true
                     surveys.forEach(survey => {
                         const surveyBox = document.createElement('div');
                         surveyBox.classList.add('survey-box');
-                        const surveyMessage = document.createElement('p');
-                        surveyMessage.textContent = survey.message;
-                        surveyBox.appendChild(surveyMessage);
+                        const reviewTitle = document.createElement('div');
+                        reviewTitle.classList.add('review-title');
+                        reviewTitle.textContent = "Review";
+                        const reviewContent = document.createElement('div');
+                        reviewContent.classList.add('review-content');
+                        reviewContent.textContent = survey.message;
+                        surveyBox.appendChild(reviewTitle);
+                        surveyBox.appendChild(reviewContent);
                         surveyList.appendChild(surveyBox);
                     });
                 } else {
-                    alert("Failed to fetch surveys. Please try again.");
+                    alert("Failed to fetch surveys.");
                 }
             } catch (error) {
                 console.error("Error fetching surveys:", error);
-                alert("An error occurred while fetching surveys. Please try again.");
+                alert("An error occurred while fetching surveys.");
             }
         }
-        window.onload = fetchSurveys;
         document.getElementById("review-button").addEventListener("click", function () {
             document.getElementById("review-popup").style.display = "block";
         });
@@ -153,8 +170,7 @@ comments: true
                 return;
             }
             try {
-                const response = await fetch(`${pythonURI}/api/survey`, {
-                    ...fetchOptions,
+                const response = await fetch('/api/survey', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message: reviewText })
@@ -165,13 +181,14 @@ comments: true
                     document.getElementById("review-text").value = "";
                     fetchSurveys();
                 } else {
-                    alert("Failed to submit review. Please try again.");
+                    alert("Failed to submit review.");
                 }
             } catch (error) {
                 console.error("Error submitting review:", error);
-                alert("An error occurred while submitting the review. Please try again.");
+                alert("An error occurred while submitting the review.");
             }
         });
+        window.onload = fetchSurveys;
     </script>
 </body>
 </html>
