@@ -81,6 +81,9 @@ comments: true
             display: flex;
             flex-direction: column;
             gap: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-between;
         }
         .survey-box {
             background-color: #f9f9f9;
@@ -91,7 +94,8 @@ comments: true
             color: black;
             font-size: 16px;
             height: 150px;
-            width: 250px;
+            /*width: 250px;*/
+            width: 30%; /* Adjust the width to ensure 3 boxes per row */
         }
         .survey-box p {
             margin: 5px 0;
@@ -130,7 +134,7 @@ comments: true
                         surveyBox.classList.add('survey-box');
                         const reviewTitle = document.createElement('div');
                         reviewTitle.classList.add('review-title');
-                        reviewTitle.textContent = "Review";
+                        reviewTitle.textContent = "REVIEW";
                         const reviewContent = document.createElement('div');
                         reviewContent.classList.add('review-content');
                         reviewContent.textContent = survey.message;
