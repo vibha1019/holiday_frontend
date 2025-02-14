@@ -90,6 +90,8 @@ comments: true
             box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
             color: black;
             font-size: 16px;
+            height: 150px;
+            width: 150px;
         }
         .survey-box p {
             margin: 5px 0;
