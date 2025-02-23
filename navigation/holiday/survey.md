@@ -1,3 +1,10 @@
+---
+layout: post
+title: Survey
+permalink: /holiday/survey/
+author: Soni Dhenuva
+comments: true
+---
 <html lang="en">
 <head>
     <meta charset="UTF-8">
