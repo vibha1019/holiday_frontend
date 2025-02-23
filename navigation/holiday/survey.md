@@ -92,6 +92,9 @@ comments: true
         .delete-button:hover {
             background: darkred;
         }
+        .textERW{
+            color: black !important;
+        }
     </style>
 </head>
 <body>
@@ -99,7 +102,7 @@ comments: true
     <div id="review-popup" class="popup">
         <div class="popup-content">
             <span class="close-popup">&times;</span>
-            <h2>Enter a Review for the Website</h2>
+            <h2 class = "textERW">Enter a Review for the Website</h2>
             <textarea id="review-text" placeholder="Write your review here..."></textarea>
             <button id="submit-review">Send</button>
         </div>
