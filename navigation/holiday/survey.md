@@ -108,96 +108,143 @@ comments: true
         </div>
     </div>
     <div id="survey-list"></div>
-    <script type="module">
-        import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
-        async function fetchSurveys() {
-            try {
-                const response = await fetch(`${pythonURI}/api/surveys`, {
-                    ...fetchOptions,
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
+<script type="module">
+    import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+    async function fetchSurveys() {
+        try {
+            const response = await fetch(`${pythonURI}/api/surveys`, {
+                ...fetchOptions,
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            if (response.ok) {
+                const surveys = await response.json();
+                const surveyList = document.getElementById("survey-list");
+                surveyList.innerHTML = '';
+                surveys.forEach(survey => {
+                    const surveyBox = document.createElement('div');
+                    surveyBox.classList.add('survey-box');
+                    surveyBox.setAttribute('data-id', survey.id);
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = "X";
+                    deleteButton.classList.add('delete-button');
+                    deleteButton.addEventListener("click", () => deleteSurvey(survey.id));
+                    const editButton = document.createElement('button');
+                    editButton.textContent = "Edit";
+                    editButton.classList.add('edit-button');
+                    editButton.addEventListener("click", () => openEditPopup(survey));
+                    const reviewTitle = document.createElement('div');
+                    reviewTitle.textContent = "REVIEW";
+                    const reviewContent = document.createElement('div');
+                    reviewContent.textContent = survey.message;
+                    surveyBox.appendChild(deleteButton);
+                    surveyBox.appendChild(editButton);
+                    surveyBox.appendChild(reviewTitle);
+                    surveyBox.appendChild(reviewContent);
+                    surveyList.appendChild(surveyBox);
                 });
-                if (response.ok) {
-                    const surveys = await response.json();
-                    const surveyList = document.getElementById("survey-list");
-                    surveyList.innerHTML = '';
-                    surveys.forEach(survey => {
-                        const surveyBox = document.createElement('div');
-                        surveyBox.classList.add('survey-box');
-                        surveyBox.setAttribute('data-id', survey.id);
-                        const deleteButton = document.createElement('button');
-                        deleteButton.textContent = "X";
-                        deleteButton.classList.add('delete-button');
-                        deleteButton.addEventListener("click", () => deleteSurvey(survey.id));
-                        const reviewTitle = document.createElement('div');
-                        reviewTitle.textContent = "REVIEW";
-                        const reviewContent = document.createElement('div');
-                        reviewContent.textContent = survey.message;
-                        surveyBox.appendChild(deleteButton);
-                        surveyBox.appendChild(reviewTitle);
-                        surveyBox.appendChild(reviewContent);
-                        surveyList.appendChild(surveyBox);
-                    });
-                } else {
-                    alert("Failed to fetch surveys.");
-                }
-            } catch (error) {
-                console.error("Error fetching surveys:", error);
-                alert("An error occurred while fetching surveys.");
+            } else {
+                alert("Failed to fetch surveys.");
             }
+        } catch (error) {
+            console.error("Error fetching surveys:", error);
+            alert("An error occurred while fetching surveys.");
         }
-        async function deleteSurvey(surveyId) {
-            try {
-                const response = await fetch(`${pythonURI}/api/survey?id=${surveyId}`, {
-                    ...fetchOptions,
-                    method: 'DELETE',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                if (response.ok) {
-                    alert("Survey deleted successfully!");
-                    fetchSurveys(); // Refresh the list after deletion
-                } else {
-                    const errorData = await response.json();
-                    alert(`Failed to delete survey: ${errorData.message}`);
-                }
-            } catch (error) {
-                console.error("Error deleting survey:", error);
-                alert("An error occurred while deleting the survey.");
+    }
+    async function deleteSurvey(surveyId) {
+        try {
+            const response = await fetch(`${pythonURI}/api/survey?id=${surveyId}`, {
+                ...fetchOptions,
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            if (response.ok) {
+                alert("Survey deleted successfully!");
+                fetchSurveys(); // Refresh the list after deletion
+            } else {
+                const errorData = await response.json();
+                alert(`Failed to delete survey: ${errorData.message}`);
             }
+        } catch (error) {
+            console.error("Error deleting survey:", error);
+            alert("An error occurred while deleting the survey.");
         }
-        document.getElementById("review-button").addEventListener("click", function () {
-            document.getElementById("review-popup").style.display = "block";
-        });
-        document.querySelector(".close-popup").addEventListener("click", function () {
-            document.getElementById("review-popup").style.display = "none";
-        });
-        document.getElementById("submit-review").addEventListener("click", async function () {
-            let reviewText = document.getElementById("review-text").value;
-            if (reviewText.trim() === "") {
-                alert("Please enter a review before submitting.");
-                return;
+    }
+    function openEditPopup(survey) {
+        const editPopup = document.getElementById("edit-popup");
+        document.getElementById("edit-text").value = survey.message;
+        document.getElementById("submit-edit").onclick = () => submitEdit(survey.id);
+        editPopup.style.display = "block";
+    }
+    async function submitEdit(surveyId) {
+        const updatedMessage = document.getElementById("edit-text").value;
+        if (updatedMessage.trim() === "") {
+            alert("Please enter a message before submitting.");
+            return;
+        }
+        try {
+            const response = await fetch(`${pythonURI}/api/survey?id=${surveyId}`, {
+                ...fetchOptions,
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: updatedMessage })
+            });
+            if (response.ok) {
+                alert("Survey updated successfully!");
+                document.getElementById("edit-popup").style.display = "none";
+                fetchSurveys(); // Refresh surveys after update
+            } else {
+                alert("Failed to update survey.");
             }
-            try {
-                const response = await fetch(`${pythonURI}/api/survey`, {
-                    ...fetchOptions,
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: reviewText })
-                });
-                if (response.ok) {
-                    alert("Thank you for your review!");
-                    document.getElementById("review-popup").style.display = "none";
-                    document.getElementById("review-text").value = "";
-                    fetchSurveys();
-                } else {
-                    alert("Failed to submit review.");
-                }
-            } catch (error) {
-                console.error("Error submitting review:", error);
-                alert("An error occurred while submitting the review.");
+        } catch (error) {
+            console.error("Error updating survey:", error);
+            alert("An error occurred while updating the survey.");
+        }
+    }
+    document.getElementById("review-button").addEventListener("click", function () {
+        document.getElementById("review-popup").style.display = "block";
+    });
+    document.querySelector(".close-popup").addEventListener("click", function () {
+        document.getElementById("review-popup").style.display = "none";
+    });
+    document.getElementById("submit-review").addEventListener("click", async function () {
+        let reviewText = document.getElementById("review-text").value;
+        if (reviewText.trim() === "") {
+            alert("Please enter a review before submitting.");
+            return;
+        }
+        try {
+            const response = await fetch(`${pythonURI}/api/survey`, {
+                ...fetchOptions,
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: reviewText })
+            });
+            if (response.ok) {
+                alert("Thank you for your review!");
+                document.getElementById("review-popup").style.display = "none";
+                document.getElementById("review-text").value = "";
+                fetchSurveys();
+            } else {
+                alert("Failed to submit review.");
             }
-        });
-        window.onload = fetchSurveys;
-    </script>
+        } catch (error) {
+            console.error("Error submitting review:", error);
+            alert("An error occurred while submitting the review.");
+        }
+    });
+    window.onload = fetchSurveys;
+</script>
+
+<!-- Edit Popup Modal -->
+<div id="edit-popup" class="popup">
+    <div class="popup-content">
+        <span class="close-popup">&times;</span>
+        <h2>Edit Review</h2>
+        <textarea id="edit-text" placeholder="Edit your review here..."></textarea>
+        <button id="submit-edit">Submit Edit</button>
+    </div>
+</div>
+
 </body>
 </html>
