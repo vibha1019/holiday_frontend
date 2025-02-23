@@ -44,9 +44,6 @@ comments: true
             flex-direction: column;
             align-items: center;
         }
-        .popup-content h2 {
-            color: black;
-        }
         textarea {
             width: 100%;
             height: 80px;
@@ -68,23 +65,6 @@ comments: true
         #submit-review:hover {
             background-color: #005f5f;
         }
-        .close-popup {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 20px;
-            cursor: pointer;
-        }
-        #survey-list {
-            margin-top: 20px;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: space-between;
-        }
         .survey-box {
             background-color: #f9f9f9;
             padding: 15px;
@@ -94,12 +74,23 @@ comments: true
             color: black;
             font-size: 16px;
             height: 150px;
-            /*width: 250px;*/
-            width: 30%; /* Adjust the width to ensure 3 boxes per row */
+            width: 30%;
+            position: relative;
         }
-        .survey-box p {
-            margin: 5px 0;
-            color: black;
+        .delete-button {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 5px;
+            padding: 5px;
+        }
+        .delete-button:hover {
+            background: darkred;
         }
     </style>
 </head>
@@ -115,11 +106,9 @@ comments: true
     </div>
     <div id="survey-list"></div>
     <script type="module">
-        // Ensure the correct import
         import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
         async function fetchSurveys() {
             try {
-                // Using the dynamic pythonURI for fetching surveys
                 const response = await fetch(`${pythonURI}/api/surveys`, {
                     ...fetchOptions,
                     method: 'GET',
@@ -132,12 +121,16 @@ comments: true
                     surveys.forEach(survey => {
                         const surveyBox = document.createElement('div');
                         surveyBox.classList.add('survey-box');
+                        surveyBox.setAttribute('data-id', survey.id);
+                        const deleteButton = document.createElement('button');
+                        deleteButton.textContent = "X";
+                        deleteButton.classList.add('delete-button');
+                        deleteButton.addEventListener("click", () => deleteSurvey(survey.id));
                         const reviewTitle = document.createElement('div');
-                        reviewTitle.classList.add('review-title');
                         reviewTitle.textContent = "REVIEW";
                         const reviewContent = document.createElement('div');
-                        reviewContent.classList.add('review-content');
                         reviewContent.textContent = survey.message;
+                        surveyBox.appendChild(deleteButton);
                         surveyBox.appendChild(reviewTitle);
                         surveyBox.appendChild(reviewContent);
                         surveyList.appendChild(surveyBox);
@@ -150,15 +143,30 @@ comments: true
                 alert("An error occurred while fetching surveys.");
             }
         }
-        // The review button to open the popup
+        async function deleteSurvey(id) {
+            try {
+                const response = await fetch(`${pythonURI}/api/survey/${id}`, {
+                    ...fetchOptions,
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (response.ok) {
+                    alert("Review deleted successfully.");
+                    fetchSurveys();
+                } else {
+                    alert("Failed to delete review.");
+                }
+            } catch (error) {
+                console.error("Error deleting review:", error);
+                alert("An error occurred while deleting the review.");
+            }
+        }
         document.getElementById("review-button").addEventListener("click", function () {
             document.getElementById("review-popup").style.display = "block";
         });
-        // Close popup on close icon click
         document.querySelector(".close-popup").addEventListener("click", function () {
             document.getElementById("review-popup").style.display = "none";
         });
-        // Submit the review to the API
         document.getElementById("submit-review").addEventListener("click", async function () {
             let reviewText = document.getElementById("review-text").value;
             if (reviewText.trim() === "") {
@@ -176,7 +184,7 @@ comments: true
                     alert("Thank you for your review!");
                     document.getElementById("review-popup").style.display = "none";
                     document.getElementById("review-text").value = "";
-                    fetchSurveys(); // Refresh the survey list
+                    fetchSurveys();
                 } else {
                     alert("Failed to submit review.");
                 }
@@ -185,7 +193,6 @@ comments: true
                 alert("An error occurred while submitting the review.");
             }
         });
-        // Fetch surveys on page load
         window.onload = fetchSurveys;
     </script>
 </body>
