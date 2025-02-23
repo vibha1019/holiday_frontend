@@ -143,22 +143,23 @@ comments: true
                 alert("An error occurred while fetching surveys.");
             }
         }
-        async function deleteSurvey(id) {
+        async function deleteSurvey(surveyId) {
             try {
-                const response = await fetch(`${pythonURI}/api/survey/${id}`, {
+                const response = await fetch(`${pythonURI}/api/survey?id=${surveyId}`, {
                     ...fetchOptions,
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' }
                 });
                 if (response.ok) {
-                    alert("Review deleted successfully.");
-                    fetchSurveys();
+                    alert("Survey deleted successfully!");
+                    fetchSurveys(); // Refresh the list after deletion
                 } else {
-                    alert("Failed to delete review.");
+                    const errorData = await response.json();
+                    alert(`Failed to delete survey: ${errorData.message}`);
                 }
             } catch (error) {
-                console.error("Error deleting review:", error);
-                alert("An error occurred while deleting the review.");
+                console.error("Error deleting survey:", error);
+                alert("An error occurred while deleting the survey.");
             }
         }
         document.getElementById("review-button").addEventListener("click", function () {
