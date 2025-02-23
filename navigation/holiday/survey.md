@@ -92,13 +92,6 @@ comments: true
         .delete-button:hover {
             background: darkred;
         }
-        .edit-button {
-            right: 50px;
-            background: blue;
-        }
-        .edit-button:hover {
-            background: darkblue;
-        }
     </style>
 </head>
 <body>
@@ -116,7 +109,7 @@ comments: true
         import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
         async function fetchSurveys() {
             try {
-                const response = await fetch(${pythonURI}/api/surveys, {
+                const response = await fetch(`${pythonURI}/api/surveys`, {
                     ...fetchOptions,
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' }
@@ -152,7 +145,7 @@ comments: true
         }
         async function deleteSurvey(surveyId) {
             try {
-                const response = await fetch(${pythonURI}/api/survey?id=${surveyId}, {
+                const response = await fetch(`${pythonURI}/api/survey?id=${surveyId}`, {
                     ...fetchOptions,
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' }
@@ -162,7 +155,7 @@ comments: true
                     fetchSurveys(); // Refresh the list after deletion
                 } else {
                     const errorData = await response.json();
-                    alert(Failed to delete survey: ${errorData.message});
+                    alert(`Failed to delete survey: ${errorData.message}`);
                 }
             } catch (error) {
                 console.error("Error deleting survey:", error);
@@ -182,7 +175,7 @@ comments: true
                 return;
             }
             try {
-                const response = await fetch(${pythonURI}/api/survey, {
+                const response = await fetch(`${pythonURI}/api/survey`, {
                     ...fetchOptions,
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
