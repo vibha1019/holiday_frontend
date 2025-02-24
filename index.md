@@ -207,27 +207,28 @@ hide: true
     }
     /* Snowflake styling */
     .snowflake {
-      position: absolute;
-      color: white;
-      font-size: 1em;
-      user-select: none;
-      pointer-events: none;
-      z-index: 1;
-      animation: fall linear infinite;
+        position: fixed; /* Changed from absolute to fixed */
+        top: 0; /* Ensure snowflakes start from the top */
+        color: white;
+        font-size: 1em;
+        user-select: none;
+        pointer-events: none;
+        z-index: 0;
+        animation: fall linear infinite;
     }
     @keyframes fall {
       0% { transform: translateY(-10px); }
       100% { transform: translateY(100vh); }
     }
     .snowflake:nth-child(odd) {
-      animation-duration: 10s;
+      animation-duration: 12s;
     }
     .snowflake:nth-child(even) {
-      animation-duration: 15s;
+      animation-duration: 18s;
     }
     .snowflake:nth-child(1) {
       font-size: 1.5em;
-      animation-duration: 10s;
+      animation-duration: 14s;
     }
     .snowflake:nth-child(2) {
       font-size: 1.3em;
@@ -466,6 +467,7 @@ hide: true
         }
       });
       // Snowflakes Creation
+      const numberOfSnowflakes = 100;
       for (let i = 0; i < 100; i++) {
         let snowflake = document.createElement("div");
         snowflake.classList.add("snowflake");
