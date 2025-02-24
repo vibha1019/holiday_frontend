@@ -499,7 +499,7 @@ button[type="submit"]:hover {
             <h3>Wall Art</h3>
         </div>
         <div class="product" data-item="Candle Set">
-            <img src="{{site.baseurl}}/images/candle set.jpeg" alt="Candle Set">
+            <img src="{{site.baseurl}}/images/wall art.jpeg" alt="Candle Set">
             <h3>Candle Set</h3>
         </div>
     </div>
