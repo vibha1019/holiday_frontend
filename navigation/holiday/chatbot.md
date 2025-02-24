@@ -139,7 +139,7 @@ comments: true
                 <button id="send-message-button">Send</button>
             </div>
         </div>
-        <script type="module">
+        <script type="module" src="/holiday_frontend/chatbot.js">
             import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
             const chatBox = document.getElementById('chat-box');
             const userInput = document.getElementById('user-input');
