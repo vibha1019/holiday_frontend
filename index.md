@@ -4,24 +4,24 @@ title:
 search_exclude: true
 hide: true
 ---
-
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Popup Login Alert</title>
   <style>
+    /* Global Background */
     html, body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        background-image: url('{{ site.baseurl }}/images/greenbackground.png');
-        background-size: cover; /* Cover the entire screen */
-        background-position: center;
-        background-repeat: no-repeat;
-        background-attachment: fixed; /* Keeps background fixed while scrolling */
-        }
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('{{ site.baseurl }}/images/greenbackground.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
     /* Popup styles */
     .popup-overlay {
       position: fixed;
@@ -139,11 +139,6 @@ hide: true
       transform: translateX(5px);
     }
     /* Holiday page styles */
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-    }
     .holiday-page {
       background-image: url('{{ site.baseurl }}/images/greenbackground.png');
       background-size: cover;
@@ -159,10 +154,14 @@ hide: true
       text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
       position: relative;
     }
+    .holiday-header {
+      width: 100%;
+      text-align: center;
+      padding: 20px 0;
+    }
     .holiday-header h1 {
       font-size: 2.5em;
-      margin-bottom: 30px;
-      text-align: center;
+      margin: 20px 0;
       background: rgba(0, 0, 0, 0.6);
       padding: 10px 20px;
       border-radius: 10px;
@@ -253,6 +252,155 @@ hide: true
       font-size: 1.7em;
       animation-duration: 14s;
     }
+    body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    height: 100vh;
+    background-color: #f9f9f9;
+    }
+    #help-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #B22222 !important;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    #help-button:hover {
+    background-color: #63b6e3;
+    }
+    #chat-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 350px;
+    max-height: 500px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    }
+    #chat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background-color: #333;
+        color: white;
+        border-bottom: 1px solid #ddd;
+    }
+    #chat-header h4 {
+        margin: 0;
+        font-size: 16px;
+    }
+    #close-chat {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+    }
+    #close-chat:hover {
+        color: #ff6666;
+    }
+    #chat-box {
+        flex-grow: 1;
+        padding: 10px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+    }
+    .message {
+        margin: 10px;
+        padding: 10px;
+        border-radius: 10px;
+        max-width: 75%;
+        word-wrap: break-word;
+        display: inline-block;
+    }
+    .assistant {
+        background-color: #333;
+        color: white;
+        align-self: flex-start;
+        text-align: left;
+    }
+    .user {
+        background-color: #2f4f4f;
+        color: white;
+        align-self: flex-end;
+        text-align: right;
+    }
+    #input-container {
+        display: flex;
+        padding: 10px;
+        border-top: 1px solid #ddd;
+    }
+    input[type="text"] {
+        flex-grow: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+    button {
+        margin-left: 5px;
+        padding: 10px;
+        background-color: #333;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+    button:hover {
+        background-color: #555;
+    /* Top Searchbar Styles */
+    .top-search {
+      margin: 0 auto 20px;
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+    }
+    .top-search input {
+      width: 100%;
+      padding: 10px 15px;
+      border: 2px solid #ddd;
+      border-radius: 25px;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .top-search input:focus {
+      border-color: green;
+      box-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+    }
+    .top-search #results {
+      margin-top: 10px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .top-search .result {
+      margin: 5px 0;
+      padding: 8px 12px;
+      background: green;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .top-search .result:hover {
+      background: darkred;
+      transform: translateY(-2px);
+    }
   </style>
 </head>
 <body>
@@ -264,6 +412,18 @@ hide: true
       <a href="login.html" class="popup-button">Go to Login Page</a>
     </div>
   </div>
+  <button id="help-button">Need Help?</button>
+    <div id="chat-container">
+        <div id="chat-header">
+            <h4>Giftinator 3000</h4>
+            <button id="close-chat">×</button>
+        </div>
+        <div id="chat-box"></div>
+        <div id="input-container">
+            <input type="text" id="user-input" placeholder="Type your message..." />
+            <button id="send-message-button">Send</button>
+        </div>
+    </div>
 
   <!-- Sidebar -->
   <div class="sidebar">
@@ -281,6 +441,16 @@ hide: true
   <!-- Holiday Page Content -->
   <div class="holiday-page">
     <header class="holiday-header">
+      <!-- Top Searchbar integrated into the header -->
+      <div class="top-search">
+        <input 
+          type="text" 
+          id="searchInput" 
+          placeholder="Search for an item or tag..." 
+          oninput="searchItems()"
+        />
+        <div id="results"></div>
+      </div>
       <h1>🎁 Happy Holidays Gift List 🎄</h1>
     </header>
     <div class="categories-grid">
@@ -311,7 +481,10 @@ hide: true
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+
+    // Popup and Snowflakes Code
     document.addEventListener("DOMContentLoaded", function() {
       // Popup Login Alert Logic
       const isAuthenticated = localStorage.getItem('authenticated') === 'true';
@@ -337,6 +510,114 @@ hide: true
         snowflake.innerHTML = "❆";
         document.querySelector(".holiday-page").appendChild(snowflake);
       }
+      import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+      const chatBox = document.getElementById('chat-box');
+      const userInput = document.getElementById('user-input');
+        const chatContainer = document.getElementById('chat-container');
+        const sendMessageButton = document.getElementById('send-message-button');
+        // Adding event listeners for the help button, close chat button, and send message button
+        document.getElementById('help-button').addEventListener('click', toggleChat);
+        document.getElementById('close-chat').addEventListener('click', toggleChat);
+        sendMessageButton.addEventListener('click', sendMessage); // Event listener for send message button
+        function toggleChat() {
+            chatContainer.style.display = chatContainer.style.display === 'flex' ? 'none' : 'flex';
+        }
+        async function sendMessage() {
+            const message = userInput.value;
+            if (!message) return;
+            appendMessage('user', message);
+            userInput.value = '';
+            try {
+                const response = await fetch(`${pythonURI}/chat`, {
+                    ...fetchOptions,
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_input: message }),
+                    credentials: 'include' // Ensures cookies/auth headers work
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    appendMessage('assistant', data.response);
+                } else {
+                    appendMessage('assistant', `Error: ${data.error}`);
+                }
+            } catch (error) {
+                appendMessage('assistant', `Error: ${error.message}`);
+            }
+        }
+        function appendMessage(sender, message) {
+            const messageElement = document.createElement('div');
+            messageElement.className = `message ${sender}`;
+            messageElement.innerText = message;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    });
+
+    // Searchbar Functions
+    async function searchItems() {
+      const input = document.getElementById('searchInput').value.trim().toLowerCase();
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = ''; // Clear previous results
+
+      if (input) {
+        try {
+          const response = await fetch(`${pythonURI}/api/search?q=${encodeURIComponent(input)}`, {
+            ...fetchOptions,
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+
+          const items = await response.json();
+          if (items.length > 0) {
+            items.forEach(item => {
+              const resultDiv = document.createElement('div');
+              resultDiv.className = 'result';
+              resultDiv.textContent = item.name;
+              resultDiv.onclick = async () => {
+                await incrementTags(item.name);
+                window.location.href = item.link;
+              };
+              resultsDiv.appendChild(resultDiv);
+            });
+          } else {
+            resultsDiv.textContent = 'No results found.';
+          }
+        } catch (error) {
+          console.error('Error fetching search results:', error);
+          resultsDiv.textContent = 'An error occurred while searching. Please try again.';
+        }
+      }
+    }
+
+    async function incrementTags(itemName) {
+      try {
+        const response = await fetch(`${pythonURI}/api/search/increment_tag`, {
+          ...fetchOptions,
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: itemName })
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP status code: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log(data.message);
+      } catch (error) {
+        console.error('Error updating tags:', error);
+      }
+    }
+
+    window.searchItems = searchItems;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('Search bar initialized');
     });
   </script>
 </body>
