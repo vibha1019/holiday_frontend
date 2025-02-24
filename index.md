@@ -10,17 +10,18 @@ hide: true
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Popup Login Alert</title>
   <style>
+    /* Global Background */
     html, body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        background-image: url('{{ site.baseurl }}/images/greenbackground.png');
-        background-size: cover; /* Cover the entire screen */
-        background-position: center;
-        background-repeat: no-repeat;
-        background-attachment: fixed; /* Keeps background fixed while scrolling */
-        }
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('{{ site.baseurl }}/images/greenbackground.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
     /* Popup styles */
     .popup-overlay {
       position: fixed;
@@ -138,11 +139,6 @@ hide: true
       transform: translateX(5px);
     }
     /* Holiday page styles */
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-    }
     .holiday-page {
       background-image: url('{{ site.baseurl }}/images/greenbackground.png');
       background-size: cover;
@@ -158,10 +154,14 @@ hide: true
       text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
       position: relative;
     }
+    .holiday-header {
+      width: 100%;
+      text-align: center;
+      padding: 20px 0;
+    }
     .holiday-header h1 {
       font-size: 2.5em;
-      margin-bottom: 30px;
-      text-align: center;
+      margin: 20px 0;
       background: rgba(0, 0, 0, 0.6);
       padding: 10px 20px;
       border-radius: 10px;
@@ -364,6 +364,42 @@ hide: true
     }
     button:hover {
         background-color: #555;
+    /* Top Searchbar Styles */
+    .top-search {
+      margin: 0 auto 20px;
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+    }
+    .top-search input {
+      width: 100%;
+      padding: 10px 15px;
+      border: 2px solid #ddd;
+      border-radius: 25px;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .top-search input:focus {
+      border-color: green;
+      box-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+    }
+    .top-search #results {
+      margin-top: 10px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .top-search .result {
+      margin: 5px 0;
+      padding: 8px 12px;
+      background: green;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .top-search .result:hover {
+      background: darkred;
+      transform: translateY(-2px);
     }
   </style>
 </head>
@@ -405,6 +441,16 @@ hide: true
   <!-- Holiday Page Content -->
   <div class="holiday-page">
     <header class="holiday-header">
+      <!-- Top Searchbar integrated into the header -->
+      <div class="top-search">
+        <input 
+          type="text" 
+          id="searchInput" 
+          placeholder="Search for an item or tag..." 
+          oninput="searchItems()"
+        />
+        <div id="results"></div>
+      </div>
       <h1>🎁 Happy Holidays Gift List 🎄</h1>
     </header>
     <div class="categories-grid">
@@ -435,7 +481,10 @@ hide: true
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+
+    // Popup and Snowflakes Code
     document.addEventListener("DOMContentLoaded", function() {
       // Popup Login Alert Logic
       const isAuthenticated = localStorage.getItem('authenticated') === 'true';
@@ -503,6 +552,72 @@ hide: true
             chatBox.appendChild(messageElement);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
+    });
+
+    // Searchbar Functions
+    async function searchItems() {
+      const input = document.getElementById('searchInput').value.trim().toLowerCase();
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = ''; // Clear previous results
+
+      if (input) {
+        try {
+          const response = await fetch(`${pythonURI}/api/search?q=${encodeURIComponent(input)}`, {
+            ...fetchOptions,
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+
+          const items = await response.json();
+          if (items.length > 0) {
+            items.forEach(item => {
+              const resultDiv = document.createElement('div');
+              resultDiv.className = 'result';
+              resultDiv.textContent = item.name;
+              resultDiv.onclick = async () => {
+                await incrementTags(item.name);
+                window.location.href = item.link;
+              };
+              resultsDiv.appendChild(resultDiv);
+            });
+          } else {
+            resultsDiv.textContent = 'No results found.';
+          }
+        } catch (error) {
+          console.error('Error fetching search results:', error);
+          resultsDiv.textContent = 'An error occurred while searching. Please try again.';
+        }
+      }
+    }
+
+    async function incrementTags(itemName) {
+      try {
+        const response = await fetch(`${pythonURI}/api/search/increment_tag`, {
+          ...fetchOptions,
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: itemName })
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP status code: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log(data.message);
+      } catch (error) {
+        console.error('Error updating tags:', error);
+      }
+    }
+
+    window.searchItems = searchItems;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('Search bar initialized');
     });
   </script>
 </body>
