@@ -442,9 +442,7 @@ button[type="submit"]:hover {
   margin: 5px 0;
 }
 
-
 </style>
-
 <html lang="en">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -453,7 +451,7 @@ button[type="submit"]:hover {
         body {
             font-family: Arial, sans-serif;
             background: #111;
-            color: #fff;
+            color: #000;
             margin: 0;
             padding: 0;
             text-align: center;
@@ -464,6 +462,7 @@ button[type="submit"]:hover {
             background: rgba(0, 0, 0, 0.6);
             padding: 10px 20px;
             border-radius: 10px;
+            color: #000;
         }
         .product-list {
             display: grid;
@@ -479,6 +478,7 @@ button[type="submit"]:hover {
             padding: 15px;
             text-align: center;
             transition: transform 0.2s, box-shadow 0.2s;
+            color: #000;
         }
         .product img {
             max-width: 100%;
@@ -486,20 +486,17 @@ button[type="submit"]:hover {
             margin-bottom: 10px;
         }
     </style>
-    <header>
-        <h1>🏡 Explore Home Decor Gifts 🎁</h1>
-    </header>
     <div id="product-list" class="product-list">
         <div class="product" data-item="Table Lamp">
             <img src="{{site.baseurl}}/images/table lamp.jpeg" alt="Table Lamp">
             <h3>Table Lamp</h3>
         </div>
         <div class="product" data-item="Wall Art">
-            <img src="{{site.baseurl}}/images/teddybear.jpeg" alt="Wall Art">
+            <img src="{{site.baseurl}}/images/wall art.jpeg" alt="Wall Art">
             <h3>Wall Art</h3>
         </div>
         <div class="product" data-item="Candle Set">
-            <img src="{{site.baseurl}}/images/wall art.jpeg" alt="Candle Set">
+            <img src="{{site.baseurl}}/images/candle set.jpeg" alt="Candle Set">
             <h3>Candle Set</h3>
         </div>
     </div>
