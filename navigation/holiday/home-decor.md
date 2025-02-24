@@ -441,8 +441,6 @@ button[type="submit"]:hover {
 .post-body p {
   margin: 5px 0;
 }
-
-</style>
 <html lang="en">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -457,7 +455,7 @@ button[type="submit"]:hover {
             text-align: center;
         }
         header h1 {
-            font-size: 2.5em;
+            font-size: 2em;
             margin: 20px 0;
             background: rgba(0, 0, 0, 0.6);
             padding: 10px 20px;
@@ -480,6 +478,13 @@ button[type="submit"]:hover {
             transition: transform 0.2s, box-shadow 0.2s;
             color: #000;
         }
+        .product h3 {
+            font-size: 1em;
+        }
+        .product p {
+            font-size: 0.9em;
+            color: #333;
+        }
         .product img {
             max-width: 100%;
             border-radius: 10px;
@@ -490,14 +495,17 @@ button[type="submit"]:hover {
         <div class="product" data-item="Table Lamp">
             <img src="{{site.baseurl}}/images/table lamp.jpeg" alt="Table Lamp">
             <h3>Table Lamp</h3>
+            <p>A stylish table lamp to brighten up your space with warmth and elegance.</p>
         </div>
         <div class="product" data-item="Wall Art">
             <img src="{{site.baseurl}}/images/wall art.jpeg" alt="Wall Art">
             <h3>Wall Art</h3>
+            <p>Beautiful wall art pieces to add character and charm to your home.</p>
         </div>
         <div class="product" data-item="Candle Set">
-            <img src="{{site.baseurl}}/images/candle set.jpeg" alt="Candle Set">
+            <img src="{{site.baseurl}}/images/scented candles.jpeg" alt="Candle Set">
             <h3>Candle Set</h3>
+            <p>Aromatic candle set perfect for creating a cozy and relaxing ambiance.</p>
         </div>
     </div>
-</html>
+
