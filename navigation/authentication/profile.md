@@ -6,25 +6,6 @@ menu: nav/home.html
 search_exclude: true
 show_reading_time: false
 ---
-<style> 
-.profile-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
-
-.card {
-  width: 60%; /* Adjust this to make the box narrower */
-  max-width: 500px; /* Ensures it doesn't get too wide on larger screens */
-  background-color: green; /* Change background color to green */
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  color: white; /* Ensure text is readable on a green background */
-}
-
-</style>
 <div class="profile-container">
  <div class="card">
    <form>
