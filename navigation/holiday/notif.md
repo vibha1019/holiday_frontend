@@ -8,22 +8,27 @@ comments: true
 
 <!-- Link to the external CSS file -->
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/notif_styles.css">
-<h1 class="page-title">Send Notification</h1>
-<div class="form-container">
-    <form id="notificationForm">
-        <label for="content">Notification Content:</label>
-        <textarea id="content" name="content" required placeholder="Enter notification content..."></textarea>
-        <label for="recipient_id">Recipient:</label>
-        <select id="recipient_id" name="recipient_id" required>
-            <option value="" disabled selected>Select a user</option>
-        </select>
-        <button type="submit" class="primary-btn">Send Notification</button>
-    </form>
-    <div id="message" class="message"></div>
+<div class="notification-container">
+    <!-- Form to send notifications -->
+    <div class="form-container">
+        <h1 class="page-title">Send Notification</h1>
+        <form id="notificationForm">
+            <label for="content">Notification Content:</label>
+            <textarea id="content" name="content" required placeholder="Enter notification content..."></textarea>
+            <label for="recipient_id">Recipient:</label>
+            <select id="recipient_id" name="recipient_id" required>
+                <option value="" disabled selected>Select a user</option>
+            </select>
+            <button type="submit" class="primary-btn">Send Notification</button>
+        </form>
+        <div id="message" class="message"></div>
+    </div>
+    <!-- Notifications List -->
+    <div class="notifications-container">
+        <h2 class="section-title">Your Notifications</h2>
+        <div id="notificationsList"></div>
+    </div>
 </div>
-
-<h2 class="section-title">Your Notifications</h2>
-<div id="notificationsList" class="notifications-container"></div>
 
 <script type="module">
   import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
