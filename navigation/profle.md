@@ -48,7 +48,7 @@ comments: true
     <h1>User Profile</h1>
   </header>
   <section class="profile-container">
-    <img id="link" src="{{ site.baseurl }}/images/gifitinatorlogo.png" width="50" height="50" alt="Profile Picture" /> 
+    <img id="link" src="{{ site.baseurl }}/images/profile.jpg" width="100" height="100" alt="Profile Picture" /> 
     <div class="name" id="username">default_user</div>
     <div class="theme" id="theme-preference">Preferred Theme: Dark</div>
     <!-- Theme buttons -->
@@ -112,10 +112,12 @@ comments: true
             profilePic.src = `/user-images/${credentials.pfp}`; // Adjust path as needed
           }
         } else {
-          profilePic.src = '/images/gifitinatorlogo.png'; // Fallback
+          // Fallback to default profile picture if none provided
+          profilePic.src = '{{ site.baseurl }}/images/profile.jpg';
         }
+        // Fallback if the image fails to load
         profilePic.onerror = function () {
-          this.src = '/images/gifitinatorlogo.png';
+          this.src = '{{ site.baseurl }}/images/profile.jpg';
         };
       } catch (error) {
         console.error('Error fetching profile data:', error);
@@ -155,7 +157,7 @@ comments: true
         });
         if (response.ok) {
           alert('Profile deleted successfully!');
-          document.getElementById('link').src = '/images/gifitinatorlogo.png';
+          document.getElementById('link').src = '{{ site.baseurl }}/images/profile.jpg';
           document.getElementById('username').textContent = 'Unknown User';
           document.getElementById('theme-preference').textContent = 'Preferred Theme: Light';
           applyThemeColors('Light');
