@@ -156,7 +156,8 @@ hide: true
       grid-template-columns: repeat(3, 1fr);
       gap: 20px;
       width: 90%;
-      max-width: 1200px;
+      max-width: 3000px;
+      padding-left: 85px; /* Slightly shifts it to the right */
     }
     .category-box {
       background: rgba(0, 0, 0, 0.6);
@@ -242,7 +243,7 @@ hide: true
     .top-search {
       margin: 0 auto 20px;
       width: 100%;
-      max-width: 600px;
+      max-width: 800px;
       text-align: center;
     }
     .top-search input {
@@ -413,7 +414,7 @@ hide: true
         <input 
           type="text" 
           id="searchInput" 
-          placeholder="Search for an item or tag..." 
+          placeholder="🔍 Search for an item or tag..." 
           oninput="searchItems()"
         />
         <div id="results"></div>
