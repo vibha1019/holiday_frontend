@@ -267,14 +267,16 @@ hide: true
     .top-search .result {
       margin: 5px 0;
       padding: 8px 12px;
-      background: green;
+      background: transparent; /* initial background is transparent */
       color: white;
       border-radius: 5px;
       cursor: pointer;
     }
     .top-search .result:hover {
-      background: darkred;
-      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.2); /* light background on hover */
+    }
+    .top-search .result:active {
+      background: rgba(255, 255, 255, 0.3); /* slightly lighter when clicked */
     }
             #help-button {
                 position: fixed;
