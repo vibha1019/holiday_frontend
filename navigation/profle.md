@@ -13,7 +13,10 @@ comments: true
 </div>
 
 <!-- Profile Content -->
-  <img id="link" src="{{ site.baseurl }}/images/profile.jpg" width="100" height="100" alt="Profile Picture" /> 
+<div class="profile-container">
+  <div class="profile-picture">
+    <img id="link" src="{{ site.baseurl }}/images/profile.jpg" width="100" height="100" alt="Profile Picture" />
+  </div>
   <div class="name" id="username">default_user</div>
   <div class="theme" id="theme-preference">Preferred Theme: Dark</div>
 
@@ -23,8 +26,10 @@ comments: true
     <button id="dark-mode-btn">Dark Mode</button>
   </div>
 
-  <button id="delete-btn" class="delete-button">Delete Profile</button>
-
+  <div class="delete-container">
+    <button id="delete-btn" class="delete-button">Delete Profile</button>
+  </div>
+</div>
 <script type="module">
   import { getCredentials } from '{{ site.baseurl }}/assets/js/api/login.js';
   import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';

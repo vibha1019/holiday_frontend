@@ -1,49 +1,103 @@
-/* Ensures full-page centering */
+/* General Body Styling */
 body {
-    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     color: #333;
-    display: flex;
-    flex-direction: column;  /* Adjusted to support header */
-    align-items: center;
-    justify-content: flex-start; /* Prevents full height push */
-    min-height: 100vh;
 }
 
-/* Profile Header (Replaces .holiday-header) */
+/* Profile Page Header */
 .profile-header {
     width: 100%;
-    text-align: center;
-    padding: 20px 0;
-    background: rgba(0, 0, 0, 0.6);
+    background-color: #2c3e50;
     color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
 }
 
-/* Profile Section Container */
+/* Main Profile Container */
 .profile-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    margin: 20px;
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Profile Image */
+.profile-container img {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto 15px auto;
+}
+
+/* Username */
+.name {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Theme Preference */
+.theme {
+    font-size: 16px;
+    background-color: #34495e;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-bottom: 15px;
 }
 
 /* Theme Buttons */
+.theme-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
 .theme-buttons button {
-    margin: 5px;
     padding: 10px 15px;
     font-size: 14px;
     cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
 }
 
-/* Delete Button */
+#light-mode-btn {
+    background-color: #ecf0f1;
+    color: #333;
+}
+
+#light-mode-btn:hover {
+    background-color: #bdc3c7;
+}
+
+#dark-mode-btn {
+    background-color: #2c3e50;
+    color: white;
+}
+
+#dark-mode-btn:hover {
+    background-color: #1a252f;
+}
+
+/* Delete Profile Button */
 .delete-button {
     background-color: #e74c3c;
     color: white;
     border: none;
-    padding: 10px 15px;
+    padding: 12px 18px;
     font-size: 14px;
     cursor: pointer;
     border-radius: 5px;
