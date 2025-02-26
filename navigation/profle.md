@@ -5,33 +5,29 @@ permalink: /profile_page/
 author: Spencer Lyons
 comments: true
 ---
+
 <link rel="stylesheet" href="/holiday_frontend/assets/css/profile_style.css">
 
 <!-- Profile Content -->
-<div class="profile-container">
-  <!-- Profile Picture Container -->
-  <div class="profile-picture">
-    <img id="link" src="{{ site.baseurl }}/images/profile.jpg" width="100" height="100" alt="Profile Picture" />
+<div class="profile-page">
+  <!-- Delete Profile Button -->
+  <div class="delete-container">
+    <button id="delete-btn" class="delete-button" title="Delete Profile"><span class="trash-icon">&#x1F5D1;</span></button>
   </div>
 
-  <!-- Username Container -->
-  <div class="name" id="username">default_user</div>
-
-  <!-- Theme Preference Container -->
-  <div class="theme-preference">
-    <div class="theme" id="theme-preference">Preferred Theme: Dark</div>
-    <!-- Theme buttons and Trash Button -->
-    <div class="theme-buttons">
-      <button id="light-mode-btn">
-        <img src="/icons/light-mode-symbol.svg" alt="Light Mode" />
-      </button>
-      <button id="dark-mode-btn">
-        <img src="/icons/dark-mode-symbol.svg" alt="Dark Mode" />
-      </button>
-      <button id="delete-btn" class="delete-button">
-        <img src="/icons/trash-icon.svg" alt="Delete Profile" />
-      </button>
+  <!-- Profile Info Container -->
+  <div class="profile-info">
+    <div class="profile-picture">
+      <img id="link" src="{{ site.baseurl }}/images/profile.jpg" width="100" height="100" alt="Profile Picture" />
     </div>
+    <div class="name" id="username">default_user</div>
+    <div class="theme" id="theme-preference">Preferred Theme: Dark</div>
+  </div>
+
+  <!-- Theme Buttons Container -->
+  <div class="theme-buttons">
+    <button id="light-mode-btn" title="Light Mode"><span class="symbol">&#x2600;</span></button> <!-- Sun symbol for Light Mode -->
+    <button id="dark-mode-btn" title="Dark Mode"><span class="symbol">&#x263D;</span></button> <!-- Moon symbol for Dark Mode -->
   </div>
 </div>
 <script type="module">
@@ -54,7 +50,6 @@ comments: true
       }
     }
   }
-
   async function loadProfile() {
     try {
       const credentials = await getCredentials();
@@ -93,7 +88,6 @@ comments: true
       console.error('Error fetching profile data:', error);
     }
   }
-
   async function updateTheme(theme) {
     const themeElement = document.getElementById('theme-preference');
     themeElement.textContent = `Preferred Theme: ${theme}`;
@@ -113,7 +107,6 @@ comments: true
       console.error('Error updating theme:', error);
     }
   }
-
   async function deleteProfile() {
     const confirmation = confirm('Are you sure you want to delete this profile?');
     if (!confirmation) return;
@@ -139,7 +132,6 @@ comments: true
       console.error('Error deleting profile:', error);
     }
   }
-
   document.addEventListener('DOMContentLoaded', function() {
     loadProfile();
     document.getElementById('delete-btn').addEventListener('click', deleteProfile);
