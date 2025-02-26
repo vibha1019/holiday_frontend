@@ -7,49 +7,23 @@ comments: true
 ---
 
 <link rel="stylesheet" href="/holiday_frontend/assets/css/profile_style.css">
-<style>
-  /* Header styling matching your index page */
-  .holiday-header {
-    width: 100%;
-    text-align: center;
-    padding: 20px 0;
-    background: rgba(0, 0, 0, 0.6);
-    color: white;
-  }
-  .holiday-header h1 {
-    font-size: 2.5em;
-    margin: 20px 0;
-    border-radius: 10px;
-  }
-  /* Container for profile content for spacing */
-  .profile-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    margin: 20px;
-  }
-  /* Style adjustments for theme buttons */
-  .theme-buttons button {
-    margin: 5px;
-    padding: 10px 15px;
-    font-size: 14px;
-    cursor: pointer;
-  }
-</style>
-
-<header class="holiday-header">
+<!-- Profile Header -->
+<div class="profile-header">
   <h1>User Profile</h1>
-</header>
+</div>
+
+<!-- Profile Content -->
 <section class="profile-container">
   <img id="link" src="{{ site.baseurl }}/images/profile.jpg" width="100" height="100" alt="Profile Picture" /> 
   <div class="name" id="username">default_user</div>
   <div class="theme" id="theme-preference">Preferred Theme: Dark</div>
+
   <!-- Theme buttons -->
   <div class="theme-buttons">
     <button id="light-mode-btn">Light Mode</button>
     <button id="dark-mode-btn">Dark Mode</button>
   </div>
+
   <button id="delete-btn" class="delete-button">Delete Profile</button>
 </section>
 
