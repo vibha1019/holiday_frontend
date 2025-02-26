@@ -13,7 +13,6 @@ comments: true
 </div>
 
 <!-- Profile Content -->
-<section class="profile-container">
   <img id="link" src="{{ site.baseurl }}/images/profile.jpg" width="100" height="100" alt="Profile Picture" /> 
   <div class="name" id="username">default_user</div>
   <div class="theme" id="theme-preference">Preferred Theme: Dark</div>
@@ -25,7 +24,6 @@ comments: true
   </div>
 
   <button id="delete-btn" class="delete-button">Delete Profile</button>
-</section>
 
 <script type="module">
   import { getCredentials } from '{{ site.baseurl }}/assets/js/api/login.js';
