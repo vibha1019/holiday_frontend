@@ -13,21 +13,29 @@ comments: true
 </div> -->
 
 <!-- Profile Content -->
+<link rel="stylesheet" href="/holiday_frontend/assets/css/profile_style.css">
+<!-- Profile Content -->
 <div class="profile-container">
+  <!-- Profile Picture -->
   <div class="profile-picture">
     <img id="link" src="{{ site.baseurl }}/images/profile.jpg" width="100" height="100" alt="Profile Picture" />
   </div>
+  
+  <!-- Username -->
   <div class="name" id="username">default_user</div>
+
+  <!-- Theme Preference -->
   <div class="theme" id="theme-preference">Preferred Theme: Dark</div>
 
-  <!-- Theme buttons -->
+  <!-- Theme buttons (with symbols) -->
   <div class="theme-buttons">
-    <button id="light-mode-btn">Light Mode</button>
-    <button id="dark-mode-btn">Dark Mode</button>
+    <button id="light-mode-btn" title="Light Mode"><span class="symbol">&#x2600;</span></button> <!-- Sun symbol for Light Mode -->
+    <button id="dark-mode-btn" title="Dark Mode"><span class="symbol">&#x263D;</span></button> <!-- Moon symbol for Dark Mode -->
   </div>
 
+  <!-- Delete Profile Button -->
   <div class="delete-container">
-    <button id="delete-btn" class="delete-button">Delete Profile</button>
+    <button id="delete-btn" class="delete-button" title="Delete Profile"><span class="trash-icon">&#x1F5D1;</span></button> <!-- Trash icon -->
   </div>
 </div>
 <script type="module">
