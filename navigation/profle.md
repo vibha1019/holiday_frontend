@@ -8,9 +8,9 @@ comments: true
 
 <link rel="stylesheet" href="/holiday_frontend/assets/css/profile_style.css">
 <!-- Profile Header -->
-<div class="profile-header">
+<!-- <div class="profile-header">
   <h1>User Profile</h1>
-</div>
+</div> -->
 
 <!-- Profile Content -->
 <div class="profile-container">
@@ -33,7 +33,6 @@ comments: true
 <script type="module">
   import { getCredentials } from '{{ site.baseurl }}/assets/js/api/login.js';
   import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
-  
   function applyThemeColors(theme) {
     if (theme.toLowerCase() === 'light') {
       document.body.style.setProperty('background-color', 'white', 'important');
