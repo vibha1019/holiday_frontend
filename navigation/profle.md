@@ -14,8 +14,14 @@ comments: true
 
 <!-- Profile Content -->
 <link rel="stylesheet" href="/holiday_frontend/assets/css/profile_style.css">
+
 <!-- Profile Content -->
 <div class="profile-container">
+  <!-- Delete Profile Button -->
+  <div class="delete-container">
+    <button id="delete-btn" class="delete-button" title="Delete Profile"><span class="trash-icon">&#x1F5D1;</span></button>
+  </div>
+
   <!-- Profile Picture -->
   <div class="profile-picture">
     <img id="link" src="{{ site.baseurl }}/images/profile.jpg" width="100" height="100" alt="Profile Picture" />
@@ -31,11 +37,6 @@ comments: true
   <div class="theme-buttons">
     <button id="light-mode-btn" title="Light Mode"><span class="symbol">&#x2600;</span></button> <!-- Sun symbol for Light Mode -->
     <button id="dark-mode-btn" title="Dark Mode"><span class="symbol">&#x263D;</span></button> <!-- Moon symbol for Dark Mode -->
-  </div>
-
-  <!-- Delete Profile Button -->
-  <div class="delete-container">
-    <button id="delete-btn" class="delete-button" title="Delete Profile"><span class="trash-icon">&#x1F5D1;</span></button> <!-- Trash icon -->
   </div>
 </div>
 <script type="module">
