@@ -124,7 +124,8 @@ show_reading_time: false
 
   document.addEventListener('DOMContentLoaded', function() {
       initializeCalendar();
-      loadStoredEvents();
+      populateUserDropdown();
+      fetchNotifications();
   });
 
   function initializeCalendar() {
@@ -165,51 +166,71 @@ show_reading_time: false
       renderCalendar();
   }
 
-  document.getElementById("eventForm").addEventListener("submit", function(event) {
+  async function populateUserDropdown() {
+      try {
+          const response = await fetch(`${pythonURI}/api/users/id-name`, fetchOptions);
+          if (!response.ok) {
+              throw new Error('Failed to fetch users');
+          }
+          const users = await response.json();
+          const recipientSelect = document.getElementById("recipient_id");
+          recipientSelect.innerHTML = '<option value="" disabled selected>Select a user</option>';
+          users.forEach(user => {
+              const option = document.createElement("option");
+              option.value = user.id;
+              option.textContent = user.name;
+              recipientSelect.appendChild(option);
+          });
+      } catch (error) {
+          console.error("Error fetching users:", error);
+      }
+  }
+
+  document.getElementById("notificationForm").addEventListener("submit", async function(event) {
       event.preventDefault();
       
-      const eventName = document.getElementById("eventName").value;
-      const eventLocation = document.getElementById("eventLocation").value;
-      const eventDate = document.getElementById("startDate").value;
-
-      if (!eventName || !eventLocation || !eventDate) {
+      const content = document.getElementById("content").value;
+      const recipient_id = document.getElementById("recipient_id").value;
+      
+      if (!content || !recipient_id) {
           alert("Please fill in all fields.");
           return;
       }
-
-      const eventObj = { name: eventName, location: eventLocation, date: eventDate };
-
-      events.push(eventObj);
-      localStorage.setItem("events", JSON.stringify(events));
-
-      displayEvents();
-      document.getElementById("eventForm").reset();
+      
+      const notificationData = {
+          content: content,
+          recipient_id: recipient_id
+      };
+      
+      try {
+          const response = await fetch(`${pythonURI}/api/notification`, {
+              ...fetchOptions,
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(notificationData),
+          });
+          if (!response.ok) {
+              throw new Error('Failed to send notification');
+          }
+          alert('Notification sent!');
+          document.getElementById("notificationForm").reset();
+          fetchNotifications();
+      } catch (error) {
+          console.error("Error sending notification:", error);
+      }
   });
 
-  function displayEvents() {
-      const eventList = document.getElementById("event-list");
-      eventList.innerHTML = "";
-
-      events.forEach((event, index) => {
-          const eventItem = document.createElement("div");
-          eventItem.classList.add("event-item");
-          eventItem.innerHTML = `<strong>${event.name}</strong> - ${event.location} (${event.date})
-                                 <button onclick="deleteEvent(${index})">Delete</button>`;
-          eventList.appendChild(eventItem);
-      });
-  }
-
-  function deleteEvent(index) {
-      events.splice(index, 1);
-      localStorage.setItem("events", JSON.stringify(events));
-      displayEvents();
-  }
-
-  function loadStoredEvents() {
-      const storedEvents = localStorage.getItem("events");
-      if (storedEvents) {
-          events = JSON.parse(storedEvents);
-          displayEvents();
+  async function fetchNotifications() {
+      try {
+          const response = await fetch(`${pythonURI}/api/notifications`, fetchOptions);
+          if (!response.ok) {
+              throw new Error('Failed to fetch notifications');
+          }
+          const notifications = await response.json();
+          const notificationsList = document.getElementById("notificationsList");
+          notificationsList.innerHTML = notifications.map(n => `<p><strong>${n.sender}:</strong> ${n.content}</p>`).join('');
+      } catch (error) {
+          console.error("Error fetching notifications:", error);
       }
   }
 </script>
