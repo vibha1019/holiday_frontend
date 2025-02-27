@@ -1,10 +1,11 @@
 ---
 layout: post
-title: Calendar and Notifications
+title: Calendar
 permalink: /calendar
 menu: nav/home.html
 search_exclude: true
 show_reading_time: false
+author: nora + vibha
 ---
 
 <style>
