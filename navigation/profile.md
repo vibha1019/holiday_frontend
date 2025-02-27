@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Profile Settings
-permalink: /profile
-menu: nav/home.html
+permalink: /profile/
+menu: nav/profileNav.html
 search_exclude: true
 show_reading_time: false
 ---

@@ -2,6 +2,7 @@
 layout: post
 title: User Profile
 permalink: /profile_page/
+menu: nav/home.html
 author: Spencer Lyons
 comments: true
 ---
