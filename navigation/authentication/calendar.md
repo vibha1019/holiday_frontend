@@ -8,6 +8,12 @@ show_reading_time: false
 ---
 
 <style>
+    body {
+        background-image: url('images/greenbg.png');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
     .container {
         display: flex;
         justify-content: space-between;
@@ -19,14 +25,14 @@ show_reading_time: false
         width: 60%;
         text-align: center;
         padding: 20px;
-        background: #007BFF;
+        background: #8B0000;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
     .event-container {
         width: 35%;
         padding: 20px;
-        background: #007BFF;
+        background: #8B0000;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
@@ -45,14 +51,14 @@ show_reading_time: false
     .day {
         border: 1px solid #ddd;
         cursor: pointer;
-        background: #87CEFA;
+        background: white;
         border-radius: 5px;
     }
     .day:hover {
-        background: #0056b3;
+        background: #800000;
     }
     .event-day {
-        background-color: #0056b3;
+        background-color: #800000;
     }
     .event-emoji {
         font-size: 20px;
@@ -64,11 +70,34 @@ show_reading_time: false
         margin: auto;
         text-align: center;
         padding: 20px;
-        background: #007BFF;
+        background: #8B0000;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
+    .notifications-container button {
+        background: white;
+        color: black;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .notifications-container button:hover {
+        background: #CD5C5C;
+    }
+    .event-container button {
+        background: white;
+        color: black;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .event-container button:hover {
+        background: #CD5C5C;
+    }
 </style>
+
 
 <div class="container">
     <!-- Calendar Section -->
