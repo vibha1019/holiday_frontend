@@ -54,12 +54,10 @@ show_reading_time: false
     .event-day {
         background-color: #0056b3;
     }
-    .event-item {
-        background: #87CEFA;
-        padding: 10px;
-        margin: 5px 0;
-        border-radius: 5px;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    .event-emoji {
+        font-size: 20px;
+        color: red;
+        margin-top: 5px;
     }
     .notifications-container {
         width: 70%;
@@ -120,7 +118,7 @@ show_reading_time: false
 
   let currentMonth = new Date().getMonth();
   let currentYear = new Date().getFullYear();
-  let events = [];
+  let events = []; // Store events here
 
   document.addEventListener('DOMContentLoaded', function() {
       initializeCalendar();
@@ -149,7 +147,21 @@ show_reading_time: false
           const dayCell = document.createElement("div");
           dayCell.classList.add("day");
           dayCell.textContent = day;
-          dayCell.addEventListener("click", () => document.getElementById("startDate").value = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`);
+          
+          // Check if there are events on this day
+          const eventOnDay = events.filter(event => new Date(event.date).getDate() === day);
+          if (eventOnDay.length > 0) {
+              dayCell.classList.add("event-day");
+              const emoji = document.createElement("div");
+              emoji.classList.add("event-emoji");
+              emoji.textContent = "❗"; // Add the emoji below the date
+              dayCell.appendChild(emoji);
+          }
+
+          dayCell.addEventListener("click", () => {
+              document.getElementById("startDate").value = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+          });
+          
           calendarDays.appendChild(dayCell);
       }
   }
@@ -164,6 +176,41 @@ show_reading_time: false
           currentYear++;
       }
       renderCalendar();
+  }
+
+  // Event handling for adding events
+  document.getElementById("eventForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      
+      const eventName = document.getElementById("eventName").value;
+      const eventLocation = document.getElementById("eventLocation").value;
+      const eventDate = document.getElementById("startDate").value;
+      
+      if (!eventName || !eventLocation || !eventDate) {
+          alert("Please fill in all fields.");
+          return;
+      }
+      
+      // Add the event to the events array
+      events.push({ name: eventName, location: eventLocation, date: eventDate });
+      alert("Event added successfully!");
+
+      // Clear the form
+      document.getElementById("eventForm").reset();
+
+      // Display the event in the "Your Events" section
+      displayEvents();
+
+      // Re-render the calendar with new events
+      renderCalendar();
+  });
+
+  // Display events in the "Your Events" section
+  function displayEvents() {
+      const eventList = document.getElementById("event-list");
+      eventList.innerHTML = events.map(event => {
+          return `<div class="event-item">${event.name} @ ${event.location} on ${new Date(event.date).toLocaleDateString()}</div>`;
+      }).join('');
   }
 
   async function populateUserDropdown() {
