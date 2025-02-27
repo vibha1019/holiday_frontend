@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Profile Settings
-permalink: /profile/
+permalink: /profile_page/
 menu: nav/profileNav.html
 search_exclude: true
 show_reading_time: false

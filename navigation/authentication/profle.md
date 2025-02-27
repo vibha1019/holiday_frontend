@@ -1,7 +1,7 @@
 ---
 layout: post
 title: User Profile
-permalink: /profile_page/
+permalink: /profile/
 menu: nav/home.html
 author: Spencer Lyons
 comments: true
