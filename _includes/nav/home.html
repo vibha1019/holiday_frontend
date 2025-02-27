@@ -2,6 +2,34 @@
     .header {
         display: none;
     }
+
+    #authenticatedContent {
+        background-color: #087108 !important; /* Dark green background */
+        padding: 10px;
+    }
+
+    #authenticatedContent table {
+        width: 100%;
+    }
+
+    #authenticatedContent td {
+        background-color: #49b359 !important; /* Light green inside squares */
+        padding: 10px;
+        text-align: center;
+        border-radius: 5px; /* Optional: Slightly round the edges */
+    }
+
+    #authenticatedContent a {
+        color: white !important; /* Ensures links are visible */
+        text-decoration: none !important;
+        font-weight: bold;
+        display: block;
+        padding: 10px;
+    }
+
+    #authenticatedContent a:hover {
+        text-decoration: underline !important;
+    }
 </style>
 
 <div id="authenticatedContent" class="header">
@@ -14,7 +42,7 @@
             </td>
             <td><a href="{{site.baseurl}}/profile_page/">Account Settings</a></td>
             <td><a href="{{site.baseurl}}/calendar">Calendar</a></td>
-            <td><a href="{{site.baseurl}}/notifications">Calendar</a></td>
+            <td><a href="{{site.baseurl}}/notifications">Notifications</a></td>
             <td><a href="{{site.baseurl}}/holiday/survey">Leave a Review!</a></td>
             <td><a href="{{site.baseurl}}/logout">Logout</a></td>
         </tr>

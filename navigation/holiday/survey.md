@@ -3,6 +3,7 @@ layout: post
 title: Survey
 permalink: /holiday/survey/
 author: Soni Dhenuva
+menu: nav/home.html
 comments: true
 ---
 <html lang="en">
