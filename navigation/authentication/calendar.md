@@ -7,7 +7,6 @@ search_exclude: true
 show_reading_time: false
 author: nora + vibha
 ---
-
 <style>
     body {
         background-image: url('images/greenbg.png');
@@ -66,26 +65,6 @@ author: nora + vibha
         color: red;
         margin-top: 5px;
     }
-    .notifications-container {
-        width: 70%;
-        margin: auto;
-        text-align: center;
-        padding: 20px;
-        background: #8B0000;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    .notifications-container button {
-        background: white;
-        color: black;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    .notifications-container button:hover {
-        background: #CD5C5C;
-    }
     .event-container button {
         background: white;
         color: black;
@@ -98,7 +77,6 @@ author: nora + vibha
         background: #CD5C5C;
     }
 </style>
-
 
 <div class="container">
     <!-- Calendar Section -->
@@ -127,33 +105,13 @@ author: nora + vibha
     </div>
 </div>
 
-<!-- Notifications Section -->
-<div class="notifications-container">
-    <h1 class="page-title" style="color: black;">Send Notification</h1>
-    <form id="notificationForm">
-        <label for="content" style="color: black;">Notification Content:</label>
-        <textarea id="content" required placeholder="Enter notification content..."></textarea>
-        <label for="recipient_id" style="color: black;">Recipient:</label>
-        <select id="recipient_id" required>
-            <option value="" disabled selected>Select a user</option>
-        </select>
-        <button type="submit">Send Notification</button>
-    </form>
-    <h2 style="color: black;">Your Notifications</h2>
-    <div id="notificationsList"></div>
-</div>
-
 <script type="module">
-  import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
-
   let currentMonth = new Date().getMonth();
   let currentYear = new Date().getFullYear();
-  let events = []; // Store events here
+  let events = [];
 
   document.addEventListener('DOMContentLoaded', function() {
       initializeCalendar();
-      populateUserDropdown();
-      fetchNotifications();
   });
 
   function initializeCalendar() {
@@ -178,13 +136,12 @@ author: nora + vibha
           dayCell.classList.add("day");
           dayCell.textContent = day;
           
-          // Check if there are events on this day
           const eventOnDay = events.filter(event => new Date(event.date).getDate() === day);
           if (eventOnDay.length > 0) {
               dayCell.classList.add("event-day");
               const emoji = document.createElement("div");
               emoji.classList.add("event-emoji");
-              emoji.textContent = "❗"; // Add the emoji below the date
+              emoji.textContent = "❗";
               dayCell.appendChild(emoji);
           }
 
@@ -206,108 +163,5 @@ author: nora + vibha
           currentYear++;
       }
       renderCalendar();
-  }
-
-  // Event handling for adding events
-  document.getElementById("eventForm").addEventListener("submit", function(event) {
-      event.preventDefault();
-      
-      const eventName = document.getElementById("eventName").value;
-      const eventLocation = document.getElementById("eventLocation").value;
-      const eventDate = document.getElementById("startDate").value;
-      
-      if (!eventName || !eventLocation || !eventDate) {
-          alert("Please fill in all fields.");
-          return;
-      }
-      
-      // Add the event to the events array
-      events.push({ name: eventName, location: eventLocation, date: eventDate });
-      alert("Event added successfully!");
-
-      // Clear the form
-      document.getElementById("eventForm").reset();
-
-      // Display the event in the "Your Events" section
-      displayEvents();
-
-      // Re-render the calendar with new events
-      renderCalendar();
-  });
-
-  // Display events in the "Your Events" section
-  function displayEvents() {
-      const eventList = document.getElementById("event-list");
-      eventList.innerHTML = events.map(event => {
-          return `<div class="event-item">${event.name} @ ${event.location} on ${new Date(event.date).toLocaleDateString()}</div>`;
-      }).join('');
-  }
-
-  async function populateUserDropdown() {
-      try {
-          const response = await fetch(`${pythonURI}/api/users/id-name`, fetchOptions);
-          if (!response.ok) {
-              throw new Error('Failed to fetch users');
-          }
-          const users = await response.json();
-          const recipientSelect = document.getElementById("recipient_id");
-          recipientSelect.innerHTML = '<option value="" disabled selected>Select a user</option>';
-          users.forEach(user => {
-              const option = document.createElement("option");
-              option.value = user.id;
-              option.textContent = user.name;
-              recipientSelect.appendChild(option);
-          });
-      } catch (error) {
-          console.error("Error fetching users:", error);
-      }
-  }
-
-  document.getElementById("notificationForm").addEventListener("submit", async function(event) {
-      event.preventDefault();
-      
-      const content = document.getElementById("content").value;
-      const recipient_id = document.getElementById("recipient_id").value;
-      
-      if (!content || !recipient_id) {
-          alert("Please fill in all fields.");
-          return;
-      }
-      
-      const notificationData = {
-          content: content,
-          recipient_id: recipient_id
-      };
-      
-      try {
-          const response = await fetch(`${pythonURI}/api/notification`, {
-              ...fetchOptions,
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(notificationData),
-          });
-          if (!response.ok) {
-              throw new Error('Failed to send notification');
-          }
-          alert('Notification sent!');
-          document.getElementById("notificationForm").reset();
-          fetchNotifications();
-      } catch (error) {
-          console.error("Error sending notification:", error);
-      }
-  });
-
-  async function fetchNotifications() {
-      try {
-          const response = await fetch(`${pythonURI}/api/notifications`, fetchOptions);
-          if (!response.ok) {
-              throw new Error('Failed to fetch notifications');
-          }
-          const notifications = await response.json();
-          const notificationsList = document.getElementById("notificationsList");
-          notificationsList.innerHTML = notifications.map(n => `<p><strong>${n.sender}:</strong> ${n.content}</p>`).join('');
-      } catch (error) {
-          console.error("Error fetching notifications:", error);
-      }
   }
 </script>

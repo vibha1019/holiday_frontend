@@ -2,7 +2,7 @@
 layout: post
 title: Profile Settings
 permalink: /profile_page/
-menu: nav/profileNav.html
+menu: nav/home.html
 search_exclude: true
 show_reading_time: false
 ---
