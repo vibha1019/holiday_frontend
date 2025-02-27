@@ -144,3 +144,13 @@ comments: true
     });
   });
 </script>
+
+
+<script>
+  window.addEventListener('load', function () {
+    if (!sessionStorage.getItem('reloaded')) {
+      sessionStorage.setItem('reloaded', 'true');
+      location.reload();
+    }
+  });
+</script>
