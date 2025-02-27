@@ -11,21 +11,22 @@ comments: true
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Review Survey</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
         #review-button {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            display: block;
+            margin: 20px auto;
             padding: 10px 15px;
-            background-color: rgb(15, 99, 128) !important;
-            color: black;
+            background-color: rgb(15, 99, 128);
+            color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
         }
         #review-button:hover {
-            background-color: #008080 !important;
+            background-color: #008080;
         }
         .popup {
             display: none;
@@ -56,7 +57,7 @@ comments: true
         #submit-review {
             margin-top: 10px;
             padding: 10px 15px;
-            background-color: #008080 !important;
+            background-color: #008080;
             color: white;
             border: none;
             border-radius: 5px;
@@ -64,6 +65,13 @@ comments: true
         }
         #submit-review:hover {
             background-color: #005f5f;
+        }
+        #survey-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 20px;
+            justify-content: center;
         }
         .survey-box {
             background-color: #f9f9f9;
@@ -73,8 +81,6 @@ comments: true
             box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
             color: black;
             font-size: 16px;
-            height: 150px;
-            width: 30%;
             position: relative;
         }
         .delete-button {
@@ -92,8 +98,22 @@ comments: true
         .delete-button:hover {
             background: darkred;
         }
-        .textERW{
-            color: black !important;
+        .review-title-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .review-button {
+            background-color: #008080;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .review-button:hover {
+            background-color: #005f5f;
         }
     </style>
 </head>
@@ -102,7 +122,7 @@ comments: true
     <div id="review-popup" class="popup">
         <div class="popup-content">
             <span class="close-popup">&times;</span>
-            <h2 class = "textERW">Enter a Review for the Website</h2>
+            <h2 class="textERW">Enter a Review for the Website</h2>
             <textarea id="review-text" placeholder="Write your review here..."></textarea>
             <button id="submit-review">Send</button>
         </div>
@@ -125,23 +145,24 @@ comments: true
                         const surveyBox = document.createElement('div');
                         surveyBox.classList.add('survey-box');
                         surveyBox.setAttribute('data-id', survey.id);
-                        // Create and append the Delete button
                         const deleteButton = document.createElement('button');
                         deleteButton.textContent = "X";
                         deleteButton.classList.add('delete-button');
                         deleteButton.addEventListener("click", () => deleteSurvey(survey.id));
-                        // Create and append the Edit button
-                        const editButton = document.createElement('button');
-                        editButton.textContent = "Edit";
-                        editButton.classList.add('edit-button');
-                        editButton.addEventListener("click", () => editSurvey(survey));
+                        const reviewTitleContainer = document.createElement('div');
+                        reviewTitleContainer.classList.add('review-title-container');
                         const reviewTitle = document.createElement('div');
                         reviewTitle.textContent = "REVIEW";
+                        const reviewButton = document.createElement('button');
+                        reviewButton.textContent = "Give Review";
+                        reviewButton.classList.add('review-button');
+                        reviewButton.addEventListener("click", () => editSurvey(survey));
+                        reviewTitleContainer.appendChild(reviewTitle);
+                        reviewTitleContainer.appendChild(reviewButton);
                         const reviewContent = document.createElement('div');
                         reviewContent.textContent = survey.message;
                         surveyBox.appendChild(deleteButton);
-                        surveyBox.appendChild(editButton);
-                        surveyBox.appendChild(reviewTitle);
+                        surveyBox.appendChild(reviewTitleContainer);
                         surveyBox.appendChild(reviewContent);
                         surveyList.appendChild(surveyBox);
                     });
@@ -153,88 +174,11 @@ comments: true
                 alert("An error occurred while fetching surveys.");
             }
         }
-        async function deleteSurvey(surveyId) {
-            try {
-                const response = await fetch(`${pythonURI}/api/survey?id=${surveyId}`, {
-                    ...fetchOptions,
-                    method: 'DELETE',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                if (response.ok) {
-                    alert("Survey deleted successfully!");
-                    fetchSurveys(); // Refresh the list after deletion
-                } else {
-                    const errorData = await response.json();
-                    alert(`Failed to delete survey: ${errorData.message}`);
-                }
-            } catch (error) {
-                console.error("Error deleting survey:", error);
-                alert("An error occurred while deleting the survey.");
-            }
-        }
-        function editSurvey(survey) {
-            document.getElementById("review-popup").style.display = "block";
-            const reviewTextArea = document.getElementById("review-text");
-            reviewTextArea.value = survey.message;
-            document.getElementById("submit-review").onclick = () => updateSurvey(survey.id);
-        }
-        async function updateSurvey(surveyId) {
-            const reviewText = document.getElementById("review-text").value;
-            if (reviewText.trim() === "") {
-                alert("Please enter a review before submitting.");
-                return;
-            }
-            try {
-                const response = await fetch(`${pythonURI}/api/survey?id=${surveyId}`, {
-                    ...fetchOptions,
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: reviewText })
-                });
-                if (response.ok) {
-                    alert("Survey updated successfully!");
-                    document.getElementById("review-popup").style.display = "none";
-                    document.getElementById("review-text").value = "";
-                    fetchSurveys(); // Refresh the list after update
-                } else {
-                    alert("Failed to update survey.");
-                }
-            } catch (error) {
-                console.error("Error updating survey:", error);
-                alert("An error occurred while updating the survey.");
-            }
-        }
         document.getElementById("review-button").addEventListener("click", function () {
             document.getElementById("review-popup").style.display = "block";
         });
         document.querySelector(".close-popup").addEventListener("click", function () {
             document.getElementById("review-popup").style.display = "none";
-        });
-        document.getElementById("submit-review").addEventListener("click", async function () {
-            let reviewText = document.getElementById("review-text").value;
-            if (reviewText.trim() === "") {
-                alert("Please enter a review before submitting.");
-                return;
-            }
-            try {
-                const response = await fetch(`${pythonURI}/api/survey`, {
-                    ...fetchOptions,
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: reviewText })
-                });
-                if (response.ok) {
-                    alert("Thank you for your review!");
-                    document.getElementById("review-popup").style.display = "none";
-                    document.getElementById("review-text").value = "";
-                    fetchSurveys();
-                } else {
-                    alert("Failed to submit review.");
-                }
-            } catch (error) {
-                console.error("Error submitting review:", error);
-                alert("An error occurred while submitting the review.");
-            }
         });
         window.onload = fetchSurveys;
     </script>
