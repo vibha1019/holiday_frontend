@@ -9,11 +9,10 @@ author: nora + kushi
 ---
 <style>
     body {
-        background-image: url('images/candy.png');
+        background-image: url('images/redbg.webp');
         background-position: center;
-        background-repeat: repeat;
-        min-height: 300vh;
-        background-size: 600px auto; /* Adjust width */
+        max-height: 250vh;
+        background-size: 1700px auto; /* Adjust width */
 
         }
     .notifications-container {
@@ -128,4 +127,36 @@ author: nora + kushi
           console.error("Error fetching notifications:", error);
       }
   }
+  function startBouncingEmoji() {
+    const emoji = document.createElement("div");
+    emoji.textContent = "🎄";
+    emoji.style.position = "absolute";
+    emoji.style.fontSize = "40px"; // Adjust size
+    emoji.style.top = "50px";
+    emoji.style.left = "50px";
+    document.body.appendChild(emoji);
+
+    let x = 100, y = 100;
+    let dx = 3, dy = 3; // Speed in each direction
+    const speed = 4; // Adjust speed
+    const screenWidth = () => window.innerWidth - 30; // Keep within screen
+    const screenHeight = () => window.innerHeight - 60;
+
+    function moveEmoji() {
+        x += dx;
+        y += dy;
+
+        if (x <= 0 || x >= screenWidth()) dx *= -1;
+        if (y <= 0 || y >= screenHeight()) dy *= -1;
+
+        emoji.style.transform = `translate(${x}px, ${y}px)`;
+
+        requestAnimationFrame(moveEmoji);
+    }
+
+    moveEmoji();
+}
+
+// Call this function to start the bouncing animation
+startBouncingEmoji();
 </script>
