@@ -204,4 +204,31 @@ author: nora + vibha
 
 createGiftAnimation();
 
+document.getElementById("eventForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent page reload
+
+    const eventName = document.getElementById("eventName").value;
+    const eventLocation = document.getElementById("eventLocation").value;
+    const eventDate = document.getElementById("startDate").value;
+
+    if (!eventName || !eventLocation || !eventDate) return; // Ensure all fields are filled
+
+    events.push({ name: eventName, location: eventLocation, date: eventDate });
+
+    renderCalendar(); // Update calendar display
+    displayEvents(); // Show events in the event list
+
+    this.reset(); // Clear the form
+});
+
+function displayEvents() {
+    const eventList = document.getElementById("event-list");
+    eventList.innerHTML = ""; // Clear previous events
+    events.forEach(event => {
+        const eventItem = document.createElement("div");
+        eventItem.textContent = `${event.date}: ${event.name} @ ${event.location}`;
+        eventList.appendChild(eventItem);
+    });
+}
+
 </script>
