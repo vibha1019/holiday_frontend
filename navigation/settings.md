@@ -12,9 +12,9 @@ body {
     background-image: url('{{ site.baseurl }}/images/trees.png');
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
+    background-repeat: repeat;
     min-height: 100vh;
-    background-size: 1650px auto; /* Adjust width */
+    background-size: 600px auto; /* Adjust width */
 }
 </style>
 <div class="body">

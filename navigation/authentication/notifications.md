@@ -8,6 +8,14 @@ show_reading_time: false
 author: nora + kushi
 ---
 <style>
+    body {
+        background-image: url('images/candy.png');
+        background-position: center;
+        background-repeat: repeat;
+        min-height: 300vh;
+        background-size: 600px auto; /* Adjust width */
+
+        }
     .notifications-container {
         width: 70%;
         margin: auto;
