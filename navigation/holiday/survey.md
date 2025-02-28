@@ -83,6 +83,14 @@ comments: true
             height: 150px;
             width: 30%;
             position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        .review-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            max-height: 100px;
+            padding-right: 5px;
         }
         .delete-button {
             position: absolute;
@@ -145,6 +153,7 @@ comments: true
                         const reviewTitle = document.createElement('div');
                         reviewTitle.textContent = "REVIEW";
                         const reviewContent = document.createElement('div');
+                        reviewContent.classList.add('review-content');
                         reviewContent.textContent = survey.message;
                         surveyBox.appendChild(deleteButton);
                         surveyBox.appendChild(editButton);
