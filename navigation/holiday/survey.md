@@ -75,42 +75,53 @@ comments: true
         #survey-list {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-between; /* Ensures spacing between items */
-            gap: 10px; /* Adds spacing between rows */
+            justify-content: center; /* Centers items */
+            gap: 15px; /* Adds space between boxes */
+            padding: 20px;
         }
         .survey-box {
-            width: calc(33.33% - 20px); /* Adjusted to fit three per row, considering spacing */
-            min-width: 250px; /* Ensures they don't get too small */
-            background-color: #f9f9f9;
+            width: calc(33.33% - 20px); /* Keeps 3 per row */
+            min-width: 250px;
+            background: linear-gradient(135deg, #ffecd1, #ff7eb3); /* Festive gradient */
             padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-            color: black;
+            border-radius: 12px; /* Softer rounded corners */
+            border: 2px solid #ff4d4d; /* Holiday red border */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Slight shadow for pop-out effect */
+            color: #5a2a02; /* Warm brown text for contrast */
             font-size: 16px;
-            height: 200px;
+            height: 180px;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            text-align: center;
         }
+        /* Add festive styling to review text */
         .review-content {
             flex-grow: 1;
             overflow-y: auto;
             max-height: 100px;
-            padding-right: 5px;
+            padding: 5px;
+            font-weight: bold;
+            font-family: 'Comic Sans MS', cursive, sans-serif; /* Playful holiday font */
         }
+        /* Style the delete button */
         .delete-button {
             position: absolute;
             top: 5px;
             right: 10px;
-            background: red;
+            background: #ff3333; /* Bright red delete button */
             color: white;
             border: none;
             cursor: pointer;
             font-size: 14px;
             border-radius: 5px;
             padding: 5px;
+            transition: background 0.3s ease-in-out;
         }
         .delete-button:hover {
-            background: darkred;
+            background: #cc0000; /* Darker red hover effect */
         }
         .textERW{
             color: black !important;
