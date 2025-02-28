@@ -13,7 +13,6 @@ author: nora + kushi
         background-position: center;
         max-height: 250vh;
         background-size: 1700px auto; /* Adjust width */
-
         }
     .notifications-container {
         width: 70%;
