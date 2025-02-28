@@ -19,7 +19,7 @@ comments: true
         background-size: 950px auto; /* Adjust width */
         }
         .box h1 {
-            font-weight: bold;
+            font-weight: bold !important;
         }
         #review-button {
             position: absolute;
