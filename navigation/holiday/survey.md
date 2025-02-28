@@ -72,7 +72,15 @@ comments: true
         #submit-review:hover {
             background-color: #005f5f;
         }
+        #survey-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between; /* Ensures spacing between items */
+            gap: 10px; /* Adds spacing between rows */
+        }
         .survey-box {
+            width: calc(33.33% - 20px); /* Adjusted to fit three per row, considering spacing */
+            min-width: 250px; /* Ensures they don't get too small */
             background-color: #f9f9f9;
             padding: 15px;
             border-radius: 8px;
@@ -80,11 +88,8 @@ comments: true
             box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
             color: black;
             font-size: 16px;
-            height: 150px;
-            width: 30%;
+            height: 200px;
             position: relative;
-            display: flex;
-            flex-direction: column;
         }
         .review-content {
             flex-grow: 1;
