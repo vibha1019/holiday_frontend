@@ -164,4 +164,44 @@ author: nora + vibha
       }
       renderCalendar();
   }
+  function createGiftAnimation() {
+    const gift = document.createElement("div");
+    gift.textContent = "🎁";
+    gift.style.position = "absolute";
+    gift.style.fontSize = "40px";
+    document.body.appendChild(gift);
+    
+    function animateGift() {
+        let x = Math.random() * (window.innerWidth - 50);
+        let y = Math.random() * (window.innerHeight - 50);
+        gift.style.left = `${x}px`;
+        gift.style.top = `${y}px`;
+        gift.style.opacity = "1";
+        gift.style.transform = "scale(1)";
+        
+        gift.animate([
+            { transform: "translateX(-5px)" },
+            { transform: "translateX(5px)" },
+            { transform: "translateX(-5px)" }
+        ], {
+            duration: 500,
+            iterations: 3
+        });
+        
+        setTimeout(() => {
+            gift.animate([
+                { transform: "scale(1)" },
+                { transform: "scale(0)" }
+            ], {
+                duration: 500,
+                fill: "forwards"
+            }).onfinish = animateGift;
+        }, 1500);
+    }
+    
+    animateGift();
+}
+
+createGiftAnimation();
+
 </script>

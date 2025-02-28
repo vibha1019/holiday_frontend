@@ -7,6 +7,16 @@ author: Spencer Lyons
 comments: true
 ---
 
+<style>
+.snowflake {
+    position: absolute;
+    font-size: 20px; /* Initial size */
+    opacity: 1;
+    pointer-events: none; /* Prevent interaction */
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+</style>
+
 <link rel="stylesheet" href="/holiday_frontend/assets/css/profile_style.css">
 
 <!-- Profile Content -->
@@ -143,14 +153,52 @@ comments: true
       updateTheme('Dark');
     });
   });
-</script>
-
-
-<script>
   window.addEventListener('load', function () {
     if (!sessionStorage.getItem('reloaded')) {
       sessionStorage.setItem('reloaded', 'true');
       location.reload();
     }
   });
+  function createSnowflake() {
+    const snowflake = document.createElement("div");
+    snowflake.textContent = "❄️";
+    snowflake.classList.add("snowflake");
+    // Random position on the screen
+    snowflake.style.left = `${Math.random() * window.innerWidth}px`;
+    snowflake.style.top = `${Math.random() * window.innerHeight}px`;
+    document.body.appendChild(snowflake);
+    let size = 20;
+    let growing = true;
+    let fadeOut = false;
+    function animateSnowflake() {
+        if (growing) {
+            size += 0.5;
+            if (size >= 30) growing = false;
+        } else {
+            size -= 0.5;
+            if (size <= 20) fadeOut = true;
+        }
+        snowflake.style.fontSize = `${size}px`;
+        snowflake.style.opacity = fadeOut ? (parseFloat(snowflake.style.opacity) - 0.02) : "1";
+        if (parseFloat(snowflake.style.opacity) <= 0) {
+            snowflake.remove();
+        } else {
+            requestAnimationFrame(animateSnowflake);
+        }
+    }
+    animateSnowflake();
+}
+// Function to maintain a continuous snowfall effect
+function maintainSnowfall() {
+    let snowflakeCount = document.querySelectorAll(".snowflake").length;
+    let neededSnowflakes = Math.max(5 - snowflakeCount, 1); // Ensure at least 5 are active
+    for (let i = 0; i < neededSnowflakes; i++) {
+        createSnowflake();
+    }
+    let randomDelay = Math.random() * 1000 + 500; // Random delay between 0.5s - 1.5s
+    setTimeout(maintainSnowfall, randomDelay);
+}
+// Start continuous snowfall
+maintainSnowfall();
+
 </script>
