@@ -85,7 +85,7 @@ comments: true
             background: linear-gradient(135deg, #ffecd1, #ff7eb3); /* Festive gradient */
             padding: 15px;
             border-radius: 12px; /* Softer rounded corners */
-            border: 2px solid #ff4d4d; /* Holiday red border */
+            border: 2px solid rgb(77, 190, 255); /* Holiday red border */
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Slight shadow for pop-out effect */
             color: #5a2a02; /* Warm brown text for contrast */
             font-size: 16px;
