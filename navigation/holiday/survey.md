@@ -12,6 +12,12 @@ comments: true
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Review Survey</title>
     <style>
+        body {
+        background-image: url('{{site.baseurl}}/images/present.png');
+        background-position: center;
+        max-height: 250vh;
+        background-size: 950px auto; /* Adjust width */
+        }
         #review-button {
             position: absolute;
             top: 50%;
