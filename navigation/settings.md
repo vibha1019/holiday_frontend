@@ -7,7 +7,17 @@ search_exclude: true
 show_reading_time: false
 ---
 
-<div class="profile-container">
+<style>
+body {
+    background-image: url('{{ site.baseurl }}/images/trees.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    background-size: 1650px auto; /* Adjust width */
+}
+</style>
+<div class="body">
  <div class="card">
    <form>
      <div>
