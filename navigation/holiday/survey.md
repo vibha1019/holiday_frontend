@@ -145,18 +145,12 @@ comments: true
                         deleteButton.textContent = "X";
                         deleteButton.classList.add('delete-button');
                         deleteButton.addEventListener("click", () => deleteSurvey(survey.id));
-                        // Create and append the Edit button
-                        const editButton = document.createElement('button');
-                        editButton.textContent = "Edit";
-                        editButton.classList.add('edit-button');
-                        editButton.addEventListener("click", () => editSurvey(survey));
                         const reviewTitle = document.createElement('div');
                         reviewTitle.textContent = "REVIEW";
                         const reviewContent = document.createElement('div');
                         reviewContent.classList.add('review-content');
                         reviewContent.textContent = survey.message;
                         surveyBox.appendChild(deleteButton);
-                        surveyBox.appendChild(editButton);
                         surveyBox.appendChild(reviewTitle);
                         surveyBox.appendChild(reviewContent);
                         surveyList.appendChild(surveyBox);
@@ -187,12 +181,6 @@ comments: true
                 console.error("Error deleting survey:", error);
                 alert("An error occurred while deleting the survey.");
             }
-        }
-        function editSurvey(survey) {
-            document.getElementById("review-popup").style.display = "block";
-            const reviewTextArea = document.getElementById("review-text");
-            reviewTextArea.value = survey.message;
-            document.getElementById("submit-review").onclick = () => updateSurvey(survey.id);
         }
         async function updateSurvey(surveyId) {
             const reviewText = document.getElementById("review-text").value;
