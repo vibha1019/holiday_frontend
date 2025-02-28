@@ -155,14 +155,12 @@
                     const surveyList = document.getElementById("survey-list");
                     surveyList.innerHTML = '';
                     const currentUserId = await getCurrentUserId();
+                    console.log(`Current User ID: ${currentUserId}`);
                     surveys.forEach(survey => {
+                        console.log(`Survey ID: ${survey.id}, Created by User ID: ${survey.userId}`);
                         const surveyBox = document.createElement('div');
                         surveyBox.classList.add('survey-box');
                         surveyBox.setAttribute('data-id', survey.id);
-                        const reviewTitle = document.createElement('div');
-                        reviewTitle.textContent = "REVIEW";
-                        const reviewContent = document.createElement('div');
-                        reviewContent.textContent = survey.message;
                         if (survey.userId === currentUserId) {
                             const deleteButton = document.createElement('button');
                             deleteButton.textContent = "X";
@@ -170,13 +168,6 @@
                             deleteButton.addEventListener("click", () => deleteSurvey(survey.id));
                             surveyBox.appendChild(deleteButton);
                         }
-                        const editButton = document.createElement('button');
-                        editButton.textContent = "Edit";
-                        editButton.classList.add('edit-button');
-                        editButton.addEventListener("click", () => editSurvey(survey));
-                        surveyBox.appendChild(editButton);
-                        surveyBox.appendChild(reviewTitle);
-                        surveyBox.appendChild(reviewContent);
                         surveyList.appendChild(surveyBox);
                     });
                 } else {
@@ -184,7 +175,6 @@
                 }
             } catch (error) {
                 console.error("Error fetching surveys:", error);
-                alert("An error occurred while fetching surveys.");
             }
         }
         async function deleteSurvey(surveyId) {
@@ -194,6 +184,8 @@
                     alert("Unable to verify user. Please log in.");
                     return;
                 }
+                console.log(`Current User ID: ${currentUserId}`);
+                console.log(`Attempting to delete survey ID: ${surveyId}`);
                 const response = await fetch(`${pythonURI}/api/survey?id=${surveyId}`, {
                     ...fetchOptions,
                     method: 'DELETE',
@@ -204,6 +196,7 @@
                     fetchSurveys();
                 } else {
                     const errorData = await response.json();
+                    console.error("Deletion failed:", errorData);
                     alert(`Failed to delete survey: ${errorData.message}`);
                 }
             } catch (error) {
