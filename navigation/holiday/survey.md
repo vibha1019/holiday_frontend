@@ -80,45 +80,22 @@ comments: true
             padding: 20px;
         }
         .survey-box {
-            background-color: white;
+            width: calc(33.33% - 20px); /* Keeps 3 per row */
+            min-width: 250px;
+            background: linear-gradient(135deg,rgb(119, 175, 97),rgb(66, 148, 80)); /* Festive gradient */
             padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-            color: black;
+            border-radius: 12px; /* Softer rounded corners */
+            border: 2px solid rgb(12, 58, 10); /* Holiday red border */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Slight shadow for pop-out effect */
+            color:rgb(34, 17, 3); /* Warm brown text for contrast */
             font-size: 16px;
-            height: 200px;
-            width: 30%;
+            height: 180px;
             position: relative;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-        }
-        /* Title section (above the line) */
-        .review-title {
-            background-color: #2d882d; /* Dark green */
-            color: white;
+            align-items: center;
+            justify-content: space-between;
             text-align: center;
-            font-weight: bold;
-            padding: 10px;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-        }
-        /* Line separator */
-        .review-title::after {
-            content: "";
-            display: block;
-            width: 100%;
-            height: 3px;
-            background-color: #146314; /* Darker green line */
-        }
-        /* Review content section (below the line) */
-        .review-content {
-            background-color: white;
-            color: black;
-            padding: 10px;
-            overflow-y: auto;
-            flex-grow: 1;
         }
         /* Add festive styling to review text */
         .review-content {
@@ -127,7 +104,7 @@ comments: true
             max-height: 100px;
             padding: 5px;
             font-weight: bold;
-            font-family: 'Comic Sans MS', cursive, sans-serif; /* Playful holiday font */
+            font-family: 'Papyrus', sans-serif; /* Playful holiday font */
         }
         /* Style the delete button */
         .delete-button {
