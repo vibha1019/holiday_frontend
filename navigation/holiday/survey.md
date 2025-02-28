@@ -18,6 +18,9 @@ comments: true
         max-height: 250vh;
         background-size: 950px auto; /* Adjust width */
         }
+        .box h1 {
+            font-weight: bold;
+        }
         #review-button {
             position: absolute;
             top: 50%;
