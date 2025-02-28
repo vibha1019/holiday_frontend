@@ -12,12 +12,6 @@ comments: true
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Review Survey</title>
     <style>
-        body {
-            background-image: url('{{site.baseurl}}/images/present.png');
-            background-position: center;
-            max-height: 250vh;
-            background-size: 800px auto; /* Adjust width */
-            }
         #review-button {
             position: absolute;
             top: 50%;
@@ -99,21 +93,6 @@ comments: true
         .delete-button:hover {
             background: darkred;
         }
-        .edit-button {
-            position: absolute;
-            top: 5px;
-            left: 10px;
-            background: blue;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            border-radius: 5px;
-            padding: 5px;
-        }
-        .edit-button:hover {
-            background: darkblue;
-        }
         .textERW{
             color: black !important;
         }
@@ -124,7 +103,7 @@ comments: true
     <div id="review-popup" class="popup">
         <div class="popup-content">
             <span class="close-popup">&times;</span>
-            <h2 class="textERW">Enter a Review for the Website</h2>
+            <h2 class = "textERW">Enter a Review for the Website</h2>
             <textarea id="review-text" placeholder="Write your review here..."></textarea>
             <button id="submit-review">Send</button>
         </div>
@@ -132,25 +111,6 @@ comments: true
     <div id="survey-list"></div>
     <script type="module">
         import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
-        async function getCurrentUserId() {
-            try {
-                const response = await fetch(`${pythonURI}/api/current_user`, {
-                    ...fetchOptions,
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    return data.userId; // Assuming backend returns { userId: "123" }
-                } else {
-                    console.error("Failed to get current user ID.");
-                    return null;
-                }
-            } catch (error) {
-                console.error("Error fetching user ID:", error);
-                return null;
-            }
-        }
         async function fetchSurveys() {
             try {
                 const response = await fetch(`${pythonURI}/api/surveys`, {
@@ -162,20 +122,28 @@ comments: true
                     const surveys = await response.json();
                     const surveyList = document.getElementById("survey-list");
                     surveyList.innerHTML = '';
-                    const currentUserId = await getCurrentUserId();
-                    console.log(`Current User ID: ${currentUserId}`);
                     surveys.forEach(survey => {
-                        console.log(`Survey ID: ${survey.id}, Created by User ID: ${survey.userId}`);
                         const surveyBox = document.createElement('div');
                         surveyBox.classList.add('survey-box');
                         surveyBox.setAttribute('data-id', survey.id);
-                        if (survey.userId === currentUserId) {
-                            const deleteButton = document.createElement('button');
-                            deleteButton.textContent = "X";
-                            deleteButton.classList.add('delete-button');
-                            deleteButton.addEventListener("click", () => deleteSurvey(survey.id));
-                            surveyBox.appendChild(deleteButton);
-                        }
+                        // Create and append the Delete button
+                        const deleteButton = document.createElement('button');
+                        deleteButton.textContent = "X";
+                        deleteButton.classList.add('delete-button');
+                        deleteButton.addEventListener("click", () => deleteSurvey(survey.id));
+                        // Create and append the Edit button
+                        const editButton = document.createElement('button');
+                        editButton.textContent = "Edit";
+                        editButton.classList.add('edit-button');
+                        editButton.addEventListener("click", () => editSurvey(survey));
+                        const reviewTitle = document.createElement('div');
+                        reviewTitle.textContent = "REVIEW";
+                        const reviewContent = document.createElement('div');
+                        reviewContent.textContent = survey.message;
+                        surveyBox.appendChild(deleteButton);
+                        surveyBox.appendChild(editButton);
+                        surveyBox.appendChild(reviewTitle);
+                        surveyBox.appendChild(reviewContent);
                         surveyList.appendChild(surveyBox);
                     });
                 } else {
@@ -183,17 +151,11 @@ comments: true
                 }
             } catch (error) {
                 console.error("Error fetching surveys:", error);
+                alert("An error occurred while fetching surveys.");
             }
         }
         async function deleteSurvey(surveyId) {
             try {
-                const currentUserId = await getCurrentUserId();
-                if (!currentUserId) {
-                    alert("Unable to verify user. Please log in.");
-                    return;
-                }
-                console.log(`Current User ID: ${currentUserId}`);
-                console.log(`Attempting to delete survey ID: ${surveyId}`);
                 const response = await fetch(`${pythonURI}/api/survey?id=${surveyId}`, {
                     ...fetchOptions,
                     method: 'DELETE',
@@ -201,10 +163,9 @@ comments: true
                 });
                 if (response.ok) {
                     alert("Survey deleted successfully!");
-                    fetchSurveys();
+                    fetchSurveys(); // Refresh the list after deletion
                 } else {
                     const errorData = await response.json();
-                    console.error("Deletion failed:", errorData);
                     alert(`Failed to delete survey: ${errorData.message}`);
                 }
             } catch (error) {
@@ -235,7 +196,7 @@ comments: true
                     alert("Survey updated successfully!");
                     document.getElementById("review-popup").style.display = "none";
                     document.getElementById("review-text").value = "";
-                    fetchSurveys();
+                    fetchSurveys(); // Refresh the list after update
                 } else {
                     alert("Failed to update survey.");
                 }
@@ -244,11 +205,37 @@ comments: true
                 alert("An error occurred while updating the survey.");
             }
         }
-        document.getElementById("review-button").addEventListener("click", () => {
+        document.getElementById("review-button").addEventListener("click", function () {
             document.getElementById("review-popup").style.display = "block";
         });
-        document.querySelector(".close-popup").addEventListener("click", () => {
+        document.querySelector(".close-popup").addEventListener("click", function () {
             document.getElementById("review-popup").style.display = "none";
+        });
+        document.getElementById("submit-review").addEventListener("click", async function () {
+            let reviewText = document.getElementById("review-text").value;
+            if (reviewText.trim() === "") {
+                alert("Please enter a review before submitting.");
+                return;
+            }
+            try {
+                const response = await fetch(`${pythonURI}/api/survey`, {
+                    ...fetchOptions,
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: reviewText })
+                });
+                if (response.ok) {
+                    alert("Thank you for your review!");
+                    document.getElementById("review-popup").style.display = "none";
+                    document.getElementById("review-text").value = "";
+                    fetchSurveys();
+                } else {
+                    alert("Failed to submit review.");
+                }
+            } catch (error) {
+                console.error("Error submitting review:", error);
+                alert("An error occurred while submitting the review.");
+            }
         });
         window.onload = fetchSurveys;
     </script>
