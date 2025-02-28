@@ -80,22 +80,45 @@ comments: true
             padding: 20px;
         }
         .survey-box {
-            width: calc(33.33% - 20px); /* Keeps 3 per row */
-            min-width: 250px;
-            background: linear-gradient(135deg, #ffecd1,rgb(49, 173, 70)); /* Festive gradient */
+            background-color: white;
             padding: 15px;
-            border-radius: 12px; /* Softer rounded corners */
-            border: 2px solid rgb(12, 58, 10); /* Holiday red border */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Slight shadow for pop-out effect */
-            color: #5a2a02; /* Warm brown text for contrast */
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            color: black;
             font-size: 16px;
-            height: 180px;
+            height: 200px;
+            width: 30%;
             position: relative;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
+            overflow: hidden;
+        }
+        /* Title section (above the line) */
+        .review-title {
+            background-color: #2d882d; /* Dark green */
+            color: white;
             text-align: center;
+            font-weight: bold;
+            padding: 10px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        /* Line separator */
+        .review-title::after {
+            content: "";
+            display: block;
+            width: 100%;
+            height: 3px;
+            background-color: #146314; /* Darker green line */
+        }
+        /* Review content section (below the line) */
+        .review-content {
+            background-color: white;
+            color: black;
+            padding: 10px;
+            overflow-y: auto;
+            flex-grow: 1;
         }
         /* Add festive styling to review text */
         .review-content {
