@@ -82,10 +82,10 @@ comments: true
         .survey-box {
             width: calc(33.33% - 20px); /* Keeps 3 per row */
             min-width: 250px;
-            background: linear-gradient(135deg, #ffecd1, #ff7eb3); /* Festive gradient */
+            background: linear-gradient(135deg, #ffecd1,rgb(49, 173, 70)); /* Festive gradient */
             padding: 15px;
             border-radius: 12px; /* Softer rounded corners */
-            border: 2px solid rgb(77, 190, 255); /* Holiday red border */
+            border: 2px solid rgb(12, 58, 10); /* Holiday red border */
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Slight shadow for pop-out effect */
             color: #5a2a02; /* Warm brown text for contrast */
             font-size: 16px;
