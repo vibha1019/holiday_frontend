@@ -154,7 +154,31 @@ comments: true
                 alert("An error occurred while fetching surveys.");
             }
         }
-        async function deleteSurvey(surveyId) {
+        async function getCurrentUserId() {
+            try {
+                const response = await fetch(`${pythonURI}/api/current_user`, {
+                    ...fetchOptions,
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.userId; // Assuming backend returns `{ userId: "123" }`
+                } else {
+                    console.error("Failed to get current user ID.");
+                    return null;
+                }
+            } catch (error) {
+                console.error("Error fetching user ID:", error);
+                return null;
+            }
+        }
+        async function deleteSurvey(surveyId, surveyUserId) {
+            const currentUserId = await getCurrentUserId(); // Function to get the logged-in user's ID
+            if (currentUserId !== surveyUserId) {
+                alert("You cannot delete a survey you did not post.");
+                return;
+            }
             try {
                 const response = await fetch(`${pythonURI}/api/survey?id=${surveyId}`, {
                     ...fetchOptions,
