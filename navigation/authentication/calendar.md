@@ -76,6 +76,28 @@ author: nora + vibha
     .event-container button:hover {
         background: #CD5C5C;
     }
+    .event-item {
+        position: relative;
+        padding: 10px;
+        margin: 10px 0;
+        background-color: #F8F8F8;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .delete-icon {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        font-size: 20px;
+        color: red;
+        cursor: pointer;
+    }
+
+    .delete-icon:hover {
+        color: darkred;
+    }
+
 </style>
 
 <div class="container">
@@ -233,18 +255,21 @@ window.changeMonth = function (direction) {
         } else {
             filteredEvents.forEach(event => {
                 const eventItem = document.createElement("div");
-                eventItem.textContent = `${event.date}: ${event.name} @ ${event.location} `;
+                eventItem.classList.add("event-item"); // Add class for styling
+                eventItem.textContent = `${event.date}: ${event.name} @ ${event.location}`;
 
-                // Create delete button
-                const deleteButton = document.createElement("button");
-                deleteButton.textContent = "Delete";
-                deleteButton.style.marginLeft = "10px";
-                deleteButton.onclick = () => deleteEvent(event.event_id);  // Use event.event_id
-                eventItem.appendChild(deleteButton);
+                // Create delete icon (X or trash can)
+                const deleteIcon = document.createElement("span");
+                deleteIcon.classList.add("delete-icon"); // Add class for styling
+                deleteIcon.textContent = "❌";  // You can replace this with a trash can emoji or icon
+                deleteIcon.onclick = () => deleteEvent(event.event_id);  // Use event.event_id
+                eventItem.appendChild(deleteIcon);
+
                 eventList.appendChild(eventItem);
             });
         }
     }
+
 
 async function fetchEvents() {
     try {
