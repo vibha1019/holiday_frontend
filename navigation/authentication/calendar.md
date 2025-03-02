@@ -77,12 +77,12 @@ author: nora + vibha
         background: #CD5C5C;
     }
     .event-item {
-        position: relative;
-        padding: 10px;
-        margin: 10px 0;
-        background-color: #F8F8F8;
-        border-radius: 5px;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #F8F8F8;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     }
 
     .delete-icon {
@@ -97,7 +97,6 @@ author: nora + vibha
     .delete-icon:hover {
         color: darkred;
     }
-
 </style>
 
 <div class="container">
