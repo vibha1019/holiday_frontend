@@ -50,14 +50,16 @@ author: nora + vibha
         cursor: pointer;
         background: white;
         border-radius: 5px;
-        width: 100%; /* Ensures the day cell takes full available space */
-        height: 100%; /* Ensures cells are square-shaped */
-        box-sizing: border-box; /* Includes padding and border in height/width calculation */
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
         display: flex;
         justify-content: center;
-        align-items: center;  /* Center content in the cell */
-        overflow: hidden; /* Hide overflow */
+        align-items: center;
+        overflow: hidden;
     }
+
+
 
     .day-name, .day {
         text-align: center;
@@ -94,7 +96,7 @@ author: nora + vibha
     }
     .calendar-header-days {
         display: grid;
-        grid-template-columns: repeat(7, 1fr);
+        grid-template-columns: repeat(7, 1fr); /* This ensures that each day takes equal width */
         gap: 5px;
         padding: 10px;
         background-color: #8B0000;
@@ -106,8 +108,11 @@ author: nora + vibha
         text-align: center;
         font-weight: bold;
         color: white;
+        padding: 5px; /* Adjust padding to ensure there's space around the text */
+        font-size: 16px; /* Increase font size slightly for better readability */
+        word-wrap: break-word; /* Prevent overflow and ensure text wraps if necessary */
     }
-
+    
 </style>
 
 
