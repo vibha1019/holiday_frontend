@@ -41,6 +41,8 @@ author: nora + vibha
         grid-template-columns: repeat(7, 1fr);
         gap: 5px;
         padding: 10px;
+        max-width: 100%;
+        box-sizing: border-box;
     }
     .day-name, .day {
         text-align: center;
@@ -83,6 +85,7 @@ author: nora + vibha
         padding: 10px;
         background-color: #8B0000;
         border-radius: 5px;
+        margin-bottom: 5px;
     }
 
     .day-name {
@@ -92,6 +95,7 @@ author: nora + vibha
     }
 
 </style>
+
 
 <div class="container">
     <!-- Calendar Section -->
