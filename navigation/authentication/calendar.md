@@ -162,7 +162,7 @@ author: nora + vibha
     }
 }
 
-function changeMonth(direction) {
+window.changeMonth = function (direction) {
     currentMonth += direction;
     if (currentMonth < 0) {
         currentMonth = 11;
@@ -173,7 +173,7 @@ function changeMonth(direction) {
     }
     fetchEvents(); // Fetch events for the new month
     renderCalendar(); // Update the calendar view immediately
-}
+};
 
 
   document.getElementById("eventForm").addEventListener("submit", async function(event) {
