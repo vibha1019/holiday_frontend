@@ -264,6 +264,8 @@ async function fetchEvents() {
 }
 
 async function deleteEvent(eventId) {
+    console.log("Attempting to delete event with ID:", eventId); // Debugging log
+
     if (!confirm("Are you sure you want to delete this event?")) return;
 
     try {
@@ -271,18 +273,17 @@ async function deleteEvent(eventId) {
             ...fetchOptions,
             method: 'DELETE',
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ event_id: eventId })  // Send ID in the request body
+            body: JSON.stringify({ event_id: eventId }) // Ensure event_id is being sent
         });
 
         if (!response.ok) {
-            throw new Error(`Failed to delete event: ${response.statusText}`);
+            const errorText = await response.text();
+            throw new Error(`Failed to delete event: ${response.statusText} - ${errorText}`);
         }
 
-        // Remove event from local array
         events = events.filter(event => event.id !== eventId);
         alert("Event deleted successfully!");
 
-        // Refresh UI
         renderCalendar();
         displayEvents();
     } catch (error) {
@@ -290,6 +291,7 @@ async function deleteEvent(eventId) {
         alert("Error deleting event. Please try again.");
     }
 }
+
 
 
 </script>
