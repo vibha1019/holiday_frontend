@@ -41,24 +41,29 @@ author: nora + vibha
         grid-template-columns: repeat(7, 1fr);
         gap: 5px;
         padding: 10px;
-        max-width: 100%;
         box-sizing: border-box;
     }
+
     .day-name, .day {
         text-align: center;
-        padding: 10px;
-        font-size: 16px;
+        padding: 5px;  /* Adjust padding to make it more compact */
+        font-size: 14px;  /* Decrease font size to fit better */
         color: black;
+        box-sizing: border-box;  /* Ensure border and padding are included in width/height calculation */
     }
+
     .day {
         border: 1px solid #ddd;
         cursor: pointer;
         background: white;
         border-radius: 5px;
+        width: 100%;  /* Ensure each day takes full available space */
     }
+
     .day:hover {
         background: #800000;
     }
+
     .event-day {
         background-color: #800000;
     }
