@@ -122,39 +122,45 @@ author: nora + vibha
   }
 
   function renderCalendar() {
-      const monthYear = document.getElementById("month-year");
-      const calendarDays = document.getElementById("calendar-days");
-      monthYear.textContent = `${new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' })} ${currentYear}`;
-      calendarDays.innerHTML = "";
-      
-      const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-      const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-      
-      for (let i = 0; i < firstDay; i++) {
-          calendarDays.appendChild(document.createElement("div"));
-      }
-      
-      for (let day = 1; day <= daysInMonth; day++) {
-          const dayCell = document.createElement("div");
-          dayCell.classList.add("day");
-          dayCell.textContent = day;
-          
-          const eventOnDay = events.filter(event => new Date(event.date).getDate() === day);
-          if (eventOnDay.length > 0) {
-              dayCell.classList.add("event-day");
-              const emoji = document.createElement("div");
-              emoji.classList.add("event-emoji");
-              emoji.textContent = "❗";
-              dayCell.appendChild(emoji);
-          }
+    const monthYear = document.getElementById("month-year");
+    const calendarDays = document.getElementById("calendar-days");
+    monthYear.textContent = `${new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' })} ${currentYear}`;
+    calendarDays.innerHTML = "";
 
-          dayCell.addEventListener("click", () => {
-              document.getElementById("startDate").value = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-          });
-          
-          calendarDays.appendChild(dayCell);
-      }
-  }
+    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+    for (let i = 0; i < firstDay; i++) {
+        calendarDays.appendChild(document.createElement("div"));
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dayCell = document.createElement("div");
+        dayCell.classList.add("day");
+        dayCell.textContent = day;
+
+        const formattedDate = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const eventsOnDay = events.filter(event => new Date(event.date).toISOString().split("T")[0] === formattedDate);
+
+        if (eventsOnDay.length > 0) {
+            dayCell.classList.add("event-day");
+
+            eventsOnDay.forEach(event => {
+                const emoji = document.createElement("div");
+                emoji.classList.add("event-emoji");
+                emoji.textContent = "❗";
+                emoji.title = `${event.name} @ ${event.location}`; // Tooltip when hovering
+                dayCell.appendChild(emoji);
+            });
+        }
+
+        dayCell.addEventListener("click", () => {
+            document.getElementById("startDate").value = formattedDate;
+        });
+
+        calendarDays.appendChild(dayCell);
+    }
+}
 
   function changeMonth(direction) {
       currentMonth += direction;
