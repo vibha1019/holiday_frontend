@@ -36,12 +36,13 @@ author: nora + vibha
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-    .calendar-grid {
+   .calendar-grid {
         display: grid;
-        grid-template-columns: repeat(7, 1fr);
+        grid-template-columns: repeat(7, 1fr); /* Ensure each column takes equal width */
         gap: 5px;
         padding: 10px;
         box-sizing: border-box;
+        grid-auto-rows: 1fr; /* Ensure all rows are the same height */
     }
 
     .day-name, .day {
@@ -57,7 +58,9 @@ author: nora + vibha
         cursor: pointer;
         background: white;
         border-radius: 5px;
-        width: 100%;  /* Ensure each day takes full available space */
+        width: 100%;
+        height: 100%; /* Ensure each day is square shaped */
+        box-sizing: border-box; /* Includes padding and border in the height/width calculation */
     }
 
     .day:hover {
