@@ -76,6 +76,21 @@ author: nora + vibha
     .event-container button:hover {
         background: #CD5C5C;
     }
+    .calendar-header-days {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 5px;
+        padding: 10px;
+        background-color: #8B0000;
+        border-radius: 5px;
+    }
+
+    .day-name {
+        text-align: center;
+        font-weight: bold;
+        color: white;
+    }
+
 </style>
 
 <div class="container">
@@ -127,13 +142,30 @@ author: nora + vibha
     monthYear.textContent = `${new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' })} ${currentYear}`;
     calendarDays.innerHTML = "";
 
+    // Weekday names to display at the top
+    const weekdayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    // Create and append the weekday names header row
+    const weekdayHeader = document.createElement("div");
+    weekdayHeader.classList.add("calendar-header-days");
+    weekdayNames.forEach(dayName => {
+        const dayHeaderCell = document.createElement("div");
+        dayHeaderCell.classList.add("day-name");
+        dayHeaderCell.textContent = dayName;
+        weekdayHeader.appendChild(dayHeaderCell);
+    });
+    calendarDays.appendChild(weekdayHeader);
+
+    // Calculate the first day of the month and the number of days in the month
     const firstDay = new Date(currentYear, currentMonth, 1).getDay();
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
+    // Add empty cells to align the first day of the month correctly
     for (let i = 0; i < firstDay; i++) {
         calendarDays.appendChild(document.createElement("div"));
     }
 
+    // Add day cells for the days in the month
     for (let day = 1; day <= daysInMonth; day++) {
         const dayCell = document.createElement("div");
         dayCell.classList.add("day");
@@ -161,6 +193,7 @@ author: nora + vibha
         calendarDays.appendChild(dayCell);
     }
 }
+
 
 window.changeMonth = function (direction) {
     currentMonth += direction;
