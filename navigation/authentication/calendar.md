@@ -76,14 +76,14 @@ author: nora + vibha
     .event-container button:hover {
         background: #CD5C5C;
     }
-        .event-item {
+    .event-item {
         position: relative;
         padding: 10px;
         margin: 10px 0;
         background-color: #8B0000;
         border-radius: 5px;
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-        }
+    }
 
     .delete-icon {
         position: absolute;
