@@ -239,8 +239,7 @@ window.changeMonth = function (direction) {
                 const deleteButton = document.createElement("button");
                 deleteButton.textContent = "Delete";
                 deleteButton.style.marginLeft = "10px";
-                deleteButton.onclick = () => deleteEvent(event.id);  // Pass event ID to delete function
-
+                deleteButton.onclick = () => deleteEvent(event.event_id);  // Use event.event_id
                 eventItem.appendChild(deleteButton);
                 eventList.appendChild(eventItem);
             });
@@ -265,7 +264,7 @@ async function fetchEvents() {
 
 async function deleteEvent(eventId) {
     // Define delete data as a constant
-    const delData = { event_id: eventId };
+    const delData = { event_id: eventId };  // Use event_id here instead of id
     console.log("Deleting event with data:", delData); // Debugging log
 
     try {
@@ -289,6 +288,5 @@ async function deleteEvent(eventId) {
         alert("Error deleting event. Please try again.");
     }
 }
-
 
 </script>
