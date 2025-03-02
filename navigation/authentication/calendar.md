@@ -222,22 +222,26 @@ window.changeMonth = function (direction) {
         const eventList = document.getElementById("event-list");
         eventList.innerHTML = ""; // Clear the existing event list
 
-        // Get the current date to filter events for this month
         const currentMonthDate = new Date(currentYear, currentMonth, 1);
-
-        // Filter events that match the current month and year
         const filteredEvents = events.filter(event => {
             const eventDate = new Date(event.date);
             return eventDate.getMonth() === currentMonth && eventDate.getFullYear() === currentYear;
         });
 
-        // Display the filtered events for the current month
         if (filteredEvents.length === 0) {
             eventList.innerHTML = "<p>No events for this month.</p>";
         } else {
             filteredEvents.forEach(event => {
                 const eventItem = document.createElement("div");
-                eventItem.textContent = `${event.date}: ${event.name} @ ${event.location}`;
+                eventItem.textContent = `${event.date}: ${event.name} @ ${event.location} `;
+
+                // Create delete button
+                const deleteButton = document.createElement("button");
+                deleteButton.textContent = "Delete";
+                deleteButton.style.marginLeft = "10px";
+                deleteButton.onclick = () => deleteEvent(event.id);  // Pass event ID to delete function
+
+                eventItem.appendChild(deleteButton);
                 eventList.appendChild(eventItem);
             });
         }
@@ -256,6 +260,32 @@ async function fetchEvents() {
         displayEvents();
     } catch (error) {
         console.error("Error fetching events:", error);
+    }
+}
+async function deleteEvent(eventId) {
+    if (!confirm("Are you sure you want to delete this event?")) return;
+
+    try {
+        const response = await fetch(`${pythonURI}/api/event/${eventId}`, {
+            ...fetchOptions,
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to delete event: ${response.statusText}`);
+        }
+
+        // Remove event from local array
+        events = events.filter(event => event.id !== eventId);
+        alert("Event deleted successfully!");
+
+        // Refresh UI
+        renderCalendar();
+        displayEvents();
+    } catch (error) {
+        console.error("Error deleting event:", error);
+        alert("Error deleting event. Please try again.");
     }
 }
 
