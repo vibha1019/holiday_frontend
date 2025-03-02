@@ -162,17 +162,18 @@ author: nora + vibha
     }
 }
 
-  function changeMonth(direction) {
-      currentMonth += direction;
-      if (currentMonth < 0) {
-          currentMonth = 11;
-          currentYear--;
-      } else if (currentMonth > 11) {
-          currentMonth = 0;
-          currentYear++;
-      }
-      renderCalendar();
-  }
+function changeMonth(direction) {
+    currentMonth += direction;
+    if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+    } else if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+    }
+    fetchEvents(); // Fetch events for the new month before rendering
+}
+
 
   document.getElementById("eventForm").addEventListener("submit", async function(event) {
       event.preventDefault();
@@ -226,19 +227,20 @@ author: nora + vibha
       });
   }
 
-  async function fetchEvents() {
-      try {
-          const response = await fetch(`${pythonURI}/api/events`, { ...fetchOptions, method: 'GET' });
+async function fetchEvents() {
+    try {
+        const response = await fetch(`${pythonURI}/api/events?month=${currentMonth + 1}&year=${currentYear}`, { ...fetchOptions, method: 'GET' });
 
-          if (!response.ok) {
-              throw new Error(`Failed to fetch events: ${response.statusText}`);
-          }
+        if (!response.ok) {
+            throw new Error(`Failed to fetch events: ${response.statusText}`);
+        }
 
-          events = await response.json();
-          renderCalendar();
-          displayEvents();
-      } catch (error) {
-          console.error("Error fetching events:", error);
-      }
-  }
+        events = await response.json();
+        renderCalendar(); // Now render calendar with the updated events
+        displayEvents();
+    } catch (error) {
+        console.error("Error fetching events:", error);
+    }
+}
+
 </script>
