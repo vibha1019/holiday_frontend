@@ -36,45 +36,27 @@ author: nora + vibha
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-   .calendar-grid {
+    .calendar-grid {
         display: grid;
-        grid-template-columns: repeat(7, 1fr); /* Ensure each column takes equal width */
+        grid-template-columns: repeat(7, 1fr);
         gap: 5px;
         padding: 10px;
-        box-sizing: border-box;
-        grid-auto-rows: 1fr; /* Ensure all rows are the same height */
     }
-
+    .day-name, .day {
+        text-align: center;
+        padding: 10px;
+        font-size: 16px;
+        color: black;
+    }
     .day {
         border: 1px solid #ddd;
         cursor: pointer;
         background: white;
         border-radius: 5px;
-        width: 100%;
-        height: 100%;
-        box-sizing: border-box;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
     }
-
-
-
-    .day-name, .day {
-        text-align: center;
-        padding: 5px;  /* Adjust padding to make it more compact */
-        font-size: 14px;  /* Decrease font size to fit better */
-        color: black;
-        box-sizing: border-box;  /* Ensure border and padding are included in width/height calculation */
-        word-wrap: break-word; /* Prevent text from overflowing */
-        overflow: hidden; /* Prevent overflow */
-    }
-
     .day:hover {
         background: #800000;
     }
-
     .event-day {
         background-color: #800000;
     }
@@ -94,27 +76,7 @@ author: nora + vibha
     .event-container button:hover {
         background: #CD5C5C;
     }
-    .calendar-header-days {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr); /* This ensures that each day takes equal width */
-        gap: 5px;
-        padding: 10px;
-        background-color: #8B0000;
-        border-radius: 5px;
-        margin-bottom: 5px;
-    }
-
-    .day-name {
-        text-align: center;
-        font-weight: bold;
-        color: white;
-        padding: 5px; /* Adjust padding to ensure there's space around the text */
-        font-size: 16px; /* Increase font size slightly for better readability */
-        word-wrap: break-word; /* Prevent overflow and ensure text wraps if necessary */
-    }
-    
 </style>
-
 
 <div class="container">
     <!-- Calendar Section -->
@@ -162,39 +124,22 @@ author: nora + vibha
   function renderCalendar() {
     const monthYear = document.getElementById("month-year");
     const calendarDays = document.getElementById("calendar-days");
-    monthYear.textContent = `${new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' })} ${currentYear}`;
+    monthYear.textContent = ${new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' })} ${currentYear};
     calendarDays.innerHTML = "";
 
-    // Weekday names to display at the top
-    const weekdayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-    // Create and append the weekday names header row
-    const weekdayHeader = document.createElement("div");
-    weekdayHeader.classList.add("calendar-header-days");
-    weekdayNames.forEach(dayName => {
-        const dayHeaderCell = document.createElement("div");
-        dayHeaderCell.classList.add("day-name");
-        dayHeaderCell.textContent = dayName;
-        weekdayHeader.appendChild(dayHeaderCell);
-    });
-    calendarDays.appendChild(weekdayHeader);
-
-    // Calculate the first day of the month and the number of days in the month
     const firstDay = new Date(currentYear, currentMonth, 1).getDay();
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
-    // Add empty cells to align the first day of the month correctly
     for (let i = 0; i < firstDay; i++) {
         calendarDays.appendChild(document.createElement("div"));
     }
 
-    // Add day cells for the days in the month
     for (let day = 1; day <= daysInMonth; day++) {
         const dayCell = document.createElement("div");
         dayCell.classList.add("day");
         dayCell.textContent = day;
 
-        const formattedDate = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const formattedDate = ${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')};
         const eventsOnDay = events.filter(event => new Date(event.date).toISOString().split("T")[0] === formattedDate);
 
         if (eventsOnDay.length > 0) {
@@ -204,7 +149,7 @@ author: nora + vibha
                 const emoji = document.createElement("div");
                 emoji.classList.add("event-emoji");
                 emoji.textContent = "❗";
-                emoji.title = `${event.name} @ ${event.location}`; // Tooltip when hovering
+                emoji.title = ${event.name} @ ${event.location}; // Tooltip when hovering
                 dayCell.appendChild(emoji);
             });
         }
@@ -216,7 +161,6 @@ author: nora + vibha
         calendarDays.appendChild(dayCell);
     }
 }
-
 
 window.changeMonth = function (direction) {
     currentMonth += direction;
@@ -244,7 +188,7 @@ window.changeMonth = function (direction) {
       console.log("Event Data:", postData);  // Log event data for debugging
 
       try {
-          const response = await fetch(`${pythonURI}/api/event`, {
+          const response = await fetch(${pythonURI}/api/event, {
               ...fetchOptions,
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -253,7 +197,7 @@ window.changeMonth = function (direction) {
 
           if (!response.ok) {
               const errorMessage = await response.text();
-              throw new Error(`Failed to add event: ${response.statusText} - ${errorMessage}`);
+              throw new Error(Failed to add event: ${response.statusText} - ${errorMessage});
           }
 
           const createdEvent = await response.json();
@@ -279,17 +223,17 @@ window.changeMonth = function (direction) {
       eventList.innerHTML = "";
       events.forEach(event => {
           const eventItem = document.createElement("div");
-          eventItem.textContent = `${event.date}: ${event.name} @ ${event.location}`;
+          eventItem.textContent = ${event.date}: ${event.name} @ ${event.location};
           eventList.appendChild(eventItem);
       });
   }
 
 async function fetchEvents() {
     try {
-        const response = await fetch(`${pythonURI}/api/events?month=${currentMonth + 1}&year=${currentYear}`, { ...fetchOptions, method: 'GET' });
+        const response = await fetch(${pythonURI}/api/events?month=${currentMonth + 1}&year=${currentYear}, { ...fetchOptions, method: 'GET' });
 
         if (!response.ok) {
-            throw new Error(`Failed to fetch events: ${response.statusText}`);
+            throw new Error(Failed to fetch events: ${response.statusText});
         }
 
         events = await response.json();
