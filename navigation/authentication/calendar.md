@@ -45,22 +45,28 @@ author: nora + vibha
         grid-auto-rows: 1fr; /* Ensure all rows are the same height */
     }
 
+    .day {
+        border: 1px solid #ddd;
+        cursor: pointer;
+        background: white;
+        border-radius: 5px;
+        width: 100%; /* Ensures the day cell takes full available space */
+        height: 100%; /* Ensures cells are square-shaped */
+        box-sizing: border-box; /* Includes padding and border in height/width calculation */
+        display: flex;
+        justify-content: center;
+        align-items: center;  /* Center content in the cell */
+        overflow: hidden; /* Hide overflow */
+    }
+
     .day-name, .day {
         text-align: center;
         padding: 5px;  /* Adjust padding to make it more compact */
         font-size: 14px;  /* Decrease font size to fit better */
         color: black;
         box-sizing: border-box;  /* Ensure border and padding are included in width/height calculation */
-    }
-
-    .day {
-        border: 1px solid #ddd;
-        cursor: pointer;
-        background: white;
-        border-radius: 5px;
-        width: 100%;
-        height: 100%; /* Ensure each day is square shaped */
-        box-sizing: border-box; /* Includes padding and border in the height/width calculation */
+        word-wrap: break-word; /* Prevent text from overflowing */
+        overflow: hidden; /* Prevent overflow */
     }
 
     .day:hover {
