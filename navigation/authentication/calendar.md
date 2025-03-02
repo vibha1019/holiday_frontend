@@ -124,7 +124,7 @@ author: nora + vibha
   function renderCalendar() {
     const monthYear = document.getElementById("month-year");
     const calendarDays = document.getElementById("calendar-days");
-    monthYear.textContent = ${new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' })} ${currentYear};
+    monthYear.textContent = `${new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' })} ${currentYear}`;
     calendarDays.innerHTML = "";
 
     const firstDay = new Date(currentYear, currentMonth, 1).getDay();
@@ -139,7 +139,7 @@ author: nora + vibha
         dayCell.classList.add("day");
         dayCell.textContent = day;
 
-        const formattedDate = ${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')};
+        const formattedDate = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         const eventsOnDay = events.filter(event => new Date(event.date).toISOString().split("T")[0] === formattedDate);
 
         if (eventsOnDay.length > 0) {
@@ -149,7 +149,7 @@ author: nora + vibha
                 const emoji = document.createElement("div");
                 emoji.classList.add("event-emoji");
                 emoji.textContent = "❗";
-                emoji.title = ${event.name} @ ${event.location}; // Tooltip when hovering
+                emoji.title = `${event.name} @ ${event.location}`; // Tooltip when hovering
                 dayCell.appendChild(emoji);
             });
         }
@@ -188,7 +188,7 @@ window.changeMonth = function (direction) {
       console.log("Event Data:", postData);  // Log event data for debugging
 
       try {
-          const response = await fetch(${pythonURI}/api/event, {
+          const response = await fetch(`${pythonURI}/api/event`, {
               ...fetchOptions,
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -197,7 +197,7 @@ window.changeMonth = function (direction) {
 
           if (!response.ok) {
               const errorMessage = await response.text();
-              throw new Error(Failed to add event: ${response.statusText} - ${errorMessage});
+              throw new Error(`Failed to add event: ${response.statusText} - ${errorMessage}`);
           }
 
           const createdEvent = await response.json();
@@ -223,17 +223,17 @@ window.changeMonth = function (direction) {
       eventList.innerHTML = "";
       events.forEach(event => {
           const eventItem = document.createElement("div");
-          eventItem.textContent = ${event.date}: ${event.name} @ ${event.location};
+          eventItem.textContent = `${event.date}: ${event.name} @ ${event.location}`;
           eventList.appendChild(eventItem);
       });
   }
 
 async function fetchEvents() {
     try {
-        const response = await fetch(${pythonURI}/api/events?month=${currentMonth + 1}&year=${currentYear}, { ...fetchOptions, method: 'GET' });
+        const response = await fetch(`${pythonURI}/api/events?month=${currentMonth + 1}&year=${currentYear}`, { ...fetchOptions, method: 'GET' });
 
         if (!response.ok) {
-            throw new Error(Failed to fetch events: ${response.statusText});
+            throw new Error(`Failed to fetch events: ${response.statusText}`);
         }
 
         events = await response.json();
