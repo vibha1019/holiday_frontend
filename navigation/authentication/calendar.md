@@ -106,12 +106,15 @@ author: nora + vibha
 </div>
 
 <script type="module">
+  import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+
   let currentMonth = new Date().getMonth();
   let currentYear = new Date().getFullYear();
   let events = [];
 
   document.addEventListener('DOMContentLoaded', function() {
       initializeCalendar();
+      fetchEvents(); // Load existing events from database
   });
 
   function initializeCalendar() {
@@ -164,71 +167,72 @@ author: nora + vibha
       }
       renderCalendar();
   }
-  function createGiftAnimation() {
-    const gift = document.createElement("div");
-    gift.textContent = "🎁";
-    gift.style.position = "absolute";
-    gift.style.fontSize = "40px";
-    document.body.appendChild(gift);
-    
-    function animateGift() {
-        let x = Math.random() * (window.innerWidth - 50);
-        let y = Math.random() * (window.innerHeight - 50);
-        gift.style.left = `${x}px`;
-        gift.style.top = `${y}px`;
-        gift.style.opacity = "1";
-        gift.style.transform = "scale(1)";
-        
-        gift.animate([
-            { transform: "translateX(-5px)" },
-            { transform: "translateX(5px)" },
-            { transform: "translateX(-5px)" }
-        ], {
-            duration: 500,
-            iterations: 3
-        });
-        
-        setTimeout(() => {
-            gift.animate([
-                { transform: "scale(1)" },
-                { transform: "scale(0)" }
-            ], {
-                duration: 500,
-                fill: "forwards"
-            }).onfinish = animateGift;
-        }, 1500);
-    }
-    
-    animateGift();
-}
 
-createGiftAnimation();
+  document.getElementById("eventForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
 
-document.getElementById("eventForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Prevent page reload
+      const postData = {
+          name: document.getElementById("eventName").value,
+          location: document.getElementById("eventLocation").value,
+          date: document.getElementById("startDate").value,  // YYYY-MM-DD format
+      };
 
-    const eventName = document.getElementById("eventName").value;
-    const eventLocation = document.getElementById("eventLocation").value;
-    const eventDate = document.getElementById("startDate").value;
+      console.log("Event Data:", postData);  // Log event data for debugging
 
-    if (!eventName || !eventLocation || !eventDate) return; // Ensure all fields are filled
+      try {
+          const response = await fetch(`${pythonURI}/api/event`, {
+              ...fetchOptions,
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(postData)
+          });
 
-    events.push({ name: eventName, location: eventLocation, date: eventDate });
+          if (!response.ok) {
+              const errorMessage = await response.text();
+              throw new Error(`Failed to add event: ${response.statusText} - ${errorMessage}`);
+          }
 
-    renderCalendar(); // Update calendar display
-    displayEvents(); // Show events in the event list
+          const createdEvent = await response.json();
+          alert("Event added successfully!");
 
-    this.reset(); // Clear the form
-});
+          if (createdEvent.id) {
+              events.push(createdEvent);
+              renderCalendar(); // Update calendar display
+              displayEvents(); // Show updated event list
+          } else {
+              console.error("Error: Event created but no ID returned from API");
+          }
 
-function displayEvents() {
-    const eventList = document.getElementById("event-list");
-    eventList.innerHTML = ""; // Clear previous events
-    events.forEach(event => {
-        const eventItem = document.createElement("div");
-        eventItem.textContent = `${event.date}: ${event.name} @ ${event.location}`;
-        eventList.appendChild(eventItem);
-    });
-}
+          this.reset(); // Clear the form
+      } catch (error) {
+          console.error("Error:", error);
+          alert("Error adding event. Please try again.");
+      }
+  });
 
+  function displayEvents() {
+      const eventList = document.getElementById("event-list");
+      eventList.innerHTML = "";
+      events.forEach(event => {
+          const eventItem = document.createElement("div");
+          eventItem.textContent = `${event.date}: ${event.name} @ ${event.location}`;
+          eventList.appendChild(eventItem);
+      });
+  }
+
+  async function fetchEvents() {
+      try {
+          const response = await fetch(`${pythonURI}/api/events`, { ...fetchOptions, method: 'GET' });
+
+          if (!response.ok) {
+              throw new Error(`Failed to fetch events: ${response.statusText}`);
+          }
+
+          events = await response.json();
+          renderCalendar();
+          displayEvents();
+      } catch (error) {
+          console.error("Error fetching events:", error);
+      }
+  }
 </script>
