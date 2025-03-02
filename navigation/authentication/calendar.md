@@ -171,7 +171,8 @@ function changeMonth(direction) {
         currentMonth = 0;
         currentYear++;
     }
-    fetchEvents(); // Fetch events for the new month before rendering
+    fetchEvents(); // Fetch events for the new month
+    renderCalendar(); // Update the calendar view immediately
 }
 
 
