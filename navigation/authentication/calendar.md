@@ -218,15 +218,30 @@ window.changeMonth = function (direction) {
       }
   });
 
-  function displayEvents() {
-      const eventList = document.getElementById("event-list");
-      eventList.innerHTML = "";
-      events.forEach(event => {
-          const eventItem = document.createElement("div");
-          eventItem.textContent = `${event.date}: ${event.name} @ ${event.location}`;
-          eventList.appendChild(eventItem);
-      });
-  }
+    function displayEvents() {
+        const eventList = document.getElementById("event-list");
+        eventList.innerHTML = ""; // Clear the existing event list
+
+        // Get the current date to filter events for this month
+        const currentMonthDate = new Date(currentYear, currentMonth, 1);
+
+        // Filter events that match the current month and year
+        const filteredEvents = events.filter(event => {
+            const eventDate = new Date(event.date);
+            return eventDate.getMonth() === currentMonth && eventDate.getFullYear() === currentYear;
+        });
+
+        // Display the filtered events for the current month
+        if (filteredEvents.length === 0) {
+            eventList.innerHTML = "<p>No events for this month.</p>";
+        } else {
+            filteredEvents.forEach(event => {
+                const eventItem = document.createElement("div");
+                eventItem.textContent = `${event.date}: ${event.name} @ ${event.location}`;
+                eventList.appendChild(eventItem);
+            });
+        }
+    }
 
 async function fetchEvents() {
     try {
