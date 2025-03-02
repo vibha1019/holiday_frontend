@@ -264,34 +264,31 @@ async function fetchEvents() {
 }
 
 async function deleteEvent(eventId) {
-    console.log("Attempting to delete event with ID:", eventId); // Debugging log
-
-    if (!confirm("Are you sure you want to delete this event?")) return;
+    // Define delete data as a constant
+    const delData = { event_id: eventId };
+    console.log("Deleting event with data:", delData); // Debugging log
 
     try {
         const response = await fetch(`${pythonURI}/api/event`, {
             ...fetchOptions,
             method: 'DELETE',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ event_id: eventId }) // Ensure event_id is being sent
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(delData)
         });
 
         if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Failed to delete event: ${response.statusText} - ${errorText}`);
+            const errorMessage = await response.text();
+            throw new Error(`Failed to delete event: ${response.statusText} - ${errorMessage}`);
         }
 
-        events = events.filter(event => event.id !== eventId);
+        console.log("Event deleted successfully!");
         alert("Event deleted successfully!");
-
-        renderCalendar();
-        displayEvents();
+        fetchEvents(); // Refresh event list
     } catch (error) {
         console.error("Error deleting event:", error);
         alert("Error deleting event. Please try again.");
     }
 }
-
 
 
 </script>
