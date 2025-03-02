@@ -262,14 +262,16 @@ async function fetchEvents() {
         console.error("Error fetching events:", error);
     }
 }
+
 async function deleteEvent(eventId) {
     if (!confirm("Are you sure you want to delete this event?")) return;
 
     try {
-        const response = await fetch(`${pythonURI}/api/event/${eventId}`, {
+        const response = await fetch(`${pythonURI}/api/event`, {
             ...fetchOptions,
             method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' }
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ event_id: eventId })  // Send ID in the request body
         });
 
         if (!response.ok) {
@@ -288,5 +290,6 @@ async function deleteEvent(eventId) {
         alert("Error deleting event. Please try again.");
     }
 }
+
 
 </script>
