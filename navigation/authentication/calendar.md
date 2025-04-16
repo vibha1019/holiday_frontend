@@ -5,7 +5,6 @@ permalink: /calendar
 menu: nav/home.html
 search_exclude: true
 show_reading_time: false
-author: nora + vibha
 ---
 
 <style>
@@ -262,6 +261,12 @@ author: nora + vibha
 </div>
 
 <script type="module">
+    /* AP CSP Create Task - Event Calendar  
+    * Developed by V.M.
+    * All code written by student except:  
+    * - fetch API template provided by teacher  
+    */
+
   import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
 
   class EventManager {
