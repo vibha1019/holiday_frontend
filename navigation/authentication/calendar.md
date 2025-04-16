@@ -84,7 +84,6 @@ author: nora + vibha
         border-radius: 5px;
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     }
-
     .delete-icon {
         position: absolute;
         top: 5px;
@@ -93,9 +92,18 @@ author: nora + vibha
         color: red;
         cursor: pointer;
     }
-
     .delete-icon:hover {
         color: darkred;
+    }
+    /* NEW: Search/filter UI */
+    .search-box {
+        margin-bottom: 15px;
+    }
+    .search-box input {
+        padding: 8px;
+        width: 70%;
+        border-radius: 5px;
+        border: 1px solid #ddd;
     }
 </style>
 
@@ -121,7 +129,10 @@ author: nora + vibha
             <input type="date" id="startDate" required><br><br>
             <button type="submit">Save Event</button>
         </form>
-        <h3 style="color: black; margin-top: 20px;">Your Events</h3>
+        <div class="search-box">
+            <h3 style="color: black;">Your Events</h3>
+            <input type="text" id="searchInput" placeholder="Search by location...">
+        </div>
         <div id="event-list"></div>
     </div>
 </div>
@@ -129,19 +140,105 @@ author: nora + vibha
 <script type="module">
   import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
 
-  let currentMonth = new Date().getMonth();
-  let currentYear = new Date().getFullYear();
-  let events = [];
+  // ================== NEW: EVENT MANAGER CLASS (ABSTRACTION) ==================
+  class EventManager {
+    constructor() {
+      this.events = [];
+    }
 
-  document.addEventListener('DOMContentLoaded', function() {
-      initializeCalendar();
-      fetchEvents(); // Load existing events from database
-  });
+    // Helper: Format date as YYYY-MM-DD
+    formatDate(date) {
+      const d = new Date(date);
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
 
-  function initializeCalendar() {
-      renderCalendar();
+    // NEW: Sort events by date (ALGORITHM: SORTING)
+    sortEvents() {
+      this.events.sort((a, b) => new Date(a.date) - new Date(b.date));
+    }
+
+    // NEW: Filter events by location (ALGORITHM: SEARCHING)
+    filterEvents(keyword) {
+      return this.events.filter(event => 
+        event.location.toLowerCase().includes(keyword.toLowerCase())
+      );
+    }
+
+    // Fetch events from API
+    async fetchEvents(month, year) {
+      try {
+        const response = await fetch(`${pythonURI}/api/events?month=${month}&year=${year}`, { 
+          ...fetchOptions, 
+          method: 'GET' 
+        });
+        if (!response.ok) throw new Error("Failed to fetch events.");
+        this.events = await response.json();
+        this.sortEvents(); // Sort after fetching
+      } catch (error) {
+        console.error("Fetch error:", error);
+        alert("Could not load events. Check console.");
+      }
+    }
+
+    // Add new event
+    async addEvent(eventData) {
+      try {
+        const response = await fetch(`${pythonURI}/api/event`, {
+          ...fetchOptions,
+          method: 'POST',
+          body: JSON.stringify(eventData),
+        });
+        if (!response.ok) throw new Error("Failed to save event.");
+        const newEvent = await response.json();
+        this.events.push(newEvent);
+        this.sortEvents();
+        return true;
+      } catch (error) {
+        console.error("Error:", error);
+        alert(`Error: ${error.message}`);
+        return false;
+      }
+    }
+
+    // Delete event
+    async deleteEvent(eventId) {
+      try {
+        const response = await fetch(`${pythonURI}/api/event`, {
+          ...fetchOptions,
+          method: 'DELETE',
+          body: JSON.stringify({ event_id: eventId }),
+        });
+        if (!response.ok) throw new Error("Failed to delete event.");
+        this.events = this.events.filter(event => event.event_id !== eventId);
+        return true;
+      } catch (error) {
+        console.error("Error:", error);
+        alert(`Error: ${error.message}`);
+        return false;
+      }
+    }
   }
 
+  // ================== MAIN APP ==================
+  const eventManager = new EventManager();
+  let currentMonth = new Date().getMonth();
+  let currentYear = new Date().getFullYear();
+
+  // Initialize the app
+  document.addEventListener('DOMContentLoaded', () => {
+    renderCalendar();
+    eventManager.fetchEvents(currentMonth + 1, currentYear);
+    setupEventListeners();
+  });
+
+  // NEW: Validate date (must be today or future)
+  function isValidDate(date) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return new Date(date) >= today;
+  }
+
+  // Render the calendar grid
   function renderCalendar() {
     const monthYear = document.getElementById("month-year");
     const calendarDays = document.getElementById("calendar-days");
@@ -151,166 +248,128 @@ author: nora + vibha
     const firstDay = new Date(currentYear, currentMonth, 1).getDay();
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
+    // Day names header
+    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    dayNames.forEach(day => {
+      const dayNameCell = document.createElement("div");
+      dayNameCell.classList.add("day-name");
+      dayNameCell.textContent = day;
+      calendarDays.appendChild(dayNameCell);
+    });
+
+    // Empty cells for days before the 1st
     for (let i = 0; i < firstDay; i++) {
-        calendarDays.appendChild(document.createElement("div"));
+      calendarDays.appendChild(document.createElement("div"));
     }
 
+    // Days of the month
     for (let day = 1; day <= daysInMonth; day++) {
-        const dayCell = document.createElement("div");
-        dayCell.classList.add("day");
-        dayCell.textContent = day;
+      const dayCell = document.createElement("div");
+      dayCell.classList.add("day");
+      dayCell.textContent = day;
 
-        const formattedDate = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        const eventsOnDay = events.filter(event => new Date(event.date).toISOString().split("T")[0] === formattedDate);
+      const formattedDate = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      const eventsOnDay = eventManager.events.filter(event => 
+        eventManager.formatDate(event.date) === formattedDate
+      );
 
-        if (eventsOnDay.length > 0) {
-            dayCell.classList.add("event-day");
+      if (eventsOnDay.length > 0) {
+        dayCell.classList.add("event-day");
+        eventsOnDay.forEach(event => {
+          const emoji = document.createElement("div");
+          emoji.classList.add("event-emoji");
+          emoji.textContent = "❗";
+          emoji.title = `${event.name} @ ${event.location}`;
+          dayCell.appendChild(emoji);
+        });
+      }
 
-            eventsOnDay.forEach(event => {
-                const emoji = document.createElement("div");
-                emoji.classList.add("event-emoji");
-                emoji.textContent = "❗";
-                emoji.title = `${event.name} @ ${event.location}`; // Tooltip when hovering
-                dayCell.appendChild(emoji);
+      dayCell.addEventListener("click", () => {
+        document.getElementById("startDate").value = formattedDate;
+      });
+
+      calendarDays.appendChild(dayCell);
+    }
+  }
+
+  // Display events in the sidebar
+  function displayEvents(events = eventManager.events) {
+    const eventList = document.getElementById("event-list");
+    eventList.innerHTML = "";
+
+    if (events.length === 0) {
+      eventList.innerHTML = "<p>No events found.</p>";
+      return;
+    }
+
+    events.forEach(event => {
+      const eventItem = document.createElement("div");
+      eventItem.classList.add("event-item");
+      eventItem.innerHTML = `
+        <strong>${eventManager.formatDate(event.date)}</strong><br>
+        ${event.name} @ ${event.location}
+        <span class="delete-icon" data-id="${event.event_id}">❌</span>
+      `;
+      eventList.appendChild(eventItem);
+    });
+  }
+
+  // Event listeners
+  function setupEventListeners() {
+    // Form submission
+    document.getElementById("eventForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const dateInput = document.getElementById("startDate").value;
+
+      if (!isValidDate(dateInput)) {
+        alert("Event date must be today or later!");
+        return;
+      }
+
+      const success = await eventManager.addEvent({
+        name: document.getElementById("eventName").value,
+        location: document.getElementById("eventLocation").value,
+        date: dateInput,
+      });
+
+      if (success) {
+        renderCalendar();
+        displayEvents();
+        e.target.reset();
+      }
+    });
+
+    // Search/filter
+    document.getElementById("searchInput").addEventListener("input", (e) => {
+      const filtered = eventManager.filterEvents(e.target.value);
+      displayEvents(filtered);
+    });
+
+    // Delete event (delegated)
+    document.getElementById("event-list").addEventListener("click", (e) => {
+      if (e.target.classList.contains("delete-icon")) {
+        if (confirm("Delete this event?")) {
+          eventManager.deleteEvent(e.target.dataset.id)
+            .then(() => {
+              renderCalendar();
+              displayEvents();
             });
         }
+      }
+    });
+  }
 
-        dayCell.addEventListener("click", () => {
-            document.getElementById("startDate").value = formattedDate;
-        });
-
-        calendarDays.appendChild(dayCell);
-    }
-}
-
-window.changeMonth = function (direction) {
+  // Month navigation
+  window.changeMonth = function (direction) {
     currentMonth += direction;
     if (currentMonth < 0) {
-        currentMonth = 11;
-        currentYear--;
+      currentMonth = 11;
+      currentYear--;
     } else if (currentMonth > 11) {
-        currentMonth = 0;
-        currentYear++;
+      currentMonth = 0;
+      currentYear++;
     }
-    fetchEvents(); // Fetch events for the new month
-    renderCalendar(); // Update the calendar view immediately
-};
-
-
-  document.getElementById("eventForm").addEventListener("submit", async function(event) {
-      event.preventDefault();
-
-      const postData = {
-          name: document.getElementById("eventName").value,
-          location: document.getElementById("eventLocation").value,
-          date: document.getElementById("startDate").value,  // YYYY-MM-DD format
-      };
-
-      console.log("Event Data:", postData);  // Log event data for debugging
-
-      try {
-          const response = await fetch(`${pythonURI}/api/event`, {
-              ...fetchOptions,
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(postData)
-          });
-
-          if (!response.ok) {
-              const errorMessage = await response.text();
-              throw new Error(`Failed to add event: ${response.statusText} - ${errorMessage}`);
-          }
-
-          const createdEvent = await response.json();
-          alert("Event added successfully!");
-
-          if (createdEvent.id) {
-              events.push(createdEvent);
-              renderCalendar(); // Update calendar display
-              displayEvents(); // Show updated event list
-          } else {
-              console.error("Error: Event created but no ID returned from API");
-          }
-
-          this.reset(); // Clear the form
-      } catch (error) {
-          console.error("Error:", error);
-          alert("Error adding event. Please try again.");
-      }
-  });
-
-    function displayEvents() {
-        const eventList = document.getElementById("event-list");
-        eventList.innerHTML = ""; // Clear the existing event list
-
-        const currentMonthDate = new Date(currentYear, currentMonth, 1);
-        const filteredEvents = events.filter(event => {
-            const eventDate = new Date(event.date);
-            return eventDate.getMonth() === currentMonth && eventDate.getFullYear() === currentYear;
-        });
-
-        if (filteredEvents.length === 0) {
-            eventList.innerHTML = "<p>No events for this month.</p>";
-        } else {
-            filteredEvents.forEach(event => {
-                const eventItem = document.createElement("div");
-                eventItem.classList.add("event-item"); // Add class for styling
-                eventItem.textContent = `${event.date}: ${event.name} @ ${event.location}`;
-
-                // Create delete icon (X or trash can)
-                const deleteIcon = document.createElement("span");
-                deleteIcon.classList.add("delete-icon"); // Add class for styling
-                deleteIcon.textContent = "❌";  // You can replace this with a trash can emoji or icon
-                deleteIcon.onclick = () => deleteEvent(event.event_id);  // Use event.event_id
-                eventItem.appendChild(deleteIcon);
-
-                eventList.appendChild(eventItem);
-            });
-        }
-    }
-
-
-async function fetchEvents() {
-    try {
-        const response = await fetch(`${pythonURI}/api/events?month=${currentMonth + 1}&year=${currentYear}`, { ...fetchOptions, method: 'GET' });
-
-        if (!response.ok) {
-            throw new Error(`Failed to fetch events: ${response.statusText}`);
-        }
-
-        events = await response.json();
-        renderCalendar(); // Now render calendar with the updated events
-        displayEvents();
-    } catch (error) {
-        console.error("Error fetching events:", error);
-    }
-}
-
-async function deleteEvent(eventId) {
-    // Define delete data as a constant
-    const delData = { event_id: eventId };  // Use event_id here instead of id
-    console.log("Deleting event with data:", delData); // Debugging log
-
-    try {
-        const response = await fetch(`${pythonURI}/api/event`, {
-            ...fetchOptions,
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(delData)
-        });
-
-        if (!response.ok) {
-            const errorMessage = await response.text();
-            throw new Error(`Failed to delete event: ${response.statusText} - ${errorMessage}`);
-        }
-
-        console.log("Event deleted successfully!");
-        alert("Event deleted successfully!");
-        fetchEvents(); // Refresh event list
-    } catch (error) {
-        console.error("Error deleting event:", error);
-        alert("Error deleting event. Please try again.");
-    }
-}
-
+    eventManager.fetchEvents(currentMonth + 1, currentYear);
+    renderCalendar();
+  };
 </script>
