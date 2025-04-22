@@ -117,8 +117,10 @@ comments: true
       });
   });
   // Function to delete an event
-    async function deleteEvent(eventId) {
+    async function deleteEvent(eventId, eventElement) {
         try {
+            const confirmDelete = confirm("Are you sure you want to delete this event?");
+            if (!confirmDelete) return;
             const response = await fetch(`${pythonURI}/api/event/${eventId}`, {
                 ...fetchOptions,
                 method: 'DELETE',
@@ -128,9 +130,13 @@ comments: true
                 const errorMessage = await response.text();
                 throw new Error(`Failed to delete event: ${response.statusText} - ${errorMessage}`);
             }
-            alert("Event deleted successfully!");
-            events = events.filter(event => event.id !== eventId);  // Remove from local array
-            renderSidebar(events);
+            // Remove the event from the global events array
+            events = events.filter(event => event.id !== eventId);
+            // Remove the event element from the DOM directly
+            if (eventElement) {
+                eventElement.remove();
+            }
+            // Re-render the calendar to update event dots
             renderCalendar(events);
         } catch (error) {
             console.error('Error deleting event:', error.message);
@@ -260,11 +266,8 @@ comments: true
         deleteButton.style.cursor = "pointer";
         deleteButton.style.borderRadius = "5px";
         // Add event listener for delete action
-        deleteButton.addEventListener("click", async () => {
-            const confirmDelete = confirm(`Are you sure you want to delete "${event.name}"?`);
-            if (confirmDelete) {
-                await deleteEvent(event.id);
-            }
+        deleteButton.addEventListener("click", () => {
+            deleteEvent(event.id, eventItem);  // Pass the event's DOM element
         });
         eventItem.appendChild(eventName);
         eventItem.appendChild(eventLocation);
