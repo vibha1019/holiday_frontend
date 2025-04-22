@@ -59,10 +59,16 @@ comments: true
   // Handle the form submission to create a new event
   document.getElementById("eventForm").addEventListener("submit", async function(event) {
     event.preventDefault();
+    // Get the date value and adjust for timezone
+    const dateInput = document.getElementById("startDate").value;
+    const dateObj = new Date(dateInput);
+    const timezoneOffset = dateObj.getTimezoneOffset() * 60000;
+    const correctedDate = new Date(dateObj.getTime() - timezoneOffset);
+    const formattedDate = correctedDate.toISOString().split('T')[0];
     const postData = {
         name: document.getElementById("eventName").value,
         location: document.getElementById("eventLocation").value,
-        date: document.getElementById("startDate").value,  // This will be in YYYY-MM-DD format
+        date: formattedDate,  // Use the corrected date
     };
     console.log("Event Data:", postData);  // Log the event data to check before sending
     const response = await fetch(`${pythonURI}/api/event`, {
@@ -250,10 +256,12 @@ comments: true
         eventLocation.textContent = event.location;
         eventLocation.style.color = "black";
         // Event Date
-        const eventDate = document.createElement("div");
-        eventDate.classList.add("event-date");
+        // Replace the date display code with:
         const eventDateObject = new Date(event.date);
-        eventDate.textContent = eventDateObject.toLocaleDateString();
+        // Adjust for timezone
+        const timezoneOffset = eventDateObject.getTimezoneOffset() * 60000;
+        const correctedDate = new Date(eventDateObject.getTime() + timezoneOffset);
+        eventDate.textContent = correctedDate.toLocaleDateString();
         eventDate.style.color = "black";
         // Delete Button
         const deleteButton = document.createElement("button");
@@ -278,9 +286,11 @@ comments: true
 }
   function openModal(date) {
     document.getElementById("eventModal").style.display = "block";
-    const currentYear = new Date().getFullYear(); // Keep current year constant
-    const formattedDate = new Date(currentYear, currentMonth, date).toISOString().split('T')[0];
-    document.getElementById("startDate").value = formattedDate;
+    const currentYear = new Date().getFullYear();
+    const dateObj = new Date(currentYear, currentMonth, date);
+    const timezoneOffset = dateObj.getTimezoneOffset() * 60000;
+    const correctedDate = new Date(dateObj.getTime() - timezoneOffset);
+    document.getElementById("startDate").value = correctedDate.toISOString().split('T')[0];
 }
   function closeModal() {
     document.getElementById("eventModal").style.display = "none";
