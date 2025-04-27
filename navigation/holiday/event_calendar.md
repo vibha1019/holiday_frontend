@@ -42,6 +42,7 @@ All code written by student with debugging assistance from ChatGPT for timezone 
         <!-- Calendar days populated by JavaScript -->
         <div class="calendar-days" id="calendar-days"></div>
     </div>
+
     <!-- Upcoming Events Sidebar -->
     <div class="upcoming-events">
         <h3 style="color: black; font-size: 24px; font-weight: bold;">Upcoming Events</h3>
@@ -81,7 +82,7 @@ All code written by student with debugging assistance from ChatGPT for timezone 
  * - Visual calendar display
  */
 
-// Import API configuration
+// Import API configuration (assuming config.js exists)
 import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
 
 // GLOBAL VARIABLES
@@ -92,23 +93,11 @@ let currentMonth = new Date().getMonth(); // Tracks current displayed month
 document.getElementById("eventForm").addEventListener("submit", async function(event) {
     event.preventDefault();
     
-    /* 
-     * ALGORITHM: Process form data with timezone correction
-     * 1. Get input values (sequencing)
-     * 2. Adjust for timezone offset
-     * 3. Format for API
-     */
-    const dateInput = document.getElementById("startDate").value;
-    const dateObj = new Date(dateInput);
-    const timezoneOffset = dateObj.getTimezoneOffset() * 60000;
-    const correctedDate = new Date(dateObj.getTime() - timezoneOffset);
-    const formattedDate = correctedDate.toISOString().split('T')[0];
-    
-    // Prepare data for API
+    // ALGORITHM: Process form data (sequencing)
     const postData = {
         name: document.getElementById("eventName").value,
         location: document.getElementById("eventLocation").value,
-        date: formattedDate,
+        date: document.getElementById("startDate").value, // No timezone adjustment
     };
     
     // Send to server
@@ -161,7 +150,6 @@ document.addEventListener('DOMContentLoaded', function() {
  * Parameters:
  *   - eventId: string - ID of event to delete
  *   - eventElement: DOM element - The event card to remove
- * Return: None
  */
 async function deleteEvent(eventId, eventElement) {
     try {
@@ -178,14 +166,11 @@ async function deleteEvent(eventId, eventElement) {
         if (!response.ok) throw new Error(`Delete failed`);
         
         // ALGORITHM: Update data and UI
-        // 1. Remove from events array
-        events = events.filter(event => event.id !== eventId);
+        events = events.filter(event => event.id !== eventId); // Remove from list
         
-        // 2. Remove from DOM
-        if (eventElement) eventElement.remove();
+        if (eventElement) eventElement.remove(); // Remove from DOM
         
-        // 3. Update calendar display
-        renderCalendar(events);
+        renderCalendar(events); // Update calendar
     } catch (error) {
         alert(`Error deleting event: ${error.message}`);
     }
@@ -194,9 +179,6 @@ async function deleteEvent(eventId, eventElement) {
 /* 
  * PROCEDURE: renderCalendar(events)
  * Purpose: Renders calendar grid with events
- * Parameters:
- *   - events: array - List of event objects
- * Return: None
  * Contains:
  *   - Sequencing: Steps to build calendar
  *   - Selection: Highlighting current day
@@ -253,9 +235,6 @@ function renderCalendar(events) {
 /* 
  * PROCEDURE: renderSidebar(events)
  * Purpose: Displays list of upcoming events
- * Parameters:
- *   - events: array - List of event objects
- * Return: None
  */
 function renderSidebar(events) {
     const upcomingEventsContainer = document.getElementById("event-list");
@@ -279,13 +258,10 @@ function renderSidebar(events) {
         eventLocation.classList.add("event-location");
         eventLocation.textContent = event.location;
         
-        // Event date with timezone correction
+        // Event date (no timezone correction)
         const eventDate = document.createElement("div");
         eventDate.classList.add("event-date");
-        const eventDateObj = new Date(event.date);
-        const timezoneOffset = eventDateObj.getTimezoneOffset() * 60000;
-        const correctedDate = new Date(eventDateObj.getTime() + timezoneOffset);
-        eventDate.textContent = correctedDate.toLocaleDateString();
+        eventDate.textContent = new Date(event.date).toLocaleDateString();
         
         // Delete button
         const deleteButton = document.createElement("button");
@@ -301,14 +277,10 @@ function renderSidebar(events) {
 }
 
 // HELPER FUNCTIONS //
-
 function openModal(date) {
     document.getElementById("eventModal").style.display = "block";
     const currentYear = new Date().getFullYear();
-    const dateObj = new Date(currentYear, currentMonth, date);
-    const timezoneOffset = dateObj.getTimezoneOffset() * 60000;
-    const correctedDate = new Date(dateObj.getTime() - timezoneOffset);
-    document.getElementById("startDate").value = correctedDate.toISOString().split('T')[0];
+    document.getElementById("startDate").value = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
 }
 
 function closeModal() {
@@ -332,7 +304,6 @@ window.addEventListener("click", function(event) {
 });
 
 // API HELPER FUNCTIONS //
-
 function getUserId(baseurl) {
     return fetch(baseurl + '/api/id', fetchOptions)
         .then(response => {
